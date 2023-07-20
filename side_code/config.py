@@ -47,8 +47,8 @@ if not LOCAL_RUN:
     RAXML_NG_EXE = "/groups/pupko/noaeker/programs/tree_search_programs/raxml-ng/raxml-ng"
     RESULTS_FOLDER = "/groups/pupko/noaeker/bootstrap_results"
     RAxML_alisim_path="/groups/pupko/noaeker/RAxMLGroveScripts/org_script.py"
-    MAIN_CODE_PATH_SIM = "/groups/pupko/noaeker/bootstrap/simulations_generation/RAxML_grove_simulations.py"
-    PROJECT_ROOT_DIRECRTORY = "/groups/pupko/noaeker/bootstrap"
+    MAIN_CODE_PATH_SIM = "/groups/pupko/noaeker/bootstrap_repo/simulations_generation/RAxML_grove_simulations.py"
+    PROJECT_ROOT_DIRECRTORY = "/groups/pupko/noaeker/bootstrap_repo"
 
 elif LOCAL_RUN:
     IQTREE_EXE = "/Users/noa/Programs/iqtree-2.1.3-MacOSX/bin/iqtree2"
@@ -56,6 +56,6 @@ elif LOCAL_RUN:
     RAXML_NG_EXE = "/Users/noa/Programs/Raxml/raxml-ng"
     RESULTS_FOLDER = "/Users/noa/Workspace/bootstrap_results"
     RAxML_alisim_path = '/Users/noa/Workspace/RAxMLGroveScripts/org_script.py'
-    MAIN_CODE_PATH_SIM = "/Users/noa/Workspace/bootstrap/simulations_generation/RAxML_grove_simulations.py"
-    PROJECT_ROOT_DIRECRTORY = "/Users/noa/Workspace/bootstrap"
+    MAIN_CODE_PATH_SIM = "/Users/noa/Workspace/bootstrap_repo/simulations_generation/RAxML_grove_simulations.py"
+    PROJECT_ROOT_DIRECRTORY = "/Users/noa/Workspace/bootstrap_repo"
     BOOSTER_EXE = "/Users/noa/Programs/booster_macos64"
