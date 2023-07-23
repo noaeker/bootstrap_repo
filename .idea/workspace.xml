@@ -2,13 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c7df0e90-f129-4c06-bac2-5459d2cc3269" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/simulation_edit/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/simulation_edit/bootstrap_edit.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/simulation_edit/tree_partition.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/side_code/raxml.py" beforeDir="false" afterPath="$PROJECT_DIR$/side_code/raxml.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/simulations_generation/RAxML_grove_simulations.py" beforeDir="false" afterPath="$PROJECT_DIR$/simulations_generation/RAxML_grove_simulations.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/simulations_generation/simulations_argparser.py" beforeDir="false" afterPath="$PROJECT_DIR$/simulations_generation/simulations_argparser.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/simulation_edit/bootstrap_edit.py" beforeDir="false" afterPath="$PROJECT_DIR$/simulation_edit/bootstrap_edit.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/simulation_edit/garbage/booster_ml.nw" beforeDir="false" afterPath="$PROJECT_DIR$/simulation_edit/garbage/booster_ml.nw" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/simulation_edit/garbage/booster_pars.nw" beforeDir="false" afterPath="$PROJECT_DIR$/simulation_edit/garbage/booster_pars.nw" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/simulation_edit/garbage/booster_true.nw" beforeDir="false" afterPath="$PROJECT_DIR$/simulation_edit/garbage/booster_true.nw" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/simulation_edit/garbage/pars.tree" beforeDir="false" afterPath="$PROJECT_DIR$/simulation_edit/garbage/pars.tree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/simulation_edit/garbage/pars_tree_generation.raxml.log" beforeDir="false" afterPath="$PROJECT_DIR$/simulation_edit/garbage/pars_tree_generation.raxml.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/simulation_edit/garbage/pars_tree_generation.raxml.rba" beforeDir="false" afterPath="$PROJECT_DIR$/simulation_edit/garbage/pars_tree_generation.raxml.rba" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/simulation_edit/garbage/pars_tree_generation.raxml.startTree" beforeDir="false" afterPath="$PROJECT_DIR$/simulation_edit/garbage/pars_tree_generation.raxml.startTree" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/simulation_edit/garbage/tmp.ml.tree" beforeDir="false" afterPath="$PROJECT_DIR$/simulation_edit/garbage/tmp.ml.tree" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -50,8 +52,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/simulation_edit/bootstrap_edit.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="133">
-              <caret line="94" column="51" lean-forward="true" selection-start-line="94" selection-start-column="51" selection-end-line="94" selection-end-column="51" />
+            <state relative-caret-position="215">
+              <caret line="93" column="20" lean-forward="true" selection-start-line="93" selection-start-column="20" selection-end-line="93" selection-end-column="20" />
               <folding>
                 <element signature="e#0#48#0" expanded="true" />
               </folding>
@@ -96,6 +98,10 @@
       <find>dendro</find>
       <find>model=</find>
       <find>booster_pars</find>
+      <find>int</find>
+      <find>statistics</find>
+      <find>generate_partition_statistics</find>
+      <find>print</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -267,8 +273,8 @@
       <window_info anchor="bottom" id="Event Log" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.41944444" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.32222223" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.3875" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.30277777" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -287,8 +293,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/simulation_edit/bootstrap_edit.py</url>
-          <line>94</line>
-          <option name="timeStamp" value="10" />
+          <line>193</line>
+          <option name="timeStamp" value="13" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/simulation_edit/bootstrap_edit.py</url>
+          <line>97</line>
+          <option name="timeStamp" value="14" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -310,6 +321,36 @@
     </expressions>
     <expressions id="evaluateExpression">
       <expression>
+        <expression-string>parsimony_binary_support</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>statistics.update(bootstrap_tree_details.to_dict())</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>statistics</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>all_pars_ete[0]</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>all_pars_ete[0].nodes</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>pars_tree_ete</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
         <expression-string>node.name</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
@@ -321,21 +362,6 @@
       </expression>
       <expression>
         <expression-string>bootstrap_tree_details[&quot;msa_path&quot;]</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>parsimony_trees</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>parsimony_tree_path</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>mle_path</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
@@ -442,8 +468,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/simulation_edit/bootstrap_edit.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="133">
-          <caret line="94" column="51" lean-forward="true" selection-start-line="94" selection-start-column="51" selection-end-line="94" selection-end-column="51" />
+        <state relative-caret-position="215">
+          <caret line="93" column="20" lean-forward="true" selection-start-line="93" selection-start-column="20" selection-end-line="93" selection-end-column="20" />
           <folding>
             <element signature="e#0#48#0" expanded="true" />
           </folding>

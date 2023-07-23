@@ -50,7 +50,6 @@ def get_summary_statistics_dict(feature_name, values, funcs={'mean': np.mean, 'm
 
 def get_booster_tree(taxa,mle_tree_path, comparison_tree, out_path ="booster.nw"):
     cmd = f"{BOOSTER_EXE} -a tbe -i {mle_tree_path} -b {comparison_tree} -@ 1 -o {out_path}"
-    print(cmd)
     execute_command_and_write_to_log(cmd)
     with open(out_path) as B:
         bootster_tree = B.read()
@@ -91,15 +90,12 @@ def get_list_of_taxa(node):
 
 def generate_partition_statistics(node, mle_tree_ete, best_ML_vs_true_tree_ete, pairwise_distances, all_pars_ete,
                                                            taxa, all_ML_ete):
-    if not node.is_leaf():
         parsimony_support = [(pars_tree_ete & (node.name)).support for pars_tree_ete in all_pars_ete]
-        parsimony_binary_support = [(pars_tree_ete & (node.name)).support==1 for pars_tree_ete in all_pars_ete]
+        parsimony_binary_support = [int((pars_tree_ete & (node.name)).support==1) for pars_tree_ete in all_pars_ete]
         ML_tree_support = np.mean([(ML_tree_ete & (node.name)).support for ML_tree_ete in all_ML_ete])
-        ML_tree_binary_support = ([(ML_tree_ete & (node.name)).support==1 for ML_tree_ete in all_ML_ete])
-
-
-        true_support = best_ML_vs_true_tree_ete&(node.name).support
-        true_binary_support = best_ML_vs_true_tree_ete & (node.name).support==1
+        ML_tree_binary_support = [int((ML_tree_ete & (node.name)).support==1) for ML_tree_ete in all_ML_ete]
+        true_support = (best_ML_vs_true_tree_ete&(node.name)).support
+        true_binary_support = (best_ML_vs_true_tree_ete & (node.name)).support==1
         bootstrap_tree_ete_cp = mle_tree_ete.copy()
         node_cp = bootstrap_tree_ete_cp & node.name
         removed_node = node_cp.detach()
@@ -109,22 +105,22 @@ def generate_partition_statistics(node, mle_tree_ete, best_ML_vs_true_tree_ete, 
 
         remaining_tree = bootstrap_tree_ete_cp
         partition_size = min(len(get_list_of_taxa(removed_node)), len(get_list_of_taxa(remaining_tree))) / len(taxa)
-        if parsimony_support != node.support:
-            print(f"Support: {node.support}")
-            print(f"Pars Support: {parsimony_support}")
-            print(f"ML tree Support: {ML_tree_support}")
-            print(f"Silhouette: {silhouete}")
-            print(f"Size: {partition_size}")
+        #if parsimony_support != node.support:
+        #    print(f"Support: {node.support}")
+        #    print(f"Pars Support: {parsimony_support}")
+        #    print(f"ML tree Support: {ML_tree_support}")
+        #    print(f"Silhouette: {silhouete}")
+        #    print(f"Size: {partition_size}")
         # print(get_list_of_taxa(node))
 
         # print(get_list_of_taxa(bootstrap_tree_ete_cp))
 
         statistics = {'bootstrap_support': node.support, 'true_support': true_support, 'true_binary_support': true_binary_support, 'Silhouette': silhouete, 'partition_size': partition_size,
                       }
-        statistics.update(get_summary_statistics_dict(feature_name='pars_support'), values  = parsimony_support)
-        statistics.update(get_summary_statistics_dict(feature_name='ML_support'), values=ML_tree_support)
-        statistics.update(get_summary_statistics_dict(feature_name='pars_bi_support'), values=parsimony_binary_support)
-        statistics.update(get_summary_statistics_dict(feature_name='ML_bi_support'), values=ML_tree_binary_support)
+        statistics.update(get_summary_statistics_dict(feature_name='pars_support', values  = parsimony_support))
+        statistics.update(get_summary_statistics_dict(feature_name='ML_support', values= ML_tree_support))
+        statistics.update(get_summary_statistics_dict(feature_name='pars_bi_support', values= parsimony_binary_support))
+        statistics.update(get_summary_statistics_dict(feature_name='ML_bi_support', values= ML_tree_binary_support))
         return statistics
 
 def get_file_rows(path):
@@ -178,7 +174,7 @@ def main():
             for parsimony_tree in parsimony_trees:
                 with open(parsimony_tree_path, 'w') as PARS:
                     PARS.write(parsimony_tree)
-                pars_dendro, pars_tree_ete = get_booster_tree(taxa,parsimony_tree_path, mle_path, out_path=os.path.join(garbage_dir,"booster_pars.nw"))
+                pars_dendro, pars_tree_ete = get_booster_tree(taxa, mle_path,parsimony_tree_path, out_path=os.path.join(garbage_dir,"booster_pars.nw"))
                 all_pars_ete.append(pars_tree_ete)
 
 
@@ -188,15 +184,16 @@ def main():
             for ML_tree in all_ML_nw:
                 with open(tmp_ml_tree_file, 'w') as ML:
                     ML.write(ML_tree)
-                ML_dendro, ML_tree_ete = get_booster_tree(taxa, tmp_ml_tree_file, mle_path,
+                ML_dendro, ML_tree_ete = get_booster_tree(taxa,  mle_path,tmp_ml_tree_file,
                                                           out_path=os.path.join(garbage_dir,"booster_ml.nw"))
                 all_ML_ete.append(ML_tree_ete)
             for node in mle_tree_ete.iter_descendants():
-                statistics = generate_partition_statistics(node, mle_tree_ete, best_ML_vs_true_tree_ete, pairwise_distances, all_pars_ete,
-                                                           taxa, all_ML_ete)
-                statistics.update(bootstrap_tree_details.to_dict())
-                all_splits = all_splits.append(statistics, ignore_index=True)
-                all_splits.to_csv(args.final_output_path, sep='\t')
+                if not node.is_leaf():
+                    statistics = generate_partition_statistics(node, mle_tree_ete, best_ML_vs_true_tree_ete, pairwise_distances, all_pars_ete,
+                                                               taxa, all_ML_ete)
+                    statistics.update(bootstrap_tree_details.to_dict())
+                    all_splits = all_splits.append(statistics, ignore_index=True)
+                    all_splits.to_csv(args.final_output_path, sep='\t')
 
             # sns.scatterplot(data=total_data, x='parsimony_support', y='Support',  s=30, alpha=0.6)
             # plt.show()
