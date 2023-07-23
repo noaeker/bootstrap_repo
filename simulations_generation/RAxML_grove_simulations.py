@@ -3,7 +3,7 @@ import sys
 if sys.platform == "linux" or sys.platform == "linux2":
     PROJECT_ROOT_DIRECRTORY = "/groups/pupko/noaeker/bootstrap_repo"
 else:
-    PROJECT_ROOT_DIRECRTORY = "/groups/pupko/noaeker/bootstrap_repo"
+    PROJECT_ROOT_DIRECRTORY = "/Users/noa/Workspace/bootstrap_repo"
 sys.path.append(PROJECT_ROOT_DIRECRTORY)
 
 
@@ -61,11 +61,11 @@ def RAxML_grove_tree_simulation( out_dir, min_n_taxa, max_n_taxa, min_n_loci, ma
     logging.info(f'about to run {cmd_raxml_grove}')
     execute_command_and_write_to_log(cmd_raxml_grove)
     folder = os.listdir(out_dir)[0]
-    tree_path = os.path.join(out_dir, folder, 'tree_best.newick')
+    true_tree_path = os.path.join(out_dir, folder, 'tree_best.newick')
     model_formulation_file = os.path.join(out_dir, folder, 'tree_best.newick.log')
     model = extract_model_specification_from_log(model_formulation_file, 'model')
     length = extract_model_specification_from_log(model_formulation_file, 'length')
-    sim_dict = {'model': model, 'model_short': re.sub(r'\{[^{}]*\}','',model) , 'length': length, 'tree_id': folder,'tree_folder': os.path.join(out_dir, folder), 'tree_id': folder,'tree_path': tree_path, 'tree_str': get_tree_string(tree_path)}
+    sim_dict = {'model': model, 'model_short': re.sub(r'\{[^{}]*\}','',model) , 'length': length, 'tree_id': folder,'tree_folder': os.path.join(out_dir, folder), 'tree_id': folder,'true_tree_path': true_tree_path}
     return sim_dict
 
 
@@ -79,7 +79,7 @@ def single_simulated_MSA_pipeline(tree_sim_dict, j, args):
     iqtree_folder = os.path.join(tree_sim_dict["tree_folder"], f"iqtree_msa_{j}")
     create_dir_if_not_exists(iqtree_folder)
     logging.info(f"Simulating MSA {j} in {iqtree_folder}")
-    msa_path = simulate_msa(output_prefix=os.path.join(iqtree_folder, 'sim_msa'), tree_file=tree_sim_dict["tree_path"],
+    msa_path = simulate_msa(output_prefix=os.path.join(iqtree_folder, 'sim_msa'), tree_file=tree_sim_dict["true_tree_path"],
                             model=tree_sim_dict["model"], length=tree_sim_dict["length"])
     logging.info("Evaluating likelihood on current MSA")
     msa_results_dict = get_msa_stats(msa_path, tree_sim_dict["model"])

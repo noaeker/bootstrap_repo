@@ -214,6 +214,7 @@ def raxml_bootstrap_search(curr_run_directory, msa_path, prefix,  model, n_boots
     elapsed_running_time = extract_param_from_raxmlNG_log(raxml_log_file, 'time')
     best_ll = extract_param_from_raxmlNG_log(raxml_log_file, 'search_ll')
     best_tree_topology_path = search_prefix + ".raxml.support"
+    all_final_trees_path = search_prefix + ".raxml.mlTrees"
 
     model_str = re.sub('\+FU\{[^{}]*\}', '', model_str)
     model_str = model_str.replace('4m', '')
@@ -221,7 +222,7 @@ def raxml_bootstrap_search(curr_run_directory, msa_path, prefix,  model, n_boots
     res = {'final_ll': best_ll,
            'elapsed_running_time': elapsed_running_time,
            'inferred_model' : model_str,
-           'final_tree_topology': get_tree_string(best_tree_topology_path)}
+           'final_tree_topology_path': best_tree_topology_path, 'all_final_tree_topologies_path':all_final_trees_path}
     return res
 
 
@@ -299,12 +300,15 @@ def raxml_extract_sitelh(sitelh_file):
         return (sitelh_list_float)
 
 
-def raxml_compute_tree_per_site_ll(curr_run_directory, full_data_path, tree_file, ll_on_data_prefix, model):
+def raxml_compute_tree_per_site_ll(curr_run_directory, full_data_path, tree_file, ll_on_data_prefix, model, opt = True):
     compute_site_ll_prefix = os.path.join(curr_run_directory, ll_on_data_prefix)
+    opt_model_cmd = ""
+    if not opt:
+        opt_model_cmd+=" --opt-branches off --opt-model off "
     compute_site_ll_run_command = (
-            "{raxml_exe_path} --sitelh --msa {msa_path} --model {model} --tree {tree_file} --prefix {prefix} --redo").format(raxml_exe_path =RAXML_NG_EXE,
+            "{raxml_exe_path} --sitelh --msa {msa_path} --model {model} {opt_model_cmd} --tree {tree_file} --prefix {prefix}  --redo").format(raxml_exe_path =RAXML_NG_EXE,
         model=model, msa_path=full_data_path, tree_file=tree_file,
-        prefix=compute_site_ll_prefix)
+        prefix=compute_site_ll_prefix,opt_model_cmd=opt_model_cmd)
     execute_command_and_write_to_log( compute_site_ll_run_command)
     sitelh_file = compute_site_ll_prefix + ".raxml.siteLH"
     sitelh_list = raxml_extract_sitelh(sitelh_file)
