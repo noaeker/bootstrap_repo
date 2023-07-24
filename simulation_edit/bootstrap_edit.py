@@ -178,10 +178,12 @@ def main():
                         default="/Users/noa/Workspace/bootstrap_results/test/job_0/simulations_df.tsv")
     parser.add_argument('--final_output_path', type=str,
                         default="total_data.tsv")
+    parser.add_argument('--work_path', type=str,
+                        default='')
     parser.add_argument('--n_workers', type=int, default=4)
 
     args = parser.parse_args()
-
+    create_dir_if_not_exists(args.work_path)
     data = pd.read_csv(args.data_path, sep='\t')
     all_splits = pd.DataFrame()
     for true_tree_path in data['true_tree_path'].unique():
@@ -198,7 +200,7 @@ def main():
 
             b_pdc = mle_tree_dendro.phylogenetic_distance_matrix()
             pairwise_distances = get_pairwise_distances_mat(taxa, b_pdc)
-            garbage_dir = os.path.join(os.getcwd(), 'garbage')
+            garbage_dir = os.path.join(args.work_path, 'garbage')
             create_dir_if_not_exists(garbage_dir)
 
 
