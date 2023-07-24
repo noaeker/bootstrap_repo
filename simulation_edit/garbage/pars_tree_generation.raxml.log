@@ -7,7 +7,7 @@ Questions/problems/suggestions? Please visit: https://groups.google.com/forum/#!
 
 System: Intel(R) Core(TM) i7-7660U CPU @ 2.50GHz, 2 cores, 16 GB RAM
 
-RAxML-NG was called at 23-Jul-2023 23:17:36 as follows:
+RAxML-NG was called at 24-Jul-2023 00:15:08 as follows:
 
 /Users/noa/Programs/Raxml/raxml-ng --force msa --force perf_threads --msa /Users/noa/Workspace/bootstrap_results/test/job_0/raxml_tree_0/13749/iqtree_msa_0/sim_msa.phy --model JTT+G --start --tree pars{50} --prefix /Users/noa/Workspace/bootstrap_repo/simulation_edit/garbage/pars_tree_generation --seed 1 --redo
 
@@ -43,7 +43,7 @@ All starting trees saved to: /Users/noa/Workspace/bootstrap_repo/simulation_edit
 
 Execution log saved to: /Users/noa/Workspace/bootstrap_repo/simulation_edit/garbage/pars_tree_generation.raxml.log
 
-Analysis started: 23-Jul-2023 23:17:36 / finished: 23-Jul-2023 23:17:36
+Analysis started: 24-Jul-2023 00:15:08 / finished: 24-Jul-2023 00:15:08
 
-Elapsed time: 0.034 seconds
+Elapsed time: 0.021 seconds
 

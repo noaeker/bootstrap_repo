@@ -26,6 +26,29 @@ from sklearn.metrics import silhouette_samples, silhouette_score
 #                                                        model=bootstrap_tree["model_short"], opt = False)
 #     per_site_ll_scores.append(per_site_ll_score)
 # final_mat = np.array(per_site_ll_scores)
+
+
+
+def get_trees_per_site_ll_agreement(trees, garbage_dir, msa_path, model):
+
+
+    per_site_ll_scores = []
+    for tree in trees:
+        with open("tmp.tree", 'w') as TMP:
+            TMP.write(tree)
+
+        per_site_ll_score = raxml_compute_tree_per_site_ll(garbage_dir, full_data_path=msa_path,
+                                                           tree_file="tmp.tree",
+                                                           ll_on_data_prefix="per_site_ll",
+                                                           model = model, opt = False)
+        per_site_ll_scores.append(per_site_ll_score)
+    final_mat = np.array(per_site_ll_scores)
+    trees_total_ll = np.sum(final_mat, axis = 1)
+    best_tree_ind = np.argmax(trees_total_ll)
+    worst_tree_ind = np.argmin(trees_total_ll)
+    best_vs_worst = final_mat[best_tree_ind:,]-final_mat[worst_tree_ind:,]
+    return max(np.mean(best_vs_worst>0), np.mean(best_vs_worst<0))
+
 def pct_25(values):
     return np.percentile(values, 25)
 
@@ -96,32 +119,41 @@ def generate_partition_statistics(node, mle_tree_ete, best_ML_vs_true_tree_ete, 
         ML_tree_binary_support = [int((ML_tree_ete & (node.name)).support==1) for ML_tree_ete in all_ML_ete]
         true_support = (best_ML_vs_true_tree_ete&(node.name)).support
         true_binary_support = (best_ML_vs_true_tree_ete & (node.name)).support==1
-        bootstrap_tree_ete_cp = mle_tree_ete.copy()
-        node_cp = bootstrap_tree_ete_cp & node.name
+        total_tree_divergence = get_tree_divergence(mle_tree_ete)
+        mle_tree_ete_cp = mle_tree_ete.copy()
+        node_cp = mle_tree_ete_cp & node.name
         removed_node = node_cp.detach()
         silhouete = metrics.silhouette_score(X=pairwise_distances, metric='precomputed',
                                              labels=np.array([1 if t in get_list_of_taxa(removed_node) else 0 for t in
                                                               list([t.label for t in taxa])]))
 
-        remaining_tree = bootstrap_tree_ete_cp
-        partition_size = min(len(get_list_of_taxa(removed_node)), len(get_list_of_taxa(remaining_tree))) / len(taxa)
-        #if parsimony_support != node.support:
-        #    print(f"Support: {node.support}")
-        #    print(f"Pars Support: {parsimony_support}")
-        #    print(f"ML tree Support: {ML_tree_support}")
-        #    print(f"Silhouette: {silhouete}")
-        #    print(f"Size: {partition_size}")
-        # print(get_list_of_taxa(node))
+        mean_bl = np.mean(get_branch_lengths(mle_tree_ete))
+        remaining_tree = mle_tree_ete_cp
+        min_partition_divergence = min(get_tree_divergence(removed_node), get_tree_divergence(remaining_tree))
+        divergence_ratio = min_partition_divergence/total_tree_divergence
+        min_partition_size = min(len(get_list_of_taxa(removed_node)), len(get_list_of_taxa(remaining_tree)))
+        partition_size_ratio = min_partition_size / len(taxa)
 
-        # print(get_list_of_taxa(bootstrap_tree_ete_cp))
-
-        statistics = {'bootstrap_support': node.support, 'true_support': true_support, 'true_binary_support': true_binary_support, 'Silhouette': silhouete, 'partition_size': partition_size,
+        statistics = {'partition_branch': node.dist, 'partition_branch_vs_mean': node.dist/mean_bl,'bootstrap_support': node.support, 'true_support': true_support, 'true_binary_support': true_binary_support, 'Silhouette': silhouete, 'partition_size': min_partition_size,'partition_size_ratio': partition_size_ratio,
+                    'partition_divergence': min_partition_divergence, 'divergence_ratio': divergence_ratio
                       }
         statistics.update(get_summary_statistics_dict(feature_name='pars_support', values  = parsimony_support))
         statistics.update(get_summary_statistics_dict(feature_name='ML_support', values= ML_tree_support))
         statistics.update(get_summary_statistics_dict(feature_name='pars_bi_support', values= parsimony_binary_support))
         statistics.update(get_summary_statistics_dict(feature_name='ML_bi_support', values= ML_tree_binary_support))
         return statistics
+
+def get_branch_lengths(tree):
+    branch_lengths = []
+    for node in tree.iter_descendants():
+        # Do some analysis on node
+        branch_lengths.append(node.dist)
+    return branch_lengths
+
+def get_tree_divergence(tree):
+    branch_lengths = get_branch_lengths(tree)
+    return np.sum(branch_lengths)
+
 
 def get_file_rows(path):
     with open(path) as F:
