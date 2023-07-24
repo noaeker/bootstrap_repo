@@ -1,3 +1,13 @@
+import sys
+import sys
+if sys.platform == "linux" or sys.platform == "linux2":
+    PROJECT_ROOT_DIRECRTORY = "/groups/pupko/noaeker/bootstrap_repo"
+else:
+    PROJECT_ROOT_DIRECRTORY = "/Users/noa/Workspace/bootstrap_repo"
+sys.path.append(PROJECT_ROOT_DIRECRTORY)
+
+
+
 from side_code.basic_trees_manipulation import *
 import dendropy
 import numpy as np
@@ -172,7 +182,7 @@ def main():
 
     args = parser.parse_args()
 
-    data = pd.read_csv(args.data_path, sep='\t', nrows=5000)
+    data = pd.read_csv(args.data_path, sep='\t')
     all_splits = pd.DataFrame()
     for true_tree_path in data['true_tree_path'].unique():
         taxa = dendropy.TaxonNamespace()
