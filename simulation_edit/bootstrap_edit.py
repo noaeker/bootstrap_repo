@@ -11,13 +11,17 @@ sys.path.append(PROJECT_ROOT_DIRECRTORY)
 from side_code.basic_trees_manipulation import *
 import dendropy
 import numpy as np
+from scipy.stats.stats import pearsonr
 import pandas as pd
 import seaborn as sns
 from sklearn import metrics
 import matplotlib.pyplot as plt
 from ete3 import *
 import argparse
+import random
 from side_code.basic_trees_manipulation import *
+from side_code.MSA_manipulation import bootstrap_MSA
+from side_code.spr_prune_and_regraft import *
 from side_code.file_handling import *
 from side_code.raxml import generate_n_unique_tree_topologies_as_starting_trees, raxml_compute_tree_per_site_ll, generate_n_tree_topologies
 from dendropy.calculate import treecompare
@@ -25,21 +29,11 @@ from side_code.code_submission import execute_command_and_write_to_log
 from sklearn.metrics import silhouette_samples, silhouette_score
 
 
-# per_site_ll_scores = []
-# for tree in parsimony_trees:
-#     with open("tmp.tree", 'w') as TMP:
-#         TMP.write(tree)
-#
-#     per_site_ll_score = raxml_compute_tree_per_site_ll(garbage_dir, full_data_path=msa_path,
-#                                                        tree_file="tmp.tree",
-#                                                        ll_on_data_prefix="per_site_ll",
-#                                                        model=bootstrap_tree["model_short"], opt = False)
-#     per_site_ll_scores.append(per_site_ll_score)
-# final_mat = np.array(per_site_ll_scores)
 
 
 
-def get_trees_per_site_ll_agreement(trees, garbage_dir, msa_path, model):
+
+def get_trees_per_site_ll(trees, garbage_dir, msa_path, model):
 
 
     per_site_ll_scores = []
@@ -53,11 +47,20 @@ def get_trees_per_site_ll_agreement(trees, garbage_dir, msa_path, model):
                                                            model = model, opt = False)
         per_site_ll_scores.append(per_site_ll_score)
     final_mat = np.array(per_site_ll_scores)
-    trees_total_ll = np.sum(final_mat, axis = 1)
-    best_tree_ind = np.argmax(trees_total_ll)
-    worst_tree_ind = np.argmin(trees_total_ll)
-    best_vs_worst = final_mat[best_tree_ind:,]-final_mat[worst_tree_ind:,]
-    return max(np.mean(best_vs_worst>0), np.mean(best_vs_worst<0))
+    return final_mat
+    # trees_total_ll = np.sum(final_mat, axis = 1)
+    # correlations = []
+    # for i in range(final_mat.shape[1]):
+    #     col = final_mat[:,i]
+    #     if np.var(col)==0:
+    #         continue
+    #     corr = pearsonr(col,trees_total_ll)[0]
+    #     if not np.isnan(corr):
+    #         correlations.append(corr)
+    # agreement_min_max_ll = np.mean(best_vs_worst>0)
+    # d = {f'{name}_agreement_min_max_ll': agreement_min_max_ll}
+    # d.update(get_summary_statistics_dict(feature_name=f'{name}_site_corrs',values = correlations))
+    # return d
 
 def pct_25(values):
     return np.percentile(values, 25)
@@ -83,11 +86,13 @@ def get_summary_statistics_dict(feature_name, values, funcs={'mean': np.mean, 'm
 
 def get_booster_tree(taxa,mle_tree_path, comparison_tree, out_path ="booster.nw"):
     cmd = f"{BOOSTER_EXE} -a tbe -i {mle_tree_path} -b {comparison_tree} -@ 1 -o {out_path}"
+    print(cmd)
     execute_command_and_write_to_log(cmd)
     with open(out_path) as B:
         bootster_tree = B.read()
     booster_dendro = get_tree_obj(bootster_tree, taxa)
-    booster_tree_ete = generate_tree_object_from_newick(bootster_tree, format=0)
+    booster_tree_ete = Tree(newick=bootster_tree, format=0)
+    add_internal_names(booster_tree_ete)
     return booster_dendro, booster_tree_ete
 
 def get_pairwise_distances_mat(taxa, pdc):
@@ -119,12 +124,62 @@ def get_list_of_taxa(node):
         res.append(leaf.name)
     return sorted(res)
 
+def get_possible_moves(edges_list1,edges_list2):
+    possible_moves = []
+    for prune_edge in edges_list1:
+        for rgft_edge in edges_list2:
+                if not ((prune_edge.node_a == rgft_edge.node_a) or (prune_edge.node_b == rgft_edge.node_b) or (
+                        prune_edge.node_b == rgft_edge.node_a) or (prune_edge.node_a == rgft_edge.node_b)):
+                    possible_moves.append((prune_edge, rgft_edge))
+    return possible_moves
 
 
-def generate_partition_statistics(node, mle_tree_ete, best_ML_vs_true_tree_ete, pairwise_distances, all_pars_ete,
-                                                           taxa, all_ML_ete):
+# def get_spr_neighbors(tree,removed_node, remaining_tree):
+#     removed_edges_list = []
+#     for i, prune_node in enumerate(removed_node.iter_descendants("levelorder")):
+#         if prune_node.up:
+#             edge = Edge(node_a=prune_node.name, node_b=prune_node.up.name)
+#             removed_edges_list.append(edge)
+#     remaining_edges_list = []
+#     for i, prune_node in enumerate(remaining_tree.iter_descendants("levelorder")):
+#         if prune_node.up:
+#             edge = Edge(node_a=prune_node.name, node_b=prune_node.up.name)
+#             remaining_edges_list.append(edge)
+#     possible_moves_mixed = get_possible_moves(remaining_edges_list,removed_edges_list)
+#     random.shuffle(possible_moves_mixed)
+#     tree_neighbors_mixed = [generate_neighbour(tree, possible_move) for possible_move in possible_moves_mixed[:20]]
+#     return [tree.write(format=1) for tree in tree_neighbors_mixed]
+
+
+def generate_booster_trees(taxa,mle_path,trees,garbage_dir,tree_tmp_path):
+    all_tree_ete = []
+    for tree in trees[:-1]:
+        with open(tree_tmp_path, 'w') as TREE:
+            TREE.write(tree)
+        tree_dendro, tree_ete = get_booster_tree(taxa, mle_path, tree_tmp_path,
+                                                      out_path=os.path.join(garbage_dir, "booster_pars.nw"))
+        all_tree_ete.append(tree_ete)
+    return all_tree_ete
+
+def generate_bootstrap_booster_trees(msa_path, garbage_dir, n, model, taxa, mle_path):
+    all_pars_ete_boot = []
+    msa_out_path = os.path.join(garbage_dir,'boot_pars_msa.tmp')
+    for i in range(n):
+        b_msa = bootstrap_MSA(msa_path, msa_out_path)
+        pars_path = generate_n_tree_topologies(1, b_msa,
+                                   curr_run_directory=garbage_dir,
+                                   seed=1, tree_type='pars', model=model)
+        pars_dendro, pars_tree_ete = get_booster_tree(taxa, mle_path, pars_path,
+                                                      out_path=os.path.join(garbage_dir, "booster_pars.nw"))
+        all_pars_ete_boot.append(pars_tree_ete)
+    return all_pars_ete_boot
+
+def generate_partition_statistics(node,all_pars_ete,all_booster_ete,all_ML_ete, mle_tree_ete, best_ML_vs_true_tree_ete, pairwise_distances,
+                                                               taxa,garbage_dir, msa_path, model):
         parsimony_support = [(pars_tree_ete & (node.name)).support for pars_tree_ete in all_pars_ete]
         parsimony_binary_support = [int((pars_tree_ete & (node.name)).support==1) for pars_tree_ete in all_pars_ete]
+        boostrap_support = [(booster_tree_ete & (node.name)).support for booster_tree_ete in all_booster_ete]
+        bootstrap_binary_support = [int((booster_tree_ete & (node.name)).support == 1) for booster_tree_ete in all_booster_ete]
         ML_tree_support = np.mean([(ML_tree_ete & (node.name)).support for ML_tree_ete in all_ML_ete])
         ML_tree_binary_support = [int((ML_tree_ete & (node.name)).support==1) for ML_tree_ete in all_ML_ete]
         true_support = (best_ML_vs_true_tree_ete&(node.name)).support
@@ -133,23 +188,32 @@ def generate_partition_statistics(node, mle_tree_ete, best_ML_vs_true_tree_ete, 
         mle_tree_ete_cp = mle_tree_ete.copy()
         node_cp = mle_tree_ete_cp & node.name
         removed_node = node_cp.detach()
-        silhouete = metrics.silhouette_score(X=pairwise_distances, metric='precomputed',
-                                             labels=np.array([1 if t in get_list_of_taxa(removed_node) else 0 for t in
-                                                              list([t.label for t in taxa])]))
+        #labels = np.array([1 if t in get_list_of_taxa(removed_node) else 0 for t in
+        #                                                      list([t.label for t in taxa])])
+        #silhouete = metrics.silhouette_score(X=pairwise_distances, metric='precomputed',
+        #                                     labels=np.array([1 if t in get_list_of_taxa(removed_node) else 0 for t in
+        #                                                      list([t.label for t in taxa])]))
 
         mean_bl = np.mean(get_branch_lengths(mle_tree_ete))
         remaining_tree = mle_tree_ete_cp
+        mle_tree_ete_orig = mle_tree_ete.copy()
+
+        #lll_diffs.update(get_summary_statistics_dict(mixed_vs_mle,'mixed_vs_mle'))
+
+
         min_partition_divergence = min(get_tree_divergence(removed_node), get_tree_divergence(remaining_tree))
         divergence_ratio = min_partition_divergence/total_tree_divergence
         min_partition_size = min(len(get_list_of_taxa(removed_node)), len(get_list_of_taxa(remaining_tree)))
         partition_size_ratio = min_partition_size / len(taxa)
 
-        statistics = {'partition_branch': node.dist, 'partition_branch_vs_mean': node.dist/mean_bl,'bootstrap_support': node.support, 'true_support': true_support, 'true_binary_support': true_binary_support, 'Silhouette': silhouete, 'partition_size': min_partition_size,'partition_size_ratio': partition_size_ratio,
+        statistics = {'partition_branch': node.dist, 'partition_branch_vs_mean': node.dist/mean_bl,'bootstrap_support': node.support, 'true_support': true_support, 'true_binary_support': true_binary_support, 'partition_size': min_partition_size,'partition_size_ratio': partition_size_ratio,
                     'partition_divergence': min_partition_divergence, 'divergence_ratio': divergence_ratio
                       }
         statistics.update(get_summary_statistics_dict(feature_name='pars_support', values  = parsimony_support))
+        statistics.update(get_summary_statistics_dict(feature_name='bootstrap_support', values=boostrap_support))
         statistics.update(get_summary_statistics_dict(feature_name='ML_support', values= ML_tree_support))
         statistics.update(get_summary_statistics_dict(feature_name='pars_bi_support', values= parsimony_binary_support))
+        statistics.update(get_summary_statistics_dict(feature_name='bootstrap_bi_support', values=bootstrap_binary_support))
         statistics.update(get_summary_statistics_dict(feature_name='ML_bi_support', values= ML_tree_binary_support))
         return statistics
 
@@ -179,8 +243,8 @@ def main():
     parser.add_argument('--final_output_path', type=str,
                         default="total_data.tsv")
     parser.add_argument('--work_path', type=str,
-                        default='')
-    parser.add_argument('--n_workers', type=int, default=4)
+                        default='/Users/noa/Workspace/bootstrap_results/bootstrap_edit_results')
+    parser.add_argument('--n_pars', type=int, default=50)
 
     args = parser.parse_args()
     create_dir_if_not_exists(args.work_path)
@@ -195,46 +259,33 @@ def main():
             all_mle_path = bootstrap_tree_details['all_final_tree_topologies_path']
             with open(mle_path, 'r') as NEWICK_PATH:
                 mle_newick = NEWICK_PATH.read()
-            mle_tree_ete = generate_tree_object_from_newick(mle_newick)
+            #mle_tree_ete = generate_tree_object_from_newick(mle_newick, tree_type= 0)
+            mle_tree_ete  = Tree(newick=mle_newick, format=0)
+            add_internal_names(mle_tree_ete)
             mle_tree_dendro = get_tree_obj(mle_newick, taxa)
-
             b_pdc = mle_tree_dendro.phylogenetic_distance_matrix()
             pairwise_distances = get_pairwise_distances_mat(taxa, b_pdc)
             garbage_dir = os.path.join(args.work_path, 'garbage')
             create_dir_if_not_exists(garbage_dir)
-
-
             best_ML_vs_true_dendro, best_ML_vs_true_tree_ete = get_booster_tree(taxa, mle_path, true_tree_path,
                                                       out_path=os.path.join(garbage_dir,"booster_true.nw"))
 
 
-            parsimony_trees_path = generate_n_tree_topologies(50, bootstrap_tree_details["msa_path"],
+            parsimony_trees_path = generate_n_tree_topologies(args.n_pars, bootstrap_tree_details["msa_path"],
                                                                                   curr_run_directory=garbage_dir,
                                                                                   seed=1, tree_type='pars', model= bootstrap_tree_details["model_short"])
+            tree_tmp_path = os.path.join(garbage_dir, "tmp.tree")
             with open(parsimony_trees_path) as trees_path:
                 parsimony_trees = trees_path.read().split("\n")[:-1]
-            all_pars_ete = []
-            parsimony_tree_path = os.path.join(garbage_dir,"pars.tree")
-            for parsimony_tree in parsimony_trees:
-                with open(parsimony_tree_path, 'w') as PARS:
-                    PARS.write(parsimony_tree)
-                pars_dendro, pars_tree_ete = get_booster_tree(taxa, mle_path,parsimony_tree_path, out_path=os.path.join(garbage_dir,"booster_pars.nw"))
-                all_pars_ete.append(pars_tree_ete)
-
+            all_pars_ete=generate_booster_trees(taxa, mle_path, parsimony_trees, garbage_dir, tree_tmp_path)
 
             all_ML_nw = get_file_rows(all_mle_path)
-            all_ML_ete = []
-            tmp_ml_tree_file = os.path.join(garbage_dir,"tmp.ml.tree")
-            for ML_tree in all_ML_nw:
-                with open(tmp_ml_tree_file, 'w') as ML:
-                    ML.write(ML_tree)
-                ML_dendro, ML_tree_ete = get_booster_tree(taxa,  mle_path,tmp_ml_tree_file,
-                                                          out_path=os.path.join(garbage_dir,"booster_ml.nw"))
-                all_ML_ete.append(ML_tree_ete)
+            all_ML_ete = generate_booster_trees(taxa, mle_path, all_ML_nw, garbage_dir, tree_tmp_path)
+            all_booster_ete = generate_bootstrap_booster_trees(msa_path,garbage_dir,args.n_pars,bootstrap_tree_details["model_short"],taxa,mle_path)
             for node in mle_tree_ete.iter_descendants():
                 if not node.is_leaf():
-                    statistics = generate_partition_statistics(node, mle_tree_ete, best_ML_vs_true_tree_ete, pairwise_distances, all_pars_ete,
-                                                               taxa, all_ML_ete)
+                    statistics = generate_partition_statistics(node,all_pars_ete,all_booster_ete,all_ML_ete, mle_tree_ete, best_ML_vs_true_tree_ete, pairwise_distances,
+                                                               taxa,garbage_dir, msa_path, bootstrap_tree_details["model_short"])
                     statistics.update(bootstrap_tree_details.to_dict())
                     all_splits = all_splits.append(statistics, ignore_index=True)
                     all_splits.to_csv(args.final_output_path, sep='\t')

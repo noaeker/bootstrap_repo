@@ -43,8 +43,8 @@ def add_internal_names(original_tree):
     return original_tree
 
 
-def generate_tree_object_from_newick(tree_nw, format = 1):
-    starting_tree_object = Tree(newick=tree_nw, format=format)
+def generate_tree_object_from_newick(tree_nw, tree_type =0):
+    starting_tree_object = Tree(newick=tree_nw, format=tree_type)
     add_internal_names(starting_tree_object)
     starting_tree_object.get_tree_root().name = "ROOT"
     return starting_tree_object
