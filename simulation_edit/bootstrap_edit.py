@@ -84,16 +84,14 @@ def get_summary_statistics_dict(feature_name, values, funcs={'mean': np.mean, 'm
     return res
 
 
-def get_booster_tree(taxa,mle_tree_path, comparison_tree, out_path ="booster.nw"):
+def get_booster_tree(mle_tree_path, comparison_tree, out_path ="booster.nw"):
     cmd = f"{BOOSTER_EXE} -a tbe -i {mle_tree_path} -b {comparison_tree} -@ 1 -o {out_path}"
-    print(cmd)
     execute_command_and_write_to_log(cmd)
     with open(out_path) as B:
         bootster_tree = B.read()
-    booster_dendro = get_tree_obj(bootster_tree, taxa)
     booster_tree_ete = Tree(newick=bootster_tree, format=0)
     add_internal_names(booster_tree_ete)
-    return booster_dendro, booster_tree_ete
+    return booster_tree_ete
 
 def get_pairwise_distances_mat(taxa, pdc):
     pairwise_distances = []
@@ -134,29 +132,14 @@ def get_possible_moves(edges_list1,edges_list2):
     return possible_moves
 
 
-# def get_spr_neighbors(tree,removed_node, remaining_tree):
-#     removed_edges_list = []
-#     for i, prune_node in enumerate(removed_node.iter_descendants("levelorder")):
-#         if prune_node.up:
-#             edge = Edge(node_a=prune_node.name, node_b=prune_node.up.name)
-#             removed_edges_list.append(edge)
-#     remaining_edges_list = []
-#     for i, prune_node in enumerate(remaining_tree.iter_descendants("levelorder")):
-#         if prune_node.up:
-#             edge = Edge(node_a=prune_node.name, node_b=prune_node.up.name)
-#             remaining_edges_list.append(edge)
-#     possible_moves_mixed = get_possible_moves(remaining_edges_list,removed_edges_list)
-#     random.shuffle(possible_moves_mixed)
-#     tree_neighbors_mixed = [generate_neighbour(tree, possible_move) for possible_move in possible_moves_mixed[:20]]
-#     return [tree.write(format=1) for tree in tree_neighbors_mixed]
 
 
-def generate_booster_trees(taxa,mle_path,trees,garbage_dir,tree_tmp_path):
+def generate_booster_trees(mle_path,trees,garbage_dir,tree_tmp_path):
     all_tree_ete = []
     for tree in trees[:-1]:
         with open(tree_tmp_path, 'w') as TREE:
             TREE.write(tree)
-        tree_dendro, tree_ete = get_booster_tree(taxa, mle_path, tree_tmp_path,
+        tree_ete = get_booster_tree(mle_path, tree_tmp_path,
                                                       out_path=os.path.join(garbage_dir, "booster_pars.nw"))
         all_tree_ete.append(tree_ete)
     return all_tree_ete
@@ -174,47 +157,35 @@ def generate_bootstrap_booster_trees(msa_path, garbage_dir, n, model, taxa, mle_
         all_pars_ete_boot.append(pars_tree_ete)
     return all_pars_ete_boot
 
-def generate_partition_statistics(node,all_pars_ete,all_booster_ete,all_ML_ete, mle_tree_ete, best_ML_vs_true_tree_ete, pairwise_distances,
-                                                               taxa,garbage_dir, msa_path, model):
-        parsimony_support = [(pars_tree_ete & (node.name)).support for pars_tree_ete in all_pars_ete]
-        parsimony_binary_support = [int((pars_tree_ete & (node.name)).support==1) for pars_tree_ete in all_pars_ete]
-        boostrap_support = [(booster_tree_ete & (node.name)).support for booster_tree_ete in all_booster_ete]
-        bootstrap_binary_support = [int((booster_tree_ete & (node.name)).support == 1) for booster_tree_ete in all_booster_ete]
-        ML_tree_support = np.mean([(ML_tree_ete & (node.name)).support for ML_tree_ete in all_ML_ete])
-        ML_tree_binary_support = [int((ML_tree_ete & (node.name)).support==1) for ML_tree_ete in all_ML_ete]
+def generate_partition_statistics(node,mle_tree_ete,extra_tree_groups, extra_boot_ete, best_ML_vs_true_tree_ete,
+                                                               ):
+        statistics = {}
+        for tree_group in extra_tree_groups:
+            tree_support = np.mean([(tree_ete & (node.name)).support for tree_ete in extra_tree_groups[tree_group]])
+            tree_binary_support = [int((tree_ete & (node.name)).support==1) for tree_ete in extra_tree_groups[tree_group]]
+
+            statistics.update(get_summary_statistics_dict(feature_name=tree_group, values=tree_support))
+            statistics.update(
+                get_summary_statistics_dict(feature_name=f'{tree_group}_binary', values=tree_binary_support))
+
+
         true_support = (best_ML_vs_true_tree_ete&(node.name)).support
         true_binary_support = (best_ML_vs_true_tree_ete & (node.name)).support==1
         total_tree_divergence = get_tree_divergence(mle_tree_ete)
         mle_tree_ete_cp = mle_tree_ete.copy()
         node_cp = mle_tree_ete_cp & node.name
         removed_node = node_cp.detach()
-        #labels = np.array([1 if t in get_list_of_taxa(removed_node) else 0 for t in
-        #                                                      list([t.label for t in taxa])])
-        #silhouete = metrics.silhouette_score(X=pairwise_distances, metric='precomputed',
-        #                                     labels=np.array([1 if t in get_list_of_taxa(removed_node) else 0 for t in
-        #                                                      list([t.label for t in taxa])]))
-
         mean_bl = np.mean(get_branch_lengths(mle_tree_ete))
         remaining_tree = mle_tree_ete_cp
-        mle_tree_ete_orig = mle_tree_ete.copy()
-
-        #lll_diffs.update(get_summary_statistics_dict(mixed_vs_mle,'mixed_vs_mle'))
-
-
         min_partition_divergence = min(get_tree_divergence(removed_node), get_tree_divergence(remaining_tree))
         divergence_ratio = min_partition_divergence/total_tree_divergence
         min_partition_size = min(len(get_list_of_taxa(removed_node)), len(get_list_of_taxa(remaining_tree)))
-        partition_size_ratio = min_partition_size / len(taxa)
+        partition_size_ratio = min_partition_size / len(get_list_of_taxa(mle_tree_ete))
 
-        statistics = {'partition_branch': node.dist, 'partition_branch_vs_mean': node.dist/mean_bl,'bootstrap_support': node.support, 'true_support': true_support, 'true_binary_support': true_binary_support, 'partition_size': min_partition_size,'partition_size_ratio': partition_size_ratio,
-                    'partition_divergence': min_partition_divergence, 'divergence_ratio': divergence_ratio
-                      }
-        statistics.update(get_summary_statistics_dict(feature_name='pars_support', values  = parsimony_support))
-        statistics.update(get_summary_statistics_dict(feature_name='bootstrap_support', values=boostrap_support))
-        statistics.update(get_summary_statistics_dict(feature_name='ML_support', values= ML_tree_support))
-        statistics.update(get_summary_statistics_dict(feature_name='pars_bi_support', values= parsimony_binary_support))
-        statistics.update(get_summary_statistics_dict(feature_name='bootstrap_bi_support', values=bootstrap_binary_support))
-        statistics.update(get_summary_statistics_dict(feature_name='ML_bi_support', values= ML_tree_binary_support))
+        statistics.update({'partition_branch': node.dist, 'partition_branch_vs_mean': node.dist/mean_bl,'bootstrap_support': node.support, 'true_support': true_support, 'true_binary_support': true_binary_support, 'partition_size': min_partition_size,'partition_size_ratio': partition_size_ratio,
+                    'partition_divergence': min_partition_divergence, 'divergence_ratio': divergence_ratio})
+        for b_method in extra_boot_ete:
+            statistics.update({f'{b_method}_support':(extra_boot_ete[b_method]&node.name).support})
         return statistics
 
 def get_branch_lengths(tree):
@@ -235,57 +206,87 @@ def get_file_rows(path):
     return lines
 
 
+
+def get_program_default_ML_tree(program):
+    if program =='raxml':
+        name = 'final_tree_topology_path'
+    elif program =='iqtree':
+        name = 'final_tree_ultrafast'
+    elif program=='fasttree':
+        name = 'sh_bootstrap'
+    return name
+
+
+def get_bootstrap_and_tree_groups(program, bootstrap_tree_details,mle_path,garbage_dir,n_pars):
+    parsimony_trees_path = generate_n_tree_topologies(n_pars, bootstrap_tree_details["msa_path"],
+                                                      curr_run_directory=garbage_dir,
+                                                      seed=1, tree_type='pars',
+                                                      model=bootstrap_tree_details["model_short"])
+    tree_tmp_path = os.path.join(garbage_dir, "tmp.tree")
+    with open(parsimony_trees_path) as trees_path:
+        parsimony_trees = trees_path.read().split("\n")[:-1]
+    all_pars_ete = generate_booster_trees(mle_path, parsimony_trees, garbage_dir, tree_tmp_path)
+    extra_tree_groups = {'parsimony_trees': all_pars_ete}
+    if program == 'raxml':
+        all_mle_path = bootstrap_tree_details['all_final_tree_topologies_path']
+        all_ML_nw = get_file_rows(all_mle_path)
+        all_ML_ete = generate_booster_trees(mle_path, all_ML_nw, garbage_dir, tree_tmp_path)
+        extra_tree_groups.update( {'all_ML_ete': all_ML_ete})
+    elif program == 'iqtree':
+        final_tree_aLRT = bootstrap_tree_details['final_tree_aLRT']
+        aLRT_ete = Tree(newick=final_tree_aLRT, format=0)
+        add_internal_names(aLRT_ete)
+        final_tree_aBayes_path = bootstrap_tree_details['final_tree_aBayes']
+        aBayes_ete = Tree(newick=final_tree_aBayes_path, format=0)
+        add_internal_names(aBayes_ete)
+        extra_boot = {'aLRT_ete ': aLRT_ete, 'aBayes_ete': aBayes_ete}
+    elif program == 'fasttree':
+        standard_bootstrap = bootstrap_tree_details['sh_bootstrap']
+        standard_ete = Tree(newick=standard_bootstrap, format=0)
+        add_internal_names(standard_ete)
+        extra_boot = {'standard_ete': standard_ete}
+    return extra_boot, extra_tree_groups
+
 def main():
     parser = argparse.ArgumentParser()
     # parser.add_argument('--msa_path',type = str, default= '/Users/noa/Workspace/simulations_results/raxml_grove_simulations/job_0/raxml_tree_0/52454/iqtree_msa_0/sim_msa.phy')
     parser.add_argument('--data_path', type=str,
-                        default="/Users/noa/Workspace/bootstrap_results/test/job_0/simulations_df.tsv")
+                        default="/Users/noa/Workspace/bootstrap_results/test/job_0/simulations_df_fasttree.tsv")
     parser.add_argument('--final_output_path', type=str,
                         default="total_data.tsv")
     parser.add_argument('--work_path', type=str,
                         default='/Users/noa/Workspace/bootstrap_results/bootstrap_edit_results')
     parser.add_argument('--n_pars', type=int, default=50)
+    parser.add_argument('--program', type=str,  default = 'fasttree')
 
     args = parser.parse_args()
     create_dir_if_not_exists(args.work_path)
     data = pd.read_csv(args.data_path, sep='\t')
     all_splits = pd.DataFrame()
     for true_tree_path in data['true_tree_path'].unique():
-        taxa = dendropy.TaxonNamespace()
         tree_data = data.loc[data.true_tree_path == true_tree_path]
         for msa_path in tree_data['msa_path'].unique():
             bootstrap_tree_details = tree_data.loc[tree_data.msa_path == msa_path].head(1).squeeze()
-            mle_path =  bootstrap_tree_details['final_tree_topology_path']
-            all_mle_path = bootstrap_tree_details['all_final_tree_topologies_path']
-            with open(mle_path, 'r') as NEWICK_PATH:
-                mle_newick = NEWICK_PATH.read()
-            #mle_tree_ete = generate_tree_object_from_newick(mle_newick, tree_type= 0)
-            mle_tree_ete  = Tree(newick=mle_newick, format=0)
+
+            mle_path =  bootstrap_tree_details[get_program_default_ML_tree(args.program)]
+            mle_tree_ete  = Tree(mle_path, format=0)
             add_internal_names(mle_tree_ete)
-            mle_tree_dendro = get_tree_obj(mle_newick, taxa)
-            b_pdc = mle_tree_dendro.phylogenetic_distance_matrix()
-            pairwise_distances = get_pairwise_distances_mat(taxa, b_pdc)
             garbage_dir = os.path.join(args.work_path, 'garbage')
             create_dir_if_not_exists(garbage_dir)
-            best_ML_vs_true_dendro, best_ML_vs_true_tree_ete = get_booster_tree(taxa, mle_path, true_tree_path,
+            best_ML_vs_true_tree_ete = get_booster_tree(mle_path, true_tree_path,
                                                       out_path=os.path.join(garbage_dir,"booster_true.nw"))
 
 
-            parsimony_trees_path = generate_n_tree_topologies(args.n_pars, bootstrap_tree_details["msa_path"],
-                                                                                  curr_run_directory=garbage_dir,
-                                                                                  seed=1, tree_type='pars', model= bootstrap_tree_details["model_short"])
-            tree_tmp_path = os.path.join(garbage_dir, "tmp.tree")
-            with open(parsimony_trees_path) as trees_path:
-                parsimony_trees = trees_path.read().split("\n")[:-1]
-            all_pars_ete=generate_booster_trees(taxa, mle_path, parsimony_trees, garbage_dir, tree_tmp_path)
 
-            all_ML_nw = get_file_rows(all_mle_path)
-            all_ML_ete = generate_booster_trees(taxa, mle_path, all_ML_nw, garbage_dir, tree_tmp_path)
-            all_booster_ete = generate_bootstrap_booster_trees(msa_path,garbage_dir,args.n_pars,bootstrap_tree_details["model_short"],taxa,mle_path)
+
+            extra_boot, extra_tree_groups = get_bootstrap_and_tree_groups(args.program, bootstrap_tree_details,mle_path,garbage_dir,args.n_pars)
+
+
+
             for node in mle_tree_ete.iter_descendants():
                 if not node.is_leaf():
-                    statistics = generate_partition_statistics(node,all_pars_ete,all_booster_ete,all_ML_ete, mle_tree_ete, best_ML_vs_true_tree_ete, pairwise_distances,
-                                                               taxa,garbage_dir, msa_path, bootstrap_tree_details["model_short"])
+                    statistics = generate_partition_statistics(node,mle_tree_ete,extra_tree_groups, extra_boot, best_ML_vs_true_tree_ete
+                                                               )
                     statistics.update(bootstrap_tree_details.to_dict())
                     all_splits = all_splits.append(statistics, ignore_index=True)
                     all_splits.to_csv(args.final_output_path, sep='\t')

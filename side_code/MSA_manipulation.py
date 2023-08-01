@@ -70,7 +70,7 @@ def bootstrap_MSA(msa_path,out_msa_path):
                                    name=name,
                                    description=description)
         new_msa_records.append(sampled_record)
-    SeqIO.write(new_msa_records, out_msa_path, 'phylip-relaxed')
+    SeqIO.write(new_msa_records, out_msa_path, 'fasta')
     return out_msa_path
 
 

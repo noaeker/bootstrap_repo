@@ -15,6 +15,9 @@ def main_parser():
     parser.add_argument('--queue', type = str, default = 'power-pupko')
     parser.add_argument('--n_cpus_per_job', type = int, default= 1)
     parser.add_argument('--bs', type=int, default=5)
+    parser.add_argument('--msa_type', type = str, default= 'DNA')
+    parser.add_argument('--nb_iqtree',type = int, default= 1000)
+    parser.add_argument('--nb_fasttree', type=int, default=10)
     return parser
 
 

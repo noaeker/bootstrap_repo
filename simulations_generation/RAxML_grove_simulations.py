@@ -11,7 +11,9 @@ sys.path.append(PROJECT_ROOT_DIRECRTORY)
 from side_code.config import *
 from side_code.basic_trees_manipulation import get_tree_string
 from side_code.code_submission import execute_command_and_write_to_log
-from side_code.raxml import raxml_bootstrap_search
+from side_code.raxml import raxml_bootstrap_pipeline
+from side_code.FastTree import fasttree_pipeline
+from side_code.IQTREE import iqtree_pipeline
 from simulations_generation.simulations_argparser import  job_parser
 from simulations_generation.msa_features import get_msa_stats
 from side_code.file_handling import create_dir_if_not_exists, create_or_clean_dir
@@ -30,12 +32,11 @@ def simulate_msa(output_prefix, tree_file, model, length, ret_cmd = False):
     :param treefile:
     :return:
     '''
-    command = f"{IQTREE_SIM_PATH} --alisim {output_prefix} -m {model} -t {tree_file}  --length {int(length)}" \
+    command = f"{IQTREE_SIM_PATH} --alisim {output_prefix} -m {model} -t {tree_file}  --length {int(length)} --out-format fasta" \
         f"  "
     # logging.info(f"About to run {command}")
     execute_command_and_write_to_log(command)
-    msa_path = f"{output_prefix}.phy"
-    print(command)
+    msa_path = f"{output_prefix}.fa"
     if ret_cmd:
         return msa_path, command
     else:
@@ -56,11 +57,14 @@ def extract_model_specification_from_log(log_file, param):
 
 
 
-def RAxML_grove_tree_simulation( out_dir, min_n_taxa, max_n_taxa, min_n_loci, max_n_loci):
-    cmd_raxml_grove = f'{RAxML_alisim_path} generate -g alisim -o {out_dir} -q " NUM_TAXA>={min_n_taxa} and NUM_TAXA<={max_n_taxa} and OVERALL_NUM_ALIGNMENT_SITES>={min_n_loci} and OVERALL_NUM_ALIGNMENT_SITES<={max_n_loci} and OVERALL_NUM_PARTITIONS==1" '
+def RAxML_grove_tree_simulation( out_dir, min_n_taxa, max_n_taxa, min_n_loci, max_n_loci, msa_type):
+    msa_type = f"'{msa_type}'"
+    cmd_raxml_grove = f'{RAxML_alisim_path} generate -g alisim -o {out_dir} -q " NUM_TAXA>={min_n_taxa} and NUM_TAXA<={max_n_taxa} and OVERALL_NUM_ALIGNMENT_SITES>={min_n_loci} and OVERALL_NUM_ALIGNMENT_SITES<={max_n_loci} and OVERALL_NUM_PARTITIONS==1 and DATA_TYPE=={msa_type}" '
+    print(cmd_raxml_grove)
     logging.info(f'about to run {cmd_raxml_grove}')
     execute_command_and_write_to_log(cmd_raxml_grove)
     folder = os.listdir(out_dir)[0]
+    print(folder)
     true_tree_path = os.path.join(out_dir, folder, 'tree_best.newick')
     model_formulation_file = os.path.join(out_dir, folder, 'tree_best.newick.log')
     model = extract_model_specification_from_log(model_formulation_file, 'model')
@@ -85,13 +89,18 @@ def single_simulated_MSA_pipeline(tree_sim_dict, j, args):
     msa_results_dict = get_msa_stats(msa_path, tree_sim_dict["model"])
     msa_results_dict.update(tree_sim_dict)
     tree_searches_folder = os.path.join(iqtree_folder, "all_tree_searches")
+    results_folder = os.path.join(iqtree_folder, "results_folder")
     create_or_clean_dir(tree_searches_folder)
-    bootstrap_tree_search =  raxml_bootstrap_search(tree_searches_folder, msa_path, prefix = "boot", model =tree_sim_dict["model_short"] , n_bootstrap_replicates = args.bs, n_cpus=1,
-                           n_workers='auto')
-    print(bootstrap_tree_search)
-    bootstrap_tree_search.update(msa_results_dict)
-    #create_or_clean_dir(tree_searches_folder)
-    return bootstrap_tree_search
+    create_or_clean_dir(results_folder)
+    boot_tree_raxml =  raxml_bootstrap_pipeline(tree_searches_folder,results_folder , msa_path, prefix ="boot", model =tree_sim_dict["model_short"], n_bootstrap_replicates = args.bs, n_cpus=1,
+                                                n_workers='auto')
+    boot_tree_raxml.update(msa_results_dict)
+    boot_tree_iqtree = iqtree_pipeline(tree_searches_folder,results_folder , msa_path, model = tree_sim_dict["model_short"], nb=args.nb_iqtree, prefix = "iqtree_boot")
+    boot_tree_iqtree.update(msa_results_dict)
+    boot_tree_fasttree = fasttree_pipeline(tree_searches_folder,results_folder ,msa_path, msa_type = args.msa_type, nb = args.nb_fasttree)
+    boot_tree_fasttree.update(msa_results_dict)
+    create_or_clean_dir(tree_searches_folder) # remove redundant files
+    return boot_tree_raxml, boot_tree_iqtree,boot_tree_fasttree
 
 
 
@@ -102,7 +111,9 @@ def main():
     create_or_clean_dir(curr_job_folder)
     curr_job_general_log_file = os.path.join(args.curr_job_folder, "log_file.log")
     logging.basicConfig(filename=curr_job_general_log_file, level=logging.INFO)
-    all_results_df = pd.DataFrame()
+    all_results_df_raxml = pd.DataFrame()
+    all_results_df_iqtree = pd.DataFrame()
+    all_results_df_fasttree = pd.DataFrame()
     for i in range(args.number_of_trees):
         logging.info(f"Starting simulation of tree {i}")
         #try:
@@ -110,15 +121,19 @@ def main():
         curr_tree_folder = os.path.join(curr_job_folder, f'raxml_tree_{i}')
         tree_sim_dict = RAxML_grove_tree_simulation(curr_tree_folder, args.min_n_taxa,
                                                                          args.max_n_taxa, args.min_n_loci,
-                                                                         args.max_n_loci)
+                                                                         args.max_n_loci, args.msa_type)
         for j in range(args.number_of_MSAs_per_tree):
-            bootstrap_reslt = single_simulated_MSA_pipeline(tree_sim_dict, j, args,
+            boot_tree_raxml, boot_tree_iqtree,boot_tree_fasttree = single_simulated_MSA_pipeline(tree_sim_dict, j, args,
                                                            )
-            all_results_df = all_results_df.append(bootstrap_reslt, ignore_index=True)
+            all_results_df_raxml = all_results_df_raxml.append(boot_tree_raxml, ignore_index=True)
+            all_results_df_iqtree = all_results_df_iqtree.append(boot_tree_iqtree, ignore_index=True)
+            all_results_df_fasttree = all_results_df_fasttree.append(boot_tree_fasttree, ignore_index=True)
        #except Exception as E:
        #         logging.error(f"Could not run simulation at iteration {i}\n Exception : {E}")
         logging.info(f"Updating tree {i} to csv")
-        all_results_df.to_csv(os.path.join(curr_job_folder, "simulations_df.tsv"), sep='\t')
+        all_results_df_raxml.to_csv(os.path.join(curr_job_folder, "simulations_df_raxml.tsv"), sep='\t')
+        all_results_df_iqtree.to_csv(os.path.join(curr_job_folder, "simulations_df_iqtree.tsv"), sep='\t')
+        all_results_df_fasttree.to_csv(os.path.join(curr_job_folder, "simulations_df_fasttree.tsv"), sep='\t')
 
 
 if __name__ == "__main__":

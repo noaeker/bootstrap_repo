@@ -4,6 +4,7 @@ from side_code.file_handling import create_or_clean_dir, delete_dir_content, uni
 from side_code.code_submission import execute_command_and_write_to_log
 from side_code.basic_trees_manipulation import get_tree_string, generate_multiple_tree_object_from_newick_file,generate_multiple_newicks_from_newick_file
 import os
+import shutil
 import time
 import numpy as np
 import re
@@ -199,7 +200,7 @@ def extract_parsimony_unique_topologies(curr_run_directory, trees_path, dist_pat
     return unique_file_path
 
 
-def raxml_bootstrap_search(curr_run_directory, msa_path, prefix,  model, n_bootstrap_replicates, n_cpus = 1, n_workers ='auto'):
+def raxml_bootstrap_pipeline(curr_run_directory, results_folder, msa_path, prefix, model, n_bootstrap_replicates, n_cpus = 1, n_workers ='auto'):
 
     search_prefix = os.path.join(curr_run_directory, prefix)
     search_command = (
@@ -213,16 +214,17 @@ def raxml_bootstrap_search(curr_run_directory, msa_path, prefix,  model, n_boots
         model_str = MODEL.read().split(',')[0]
     elapsed_running_time = extract_param_from_raxmlNG_log(raxml_log_file, 'time')
     best_ll = extract_param_from_raxmlNG_log(raxml_log_file, 'search_ll')
-    best_tree_topology_path = search_prefix + ".raxml.support"
-    all_final_trees_path = search_prefix + ".raxml.mlTrees"
+    best_tree_topology_path_orig = search_prefix + ".raxml.support"
+    all_final_trees_path_orig = search_prefix + ".raxml.mlTrees"
 
     model_str = re.sub('\+FU\{[^{}]*\}', '', model_str)
     model_str = model_str.replace('4m', '')
-
-    res = {'final_ll': best_ll,
-           'elapsed_running_time': elapsed_running_time,
-           'inferred_model' : model_str,
-           'final_tree_topology_path': best_tree_topology_path, 'all_final_tree_topologies_path':all_final_trees_path}
+    final_tree_topology_path = os.path.join(results_folder,'raxml_final_tree_topology.tree')
+    shutil.move(best_tree_topology_path_orig,final_tree_topology_path)
+    all_final_tree_topologies_path = os.path.join(results_folder, 'raxml_all_final_tree_topologies.tree')
+    shutil.move(all_final_trees_path_orig,all_final_tree_topologies_path)
+    res = {
+           'final_tree_topology_path': final_tree_topology_path, 'all_final_tree_topologies_path':all_final_tree_topologies_path}
     return res
 
 

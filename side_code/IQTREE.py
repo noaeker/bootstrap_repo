@@ -4,6 +4,7 @@ from side_code.code_submission import execute_command_and_write_to_log
 from side_code.basic_trees_manipulation import get_tree_string, generate_multiple_tree_object_from_newick_file
 import os
 import time
+from side_code.basic_trees_manipulation import *
 import re
 # from side_code.basic_trees_manipulation import *
 import datetime
@@ -35,42 +36,43 @@ def extract_param_from_IQTREE_log(iqtree_log_path, param_name, raise_error=True)
 
 
 
-def iqtree_search(curr_run_directory, msa_path, msa_type,prefix,  starting_tree_path):
+def iqtree_bootstrap_search(curr_run_directory, msa_path, model,nb, prefix):
 
-    starting_trees_command = f"-t {starting_tree_path}"
-    if LOCAL_RUN:
-        starting_trees_command+=" -n 0 "
     search_prefix = os.path.join(curr_run_directory, prefix)
-    model = "GTR+G" if msa_type == "DNA" else "WAG+G"
-    search_command = f"{IQTREE_EXE} -s {msa_path} -nt 1 -m {model} {starting_trees_command} -seed {SEED} -pre {search_prefix} -redo "
-    iqtree_general_log_file = search_prefix + ".log"
-    iqtree_log_file = search_prefix + ".iqtree"
-    execute_command_and_write_to_log(search_command, print_to_log=True)
-    best_ll = extract_param_from_IQTREE_log(iqtree_log_file, 'll')
-    starting_tree_ll = extract_param_from_IQTREE_log(iqtree_general_log_file, 'starting_tree_ll')
+    search_command = f"{IQTREE_EXE} -s {msa_path}  -m {model} -seed {SEED} -pre {search_prefix} -alrt 0 -abayes -bb {nb} -redo "
     best_tree_topology_path = search_prefix + ".treefile"
-    res = {'spr_radius': -1, 'spr_cutoff': -1, 'final_ll': best_ll,
-           'starting_tree_ll': starting_tree_ll,
-           'elapsed_running_time': -1,
-           'final_tree_topology': get_tree_string(best_tree_topology_path)}
-    print(res)
+    execute_command_and_write_to_log(search_command, print_to_log=True)
+    return best_tree_topology_path
+
+
+
+def diffrentiate_bootstrap_trees(t):
+    with open(t) as T:
+        text = T.read()
+    pattern = re.compile(r'/[\d.]+/[\d.]+/[\d.]+')
+    res = [text, text, text]
+    for i in range(3):
+        for match in re.findall(pattern, text):
+            m_tuple = match.split("/")[1:]
+            res[i] = res[i].replace(match, m_tuple[i])
+    return {'final_tree_aLRT':res[0],'final_tree_aBayes': res[1], 'final_tree_ultrafast': res[2]}
+
+
+def iqtree_pipeline(curr_run_directory,results_folder, msa_path, model,nb,  prefix):
+    ML_tree = iqtree_bootstrap_search(curr_run_directory, msa_path, model,nb,  prefix)
+    different_tree_topologies =  diffrentiate_bootstrap_trees(ML_tree)
+    res = {}
+    for tree_type in different_tree_topologies:
+        path = os.path.join(results_folder,f'{tree_type}.tree')
+        with open(path,'w') as T:
+            T.write(different_tree_topologies[tree_type])
+        res[tree_type] = path
     return res
 
 
 
 
-
-def iqtree_ll_eval(curr_run_directory, msa_path, msa_type,prefix,  starting_tree_path):
-
-    starting_trees_command = f"-t {starting_tree_path}"
-    search_prefix = os.path.join(curr_run_directory, prefix)
-    model = "GTR+G" if msa_type == "DNA" else "WAG+G"
-    search_command = f"{IQTREE_EXE} -s {msa_path} -nt 1 -n 0 -blfix -m {model} {starting_trees_command} -seed {SEED} -pre {search_prefix} -redo "
-    iqtree_log_file = search_prefix + ".iqtree"
-    execute_command_and_write_to_log(search_command, print_to_log=True)
-    best_ll = extract_param_from_IQTREE_log(iqtree_log_file, 'll')
-    return best_ll
-
-
-
-
+#t = iqtree_search(curr_run_directory = os.path.join(os.getcwd(),'trash'), msa_path = "/Users/noa/Workspace/bootstrap_results/test/job_0/raxml_tree_0/25117/iqtree_msa_0/sim_msa.fa",model = 'GTR+G',nb = 1000,prefix = 'prefix')
+#t = "/Users/noa/Workspace/bootstrap_repo/side_code/trash/prefix.treefile"
+#text = ""
+#print(diffrentiate_bootstrap_trees(t))
