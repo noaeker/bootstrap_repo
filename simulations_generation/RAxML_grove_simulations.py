@@ -56,11 +56,12 @@ def extract_model_specification_from_log(log_file, param):
     return res
 
 
+#and OVERALL_NUM_PARTITIONS==1
 
 
 def RAxML_grove_tree_simulation( out_dir, min_n_taxa, max_n_taxa, min_n_loci, max_n_loci, msa_type):
     msa_type = f"'{msa_type}'"
-    cmd_raxml_grove = f'{RAxML_alisim_path} generate -g alisim -o {out_dir} -q " NUM_TAXA>={min_n_taxa} and NUM_TAXA<={max_n_taxa} and OVERALL_NUM_ALIGNMENT_SITES>={min_n_loci} and OVERALL_NUM_ALIGNMENT_SITES<={max_n_loci} and OVERALL_NUM_PARTITIONS==1 and DATA_TYPE=={msa_type}" '
+    cmd_raxml_grove = f'{RAxML_alisim_path} generate -g alisim -o {out_dir} -q " NUM_TAXA>={min_n_taxa} and NUM_TAXA<={max_n_taxa} and OVERALL_NUM_ALIGNMENT_SITES>={min_n_loci} and OVERALL_NUM_ALIGNMENT_SITES<={max_n_loci}  and DATA_TYPE=={msa_type}" '
     logging.info(f'about to run {cmd_raxml_grove} to simulate tree')
     execute_command_and_write_to_log(cmd_raxml_grove)
     logging.info("Done with simulations")
