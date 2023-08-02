@@ -21,6 +21,7 @@ import sys
 import pandas as pd
 import os
 import re
+import time
 
 
 
@@ -92,7 +93,7 @@ def single_simulated_MSA_pipeline(tree_sim_dict, j, args):
     results_folder = os.path.join(iqtree_folder, "results_folder")
     create_or_clean_dir(tree_searches_folder)
     create_or_clean_dir(results_folder)
-    boot_tree_raxml =  raxml_bootstrap_pipeline(tree_searches_folder,results_folder , msa_path, prefix ="boot", model =tree_sim_dict["model_short"], n_bootstrap_replicates = args.bs, n_cpus=1,
+    boot_tree_raxml =  raxml_bootstrap_pipeline(tree_searches_folder,results_folder , msa_path, prefix ="boot", model =tree_sim_dict["model_short"],  n_cpus=1,
                                                 n_workers='auto')
     boot_tree_raxml.update(msa_results_dict)
     boot_tree_iqtree = iqtree_pipeline(tree_searches_folder,results_folder , msa_path, model = tree_sim_dict["model_short"], nb=args.nb_iqtree, prefix = "iqtree_boot")
@@ -123,11 +124,19 @@ def main():
                                                                          args.max_n_taxa, args.min_n_loci,
                                                                          args.max_n_loci, args.msa_type)
         for j in range(args.number_of_MSAs_per_tree):
+            logging.info(f"Starting with MSA {j} ")
             boot_tree_raxml, boot_tree_iqtree,boot_tree_fasttree = single_simulated_MSA_pipeline(tree_sim_dict, j, args,
                                                            )
+            st = time.time()
             all_results_df_raxml = all_results_df_raxml.append(boot_tree_raxml, ignore_index=True)
+            raxml_et = time.time()
+            logging.info(f"Done with RAxML pipeline, it took {(raxml_et-st)/60} minutes")
             all_results_df_iqtree = all_results_df_iqtree.append(boot_tree_iqtree, ignore_index=True)
+            iqtree_et = time.time()
+            logging.info(f"Done with IQTREE pipeline, it took {(iqtree_et - raxml_et) / 60} minutes")
             all_results_df_fasttree = all_results_df_fasttree.append(boot_tree_fasttree, ignore_index=True)
+            fasttree_et = time.time()
+            logging.info(f"Done with Fasttree pipeline, it took {(fasttree_et - iqtree_et) / 60} minutes")
        #except Exception as E:
        #         logging.error(f"Could not run simulation at iteration {i}\n Exception : {E}")
         logging.info(f"Updating tree {i} to csv")

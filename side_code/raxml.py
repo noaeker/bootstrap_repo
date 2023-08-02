@@ -200,13 +200,13 @@ def extract_parsimony_unique_topologies(curr_run_directory, trees_path, dist_pat
     return unique_file_path
 
 
-def raxml_bootstrap_pipeline(curr_run_directory, results_folder, msa_path, prefix, model, n_bootstrap_replicates, n_cpus = 1, n_workers ='auto'):
+def raxml_bootstrap_pipeline(curr_run_directory, results_folder, msa_path, prefix, model, n_cpus = 1, n_workers ='auto'):
 
     search_prefix = os.path.join(curr_run_directory, prefix)
     search_command = (
-        "{raxml_exe} --all --bs-trees {n_bootstrap_replicates} --threads {n_cpus} --workers {n_workers}  --force msa --force perf_threads --msa {msa_path} --model {model}  --seed {seed} --prefix {prefix} --redo").format(raxml_exe=RAXML_NG_EXE,
+        "{raxml_exe} --all --bs-trees autoMRE --threads {n_cpus} --workers {n_workers}  --force msa --force perf_threads --msa {msa_path} --model {model}  --seed {seed} --prefix {prefix} --redo").format(raxml_exe=RAXML_NG_EXE,
         msa_path=msa_path,  seed=SEED,
-        prefix=search_prefix, model=model, n_cpus = n_cpus, n_workers = n_workers,n_bootstrap_replicates=n_bootstrap_replicates)
+        prefix=search_prefix, model=model, n_cpus = n_cpus, n_workers = n_workers)
     raxml_log_file = search_prefix + ".raxml.log"
     model_file = search_prefix+".raxml.bestModel"
     execute_command_and_write_to_log(search_command, print_to_log=True)
