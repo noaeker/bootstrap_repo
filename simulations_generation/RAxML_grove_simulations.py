@@ -61,11 +61,10 @@ def extract_model_specification_from_log(log_file, param):
 def RAxML_grove_tree_simulation( out_dir, min_n_taxa, max_n_taxa, min_n_loci, max_n_loci, msa_type):
     msa_type = f"'{msa_type}'"
     cmd_raxml_grove = f'{RAxML_alisim_path} generate -g alisim -o {out_dir} -q " NUM_TAXA>={min_n_taxa} and NUM_TAXA<={max_n_taxa} and OVERALL_NUM_ALIGNMENT_SITES>={min_n_loci} and OVERALL_NUM_ALIGNMENT_SITES<={max_n_loci} and OVERALL_NUM_PARTITIONS==1 and DATA_TYPE=={msa_type}" '
-    print(cmd_raxml_grove)
-    logging.info(f'about to run {cmd_raxml_grove}')
+    logging.info(f'about to run {cmd_raxml_grove} to simulate tree')
     execute_command_and_write_to_log(cmd_raxml_grove)
+    logging.info("Done with simulations")
     folder = os.listdir(out_dir)[0]
-    print(folder)
     true_tree_path = os.path.join(out_dir, folder, 'tree_best.newick')
     model_formulation_file = os.path.join(out_dir, folder, 'tree_best.newick.log')
     model = extract_model_specification_from_log(model_formulation_file, 'model')
@@ -109,7 +108,7 @@ def main():
     parser = job_parser()
     args = parser.parse_args()
     curr_job_folder = args.curr_job_folder
-    create_or_clean_dir(curr_job_folder)
+    create_dir_if_not_exists(curr_job_folder)
     curr_job_general_log_file = os.path.join(args.curr_job_folder, "log_file.log")
     logging.basicConfig(filename=curr_job_general_log_file, level=logging.INFO)
     all_results_df_raxml = pd.DataFrame()
