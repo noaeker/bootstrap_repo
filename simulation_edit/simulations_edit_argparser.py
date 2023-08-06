@@ -9,6 +9,7 @@ def main_parser():
     parser.add_argument('--program', type=str, default='fasttree')
     parser.add_argument('--n_jobs', type=int, default=2)
     parser.add_argument('--jobs_prefix', type=str, default = 'test_boot_edit')
+    parser.add_argument('--queue', type = str, default = 'power-pupko')
     return parser
 
 
