@@ -37,7 +37,7 @@ def distribute_MSAS_over_jobs(raw_data, all_jobs_results_folder,args):
         job_raw_data.to_csv(current_raw_data_path,sep=CSV_SEP)
         current_feature_output_path = os.path.join(curr_job_folder, f"job_raw_data_with_features{CSV_SUFFIX}")
 
-        run_command = f' python {BOOTSTRAP_EDIT_CODE} --job_ind {job_ind} ---job_work_path {curr_job_folder} --job_data_path {current_raw_data_path} --job_final_output_path {current_feature_output_path} {generate_argument_str(args)}'
+        run_command = f' python {BOOTSTRAP_EDIT_CODE} --job_ind {job_ind} --job_work_path {curr_job_folder} --job_data_path {current_raw_data_path} --job_final_output_path {current_feature_output_path} {generate_argument_str(args)}'
 
 
         job_name = args.jobs_prefix + str(job_ind)
