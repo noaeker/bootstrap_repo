@@ -2,18 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c7df0e90-f129-4c06-bac2-5459d2cc3269" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/side_code/combine_current_results.py" beforeDir="false" afterPath="$PROJECT_DIR$/side_code/combine_current_results.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/side_code/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/side_code/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/simulation_edit/ML_boot_edit.py" beforeDir="false" afterPath="$PROJECT_DIR$/ML/ML_boot_edit.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/simulation_edit/bootstrap_edit.py" beforeDir="false" afterPath="$PROJECT_DIR$/simulation_edit/bootstrap_edit.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/simulation_edit/parallel_boot_edit.py" beforeDir="false" afterPath="$PROJECT_DIR$/simulation_edit/parallel_boot_edit.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/simulation_edit/simulations_argparser.py" beforeDir="false" afterPath="$PROJECT_DIR$/simulation_edit/simulations_edit_argparser.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/simulation_edit/tmp.tree" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/simulation_edit/total_data.tsv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/simulation_edit/tree_partition.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/simulation_edit/vi" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/simulation_edit/vi.tsv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/simulation_edit/simulations_edit_argparser.py" beforeDir="false" afterPath="$PROJECT_DIR$/simulation_edit/simulations_edit_argparser.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -26,7 +15,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/simulation_edit/bootstrap_edit.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="5522">
+            <state relative-caret-position="4512">
               <caret line="251" column="100" lean-forward="true" selection-start-line="251" selection-start-column="100" selection-end-line="251" selection-end-column="100" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
@@ -38,8 +27,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/simulation_edit/simulations_edit_argparser.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="418">
-              <caret line="19" column="68" lean-forward="true" selection-start-line="19" selection-start-column="68" selection-end-line="19" selection-end-column="68" />
+            <state relative-caret-position="88">
+              <caret line="4" column="113" selection-start-line="4" selection-start-column="113" selection-end-line="4" selection-end-column="113" />
             </state>
           </provider>
         </entry>
@@ -47,7 +36,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/simulation_edit/parallel_boot_edit.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="275">
+            <state relative-caret-position="131">
               <caret line="30" column="59" selection-start-line="30" selection-start-column="59" selection-end-line="30" selection-end-column="59" />
             </state>
           </provider>
@@ -165,10 +154,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-56" />
+    <option name="x" value="-9" />
     <option name="y" value="23" />
-    <option name="width" value="1945" />
-    <option name="height" value="987" />
+    <option name="width" value="1451" />
+    <option name="height" value="807" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -371,15 +360,15 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-56" y="23" width="1945" height="987" extended-state="0" />
+    <frame x="-9" y="23" width="1451" height="807" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13461539" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18111888" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3272727" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.36648044" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.44895104" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.22657342" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -719,16 +708,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/simulation_edit/bootstrap_edit.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5522">
-          <caret line="251" column="100" lean-forward="true" selection-start-line="251" selection-start-column="100" selection-end-line="251" selection-end-column="100" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/side_code/FastTree.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1100">
@@ -759,17 +738,27 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/simulation_edit/bootstrap_edit.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4512">
+          <caret line="251" column="100" lean-forward="true" selection-start-line="251" selection-start-column="100" selection-end-line="251" selection-end-column="100" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/simulation_edit/parallel_boot_edit.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="275">
+        <state relative-caret-position="131">
           <caret line="30" column="59" selection-start-line="30" selection-start-column="59" selection-end-line="30" selection-end-column="59" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/simulation_edit/simulations_edit_argparser.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="418">
-          <caret line="19" column="68" lean-forward="true" selection-start-line="19" selection-start-column="68" selection-end-line="19" selection-end-column="68" />
+        <state relative-caret-position="88">
+          <caret line="4" column="113" selection-start-line="4" selection-start-column="113" selection-end-line="4" selection-end-column="113" />
         </state>
       </provider>
     </entry>
