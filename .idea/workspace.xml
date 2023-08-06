@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c7df0e90-f129-4c06-bac2-5459d2cc3269" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/simulation_edit/parallel_boot_edit.py" beforeDir="false" afterPath="$PROJECT_DIR$/simulation_edit/parallel_boot_edit.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/simulation_edit/bootstrap_edit.py" beforeDir="false" afterPath="$PROJECT_DIR$/simulation_edit/bootstrap_edit.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -12,11 +12,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/simulation_edit/bootstrap_edit.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="148">
-              <caret line="225" column="31" lean-forward="true" selection-start-line="225" selection-start-column="31" selection-end-line="225" selection-end-column="31" />
+            <state relative-caret-position="353">
+              <caret line="227" column="23" selection-start-line="227" selection-start-column="23" selection-end-line="227" selection-end-column="23" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -42,11 +42,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/simulation_edit/parallel_boot_edit.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="113">
-              <caret line="39" column="76" lean-forward="true" selection-start-line="39" selection-start-column="76" selection-end-line="39" selection-end-column="76" />
+            <state relative-caret-position="157">
+              <caret line="41" lean-forward="true" selection-start-line="41" selection-end-line="41" />
             </state>
           </provider>
         </entry>
@@ -86,7 +86,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>vi</find>
       <find>mle</find>
       <find>get_trees_per_site_ll_agreement</find>
       <find>format</find>
@@ -116,6 +115,7 @@
       <find>boots</find>
       <find>job_msas</find>
       <find>feature</find>
+      <find>---job_work_path</find>
     </findStrings>
     <replaceStrings>
       <replace>job_data_path</replace>
@@ -143,11 +143,11 @@
         <option value="$PROJECT_DIR$/side_code/raxml.py" />
         <option value="$PROJECT_DIR$/simulations_generation/RAxML_grove_simulations.py" />
         <option value="$PROJECT_DIR$/side_code/combine_current_results.py" />
-        <option value="$PROJECT_DIR$/simulation_edit/bootstrap_edit.py" />
         <option value="$PROJECT_DIR$/simulation_edit/simulations_argparser.py" />
         <option value="$PROJECT_DIR$/side_code/config.py" />
         <option value="$PROJECT_DIR$/simulation_edit/simulations_edit_argparser.py" />
         <option value="$PROJECT_DIR$/simulation_edit/parallel_boot_edit.py" />
+        <option value="$PROJECT_DIR$/simulation_edit/bootstrap_edit.py" />
       </list>
     </option>
   </component>
@@ -372,12 +372,12 @@
     <frame x="-9" y="23" width="1451" height="807" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18111888" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18111888" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3272727" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.4013986" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.26433566" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.22657342" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -754,20 +754,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/simulation_edit/bootstrap_edit.py">
+    <entry file="file://$PROJECT_DIR$/simulation_edit/parallel_boot_edit.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="148">
-          <caret line="225" column="31" lean-forward="true" selection-start-line="225" selection-start-column="31" selection-end-line="225" selection-end-column="31" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="157">
+          <caret line="41" lean-forward="true" selection-start-line="41" selection-end-line="41" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/simulation_edit/parallel_boot_edit.py">
+    <entry file="file://$PROJECT_DIR$/simulation_edit/bootstrap_edit.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="113">
-          <caret line="39" column="76" lean-forward="true" selection-start-line="39" selection-start-column="76" selection-end-line="39" selection-end-column="76" />
+        <state relative-caret-position="353">
+          <caret line="227" column="23" selection-start-line="227" selection-start-column="23" selection-end-line="227" selection-end-column="23" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

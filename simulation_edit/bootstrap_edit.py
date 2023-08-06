@@ -225,6 +225,7 @@ def get_bootstrap_and_tree_groups(program, bootstrap_tree_details,mle_path,garba
         all_ML_nw = get_file_rows(all_mle_path)
         all_ML_ete = generate_booster_trees(mle_path, all_ML_nw, garbage_dir, tree_tmp_path)
         extra_tree_groups.update( {'all_ML_ete': all_ML_ete})
+        extra_boot = {}
     elif program == 'iqtree':
         final_tree_aLRT = bootstrap_tree_details['final_tree_aLRT']
         aLRT_ete = Tree(newick=final_tree_aLRT, format=0)
