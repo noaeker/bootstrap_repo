@@ -8,15 +8,9 @@ sys.path.append(PROJECT_ROOT_DIRECRTORY)
 
 
 
-from side_code.basic_trees_manipulation import *
+from simulation_edit.simulations_edit_argparser import job_parser
 import dendropy
 import numpy as np
-from scipy.stats.stats import pearsonr
-import pandas as pd
-import seaborn as sns
-from sklearn import metrics
-import matplotlib.pyplot as plt
-from ete3 import *
 import argparse
 import random
 from side_code.basic_trees_manipulation import *
@@ -24,9 +18,8 @@ from side_code.MSA_manipulation import bootstrap_MSA
 from side_code.spr_prune_and_regraft import *
 from side_code.file_handling import *
 from side_code.raxml import generate_n_unique_tree_topologies_as_starting_trees, raxml_compute_tree_per_site_ll, generate_n_tree_topologies
-from dendropy.calculate import treecompare
 from side_code.code_submission import execute_command_and_write_to_log
-from sklearn.metrics import silhouette_samples, silhouette_score
+
 
 
 
@@ -41,7 +34,7 @@ def get_trees_per_site_ll(trees, garbage_dir, msa_path, model):
         with open("tmp.tree", 'w') as TMP:
             TMP.write(tree)
 
-        per_site_ll_score = raxml_compute_tree_per_site_ll(garbage_dir, full_data_path=msa_path,
+        per_site_ll_score = raxml_compute_tree_per_site_ll(garbage_dir, full_job_data_path=msa_path,
                                                            tree_file="tmp.tree",
                                                            ll_on_data_prefix="per_site_ll",
                                                            model = model, opt = False)
@@ -164,9 +157,9 @@ def generate_partition_statistics(node,mle_tree_ete,extra_tree_groups, extra_boo
             tree_support = np.mean([(tree_ete & (node.name)).support for tree_ete in extra_tree_groups[tree_group]])
             tree_binary_support = [int((tree_ete & (node.name)).support==1) for tree_ete in extra_tree_groups[tree_group]]
 
-            statistics.update(get_summary_statistics_dict(feature_name=tree_group, values=tree_support))
+            statistics.update(get_summary_statistics_dict(feature_name=f"feature_{tree_group}", values=tree_support))
             statistics.update(
-                get_summary_statistics_dict(feature_name=f'{tree_group}_binary', values=tree_binary_support))
+                get_summary_statistics_dict(feature_name=f'feature_{tree_group}_binary', values=tree_binary_support))
 
 
         true_support = (best_ML_vs_true_tree_ete&(node.name)).support
@@ -182,10 +175,10 @@ def generate_partition_statistics(node,mle_tree_ete,extra_tree_groups, extra_boo
         min_partition_size = min(len(get_list_of_taxa(removed_node)), len(get_list_of_taxa(remaining_tree)))
         partition_size_ratio = min_partition_size / len(get_list_of_taxa(mle_tree_ete))
 
-        statistics.update({'partition_branch': node.dist, 'partition_branch_vs_mean': node.dist/mean_bl,'bootstrap_support': node.support, 'true_support': true_support, 'true_binary_support': true_binary_support, 'partition_size': min_partition_size,'partition_size_ratio': partition_size_ratio,
-                    'partition_divergence': min_partition_divergence, 'divergence_ratio': divergence_ratio})
+        statistics.update({'feature_partition_branch': node.dist, 'feature_partition_branch_vs_mean': node.dist/mean_bl,'bootstrap_support': node.support, 'true_support': true_support, 'true_binary_support': true_binary_support, 'feature_partition_size': min_partition_size,'feature_partition_size_ratio': partition_size_ratio,
+                    'feature_partition_divergence': min_partition_divergence, 'feature_divergence_ratio': divergence_ratio})
         for b_method in extra_boot_ete:
-            statistics.update({f'{b_method}_support':(extra_boot_ete[b_method]&node.name).support})
+            statistics.update({f'feature_{b_method}_support':(extra_boot_ete[b_method]&node.name).support})
         return statistics
 
 def get_branch_lengths(tree):
@@ -248,20 +241,10 @@ def get_bootstrap_and_tree_groups(program, bootstrap_tree_details,mle_path,garba
     return extra_boot, extra_tree_groups
 
 def main():
-    parser = argparse.ArgumentParser()
-    # parser.add_argument('--msa_path',type = str, default= '/Users/noa/Workspace/simulations_results/raxml_grove_simulations/job_0/raxml_tree_0/52454/iqtree_msa_0/sim_msa.phy')
-    parser.add_argument('--data_path', type=str,
-                        default="/Users/noa/Workspace/bootstrap_results/test/job_0/simulations_df_fasttree.tsv")
-    parser.add_argument('--final_output_path', type=str,
-                        default="total_data.tsv")
-    parser.add_argument('--work_path', type=str,
-                        default='/Users/noa/Workspace/bootstrap_results/bootstrap_edit_results')
-    parser.add_argument('--n_pars', type=int, default=50)
-    parser.add_argument('--program', type=str,  default = 'fasttree')
-
+    parser = job_parser()
     args = parser.parse_args()
-    create_dir_if_not_exists(args.work_path)
-    data = pd.read_csv(args.data_path, sep='\t')
+    create_dir_if_not_exists(args.job_work_path)
+    data = pd.read_csv(args.job_data_path, sep='\t')
     all_splits = pd.DataFrame()
     for true_tree_path in data['true_tree_path'].unique():
         tree_data = data.loc[data.true_tree_path == true_tree_path]
@@ -271,7 +254,7 @@ def main():
             mle_path =  bootstrap_tree_details[get_program_default_ML_tree(args.program)]
             mle_tree_ete  = Tree(mle_path, format=0)
             add_internal_names(mle_tree_ete)
-            garbage_dir = os.path.join(args.work_path, 'garbage')
+            garbage_dir = os.path.join(args.job_work_path, 'garbage')
             create_dir_if_not_exists(garbage_dir)
             best_ML_vs_true_tree_ete = get_booster_tree(mle_path, true_tree_path,
                                                       out_path=os.path.join(garbage_dir,"booster_true.nw"))
@@ -289,7 +272,7 @@ def main():
                                                                )
                     statistics.update(bootstrap_tree_details.to_dict())
                     all_splits = all_splits.append(statistics, ignore_index=True)
-                    all_splits.to_csv(args.final_output_path, sep='\t')
+                    all_splits.to_csv(args.job_final_output_path, sep='\t')
 
             # sns.scatterplot(data=total_data, x='parsimony_support', y='Support',  s=30, alpha=0.6)
             # plt.show()

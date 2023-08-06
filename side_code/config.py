@@ -51,7 +51,7 @@ if not LOCAL_RUN:
     MAIN_CODE_PATH_SIM = "/groups/pupko/noaeker/bootstrap_repo/simulations_generation/RAxML_grove_simulations.py"
     PROJECT_ROOT_DIRECRTORY = "/groups/pupko/noaeker/bootstrap_repo"
     BOOSTER_EXE = "/groups/pupko/noaeker/programs/other_programs/booster_linux64"
-    BOOTSTRAP_EDIT_CODE = "/groups/pupko/noaeker/bootstrap_repo/simulation_edit/bootstrap_edit"
+    BOOTSTRAP_EDIT_CODE = "/groups/pupko/noaeker/bootstrap_repo/simulation_edit/bootstrap_edit.py"
 
 elif LOCAL_RUN:
     IQTREE_EXE = "/Users/noa/Programs/iqtree-2.1.3-MacOSX/bin/iqtree2"
@@ -63,4 +63,4 @@ elif LOCAL_RUN:
     MAIN_CODE_PATH_SIM = "/Users/noa/Workspace/bootstrap_repo/simulations_generation/RAxML_grove_simulations.py"
     PROJECT_ROOT_DIRECRTORY = "/Users/noa/Workspace/bootstrap_repo"
     BOOSTER_EXE = "/Users/noa/Programs/booster_macos64"
-    BOOTSTRAP_EDIT_CODE = "/Users/noa/Workspace/bootstrap_repo/simulation_edit/bootstrap_edit"
+    BOOTSTRAP_EDIT_CODE = "/Users/noa/Workspace/bootstrap_repo/simulation_edit/bootstrap_edit.py"
