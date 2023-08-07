@@ -6,7 +6,7 @@ if platform == "linux" or platform == "linux2":
 else:
     LOCAL_RUN = True
 
-MODULE_LOAD_STR = "source /groups/itay_mayrose/lab_python/anaconda3/etc/profile.d/conda.sh; source activate noa_env;  module load gcc/gcc-7.2.0; module load R/3.6.1; module load mafft"
+MODULE_LOAD_STR = "source /groups/itay_mayrose/lab_python/anaconda3/etc/profile.d/conda.sh; source activate noa_env;  module load gcc/gcc-7.2.0;"
 PBS_FILE_GENERATOR_CODE = "/groups/pupko/noaeker/q_submitter"
 
 SEED = 5
