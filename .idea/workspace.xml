@@ -52,8 +52,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/simulation_edit/bootstrap_edit.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="104">
-              <caret line="118" column="77" lean-forward="true" selection-start-line="118" selection-start-column="77" selection-end-line="118" selection-end-column="77" />
+            <state relative-caret-position="361">
+              <caret line="136" column="181" selection-start-line="136" selection-start-column="181" selection-end-line="136" selection-end-column="181" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -108,8 +108,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>generate_tree_object_from_newick</find>
-      <find>pct_suppor</find>
       <find>generate_nei</find>
       <find>get_possibl</find>
       <find>ll_mat_wi</find>
@@ -138,6 +136,8 @@
       <find>overall_model_performance_analysis</find>
       <find>generate_partition_statistics</find>
       <find>get_neighbouring_nodes_statistics</find>
+      <find>get_node_support_feautres_among_tree_groups</find>
+      <find>child</find>
     </findStrings>
     <replaceStrings>
       <replace>job_data_path</replace>
@@ -186,18 +186,17 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="58" />
-    <option name="y" value="114" />
-    <option name="width" value="1803" />
-    <option name="height" value="813" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="57" />
+    <option name="y" value="113" />
+    <option name="width" value="1805" />
+    <option name="height" value="815" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -234,6 +233,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -393,16 +393,16 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="58" y="114" width="1803" height="813" extended-state="0" />
+    <frame x="0" y="25" width="1920" height="980" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15432099" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15429173" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32587412" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.53426576" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.24475524" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.14058957" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.24475524" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -454,7 +454,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/simulation_edit/bootstrap_edit.py</url>
-          <line>165</line>
+          <line>173</line>
           <option name="timeStamp" value="35" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -778,8 +778,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/simulation_edit/bootstrap_edit.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="104">
-          <caret line="118" column="77" lean-forward="true" selection-start-line="118" selection-start-column="77" selection-end-line="118" selection-end-column="77" />
+        <state relative-caret-position="361">
+          <caret line="136" column="181" selection-start-line="136" selection-start-column="181" selection-end-line="136" selection-end-column="181" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>

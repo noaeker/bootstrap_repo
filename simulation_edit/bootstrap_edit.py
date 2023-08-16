@@ -111,23 +111,31 @@ def generate_bootstrap_booster_trees(msa_path, garbage_dir, n, model, taxa, mle_
         all_pars_ete_boot.append(pars_tree_ete)
     return all_pars_ete_boot
 
-def get_neighbouring_nodes_statistics(node_name, tree):
-    tree_cp = tree.copy()
-    print(tree_cp.get_ascii(attributes=['name'], show_internal=True))
-    tree_cp.set_outgroup(tree_cp & node_name)
-    print(tree_cp.get_ascii(attributes=['name'], show_internal=True))
-    children_nodes = [node_c.name for node_c in (tree_cp&node_name).children]
-    sister_children_nodes = [node_c for node_c in(tree_cp&node_name).up.children if node_c.name!=node_name ][0].children
-    branch_lengths =  [n.dist for n in children_nodes+sister_children_nodes]
-    support_values = [n.support for n in children_nodes+sister_children_nodes]
-    return branch_lengths, support_values
 
-def get_node_support_feautres_among_tree_groups(mle_tree_obj,node_name, trees, name):
-    tree_support = ([(tree_ete & (node_name)).support for tree_ete in trees])
+
+def get_neighboring_nodes(tree_ete, node_name):
+    tree_ete_cp = tree_ete.copy()
+    tree_ete_cp.set_outgroup(tree_ete_cp & node_name)
+    children_nodes = [node_c for node_c in (tree_ete_cp & node_name).children]
+    sister_children_nodes = \
+        ([node_c for node_c in (tree_ete_cp & node_name).up.children if node_c.name != node_name][0]).children
+    return children_nodes+sister_children_nodes
+
+def get_node_support_feautres_among_tree_groups(node_name, trees, name):
+    tree_support = ([(tree_ete & (node_name)).support for tree_ete in trees ])
     tree_binary_support = [int((tree_ete & (node_name)).support == 1) for tree_ete in trees]
+    neighbors_ete_support_values = []
+    neighbors_ete_support_values_binary = []
+    for tree_ete in trees:
+        neighboring_nodes = get_neighboring_nodes(tree_ete, node_name)
+        support_values = [node.support for node in neighboring_nodes]
+        binary_support_values = [int(node.support == 1) for node in neighboring_nodes]
+        neighbors_ete_support_values+= support_values
+        neighbors_ete_support_values_binary+= binary_support_values
 
-    features = {f"feature_mean_{name}" : np.mean(tree_support), f"feature_mean_{name}_binary": np.mean(tree_binary_support)}
-    get_neighbouring_nodes_statistics(node_name, mle_tree_obj)
+    features = {f"feature_mean_{name}": np.mean(tree_support),
+                f"feature_mean_{name}_binary": np.mean(tree_binary_support),f"feature_mean_{name}_neighbors": np.mean(neighbors_ete_support_values), f"feature_mean_{name}_neighbors_binary": np.mean(neighbors_ete_support_values_binary) }
+
 
     return features
 
@@ -156,10 +164,10 @@ def generate_partition_statistics(node, mle_tree_obj, extra_tree_groups, extra_b
         divergence_ratio = min_partition_divergence/total_tree_divergence
         min_partition_size = min(len((removed_node.get_tree_root())), len((remaining_tree.get_tree_root())))
         partition_size_ratio = min_partition_size / len((mle_tree_obj.get_tree_root()))
-        grandchildrens = [len(c_node) for c_node in node.children ]
-        childs_brlen = [c_node.dist for c_node in node.children]
+        neighboring_nodes= get_neighboring_nodes(mle_tree_obj, node.name)
+        childs_brlen = [c_node.dist for c_node in neighboring_nodes]
 
-        statistics.update({'feature_min_grchin': np.min(grandchildrens),'feature_min_child_brlen': np.min(childs_brlen),'feature_max_child_brlen': np.max(childs_brlen),'feature_min_grchin': np.min(grandchildrens),'feature_max_grchin': np.max(grandchildrens), 'feature_partition_branch': node.dist,'feature_partition_branch_parent': node.up.dist, 'feature_partition_branch_vs_mean': node.dist/mean_bl,'bootstrap_support': node.support, 'true_support': true_support, 'true_binary_support': true_binary_support, 'feature_partition_size': min_partition_size,'feature_partition_size_ratio': partition_size_ratio,
+        statistics.update({'feature_mean_neighbor_brlen': np.mean(childs_brlen),'feature_min_neighbor_brlen': np.min(childs_brlen),'feature_partition_branch': node.dist,'feature_partition_branch_vs_mean': node.dist/mean_bl,'bootstrap_support': node.support, 'true_support': true_support, 'true_binary_support': true_binary_support, 'feature_partition_size': min_partition_size,'feature_partition_size_ratio': partition_size_ratio,
                     'feature_partition_divergence': min_partition_divergence, 'feature_divergence_ratio': divergence_ratio})
         for b_method in extra_boot_ete:
             statistics.update({f'feature_{b_method}_support':(extra_boot_ete[b_method]&node.name).support})
