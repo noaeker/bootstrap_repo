@@ -4,7 +4,7 @@ import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 import pickle
 from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
-from sklearn.metrics import matthews_corrcoef, log_loss, roc_auc_score, average_precision_score, accuracy_score, precision_score, \
+from sklearn.metrics import matthews_corrcoef, balanced_accuracy_score, log_loss, roc_auc_score, average_precision_score, accuracy_score, precision_score, \
     recall_score
 import numpy as np
 import os
@@ -127,32 +127,18 @@ def calibration_plot(model, test_data, y_test):
     pyplot.show()
 
 def enrich_with_single_feature_metrics(var_impt, train_X, y_train, test_X, y_test):
-    auc_scores = []
-    auprc_scores = []
     mcc_scores = []
+    bacc_scores = []
     for feature in var_impt.index:
-        try:
             #lg = LogisticRegression(random_state=0).fit(train_X[[feature]], y_train)
             lg = lightgbm.LGBMClassifier(importance_type='gain').fit(train_X[[feature]], y_train)
-            proba = lg.predict_proba(test_X[[feature]])[:, 1]
             pred = lg.predict(test_X[[feature]])
-            auc = roc_auc_score(y_test, proba)
-            auprc = average_precision_score(y_test, proba)
             mcc = matthews_corrcoef(y_test, pred)
-
-        except:
-            auc = -1
-            auprc = -1
-            mcc = -1
-        auc_scores.append(auc)
-        auprc_scores.append(auprc)
-        mcc_scores.append(mcc)
-    var_impt["AUC"] = auc_scores
-    var_impt["AUPRC"] = auprc_scores
+            bacc = balanced_accuracy_score(y_test, pred)
+            mcc_scores.append(mcc)
+            bacc_scores.append(bacc)
     var_impt["mcc"] = mcc_scores
-
-
-
+    var_impt["balanced_accuracy"] = mcc_scores
 
 
 

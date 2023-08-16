@@ -25,36 +25,6 @@ from side_code.code_submission import execute_command_and_write_to_log
 
 
 
-
-def get_trees_per_site_ll(trees, garbage_dir, msa_path, model):
-
-
-    per_site_ll_scores = []
-    for tree in trees:
-        with open("tmp.tree", 'w') as TMP:
-            TMP.write(tree)
-
-        per_site_ll_score = raxml_compute_tree_per_site_ll(garbage_dir, full_job_data_path=msa_path,
-                                                           tree_file="tmp.tree",
-                                                           ll_on_data_prefix="per_site_ll",
-                                                           model = model, opt = False)
-        per_site_ll_scores.append(per_site_ll_score)
-    final_mat = np.array(per_site_ll_scores)
-    return final_mat
-    # trees_total_ll = np.sum(final_mat, axis = 1)
-    # correlations = []
-    # for i in range(final_mat.shape[1]):
-    #     col = final_mat[:,i]
-    #     if np.var(col)==0:
-    #         continue
-    #     corr = pearsonr(col,trees_total_ll)[0]
-    #     if not np.isnan(corr):
-    #         correlations.append(corr)
-    # agreement_min_max_ll = np.mean(best_vs_worst>0)
-    # d = {f'{name}_agreement_min_max_ll': agreement_min_max_ll}
-    # d.update(get_summary_statistics_dict(feature_name=f'{name}_site_corrs',values = correlations))
-    # return d
-
 def pct_25(values):
     return np.percentile(values, 25)
 
@@ -115,15 +85,6 @@ def get_list_of_taxa(node):
         res.append(leaf.name)
     return sorted(res)
 
-def get_possible_moves(edges_list1,edges_list2):
-    possible_moves = []
-    for prune_edge in edges_list1:
-        for rgft_edge in edges_list2:
-                if not ((prune_edge.node_a == rgft_edge.node_a) or (prune_edge.node_b == rgft_edge.node_b) or (
-                        prune_edge.node_b == rgft_edge.node_a) or (prune_edge.node_a == rgft_edge.node_b)):
-                    possible_moves.append((prune_edge, rgft_edge))
-    return possible_moves
-
 
 
 
@@ -150,32 +111,55 @@ def generate_bootstrap_booster_trees(msa_path, garbage_dir, n, model, taxa, mle_
         all_pars_ete_boot.append(pars_tree_ete)
     return all_pars_ete_boot
 
-def generate_partition_statistics(node,mle_tree_ete,extra_tree_groups, extra_boot_ete, best_ML_vs_true_tree_ete,
-                                                               ):
-        statistics = {}
-        for tree_group in extra_tree_groups:
-            tree_support = np.mean([(tree_ete & (node.name)).support for tree_ete in extra_tree_groups[tree_group]])
-            tree_binary_support = [int((tree_ete & (node.name)).support==1) for tree_ete in extra_tree_groups[tree_group]]
+def get_neighbouring_nodes_statistics(node_name, tree):
+    tree_cp = tree.copy()
+    print(tree_cp.get_ascii(attributes=['name'], show_internal=True))
+    tree_cp.set_outgroup(tree_cp & node_name)
+    print(tree_cp.get_ascii(attributes=['name'], show_internal=True))
+    children_nodes = [node_c.name for node_c in (tree_cp&node_name).children]
+    sister_children_nodes = [node_c for node_c in(tree_cp&node_name).up.children if node_c.name!=node_name ][0].children
+    branch_lengths =  [n.dist for n in children_nodes+sister_children_nodes]
+    support_values = [n.support for n in children_nodes+sister_children_nodes]
+    return branch_lengths, support_values
 
-            statistics.update(get_summary_statistics_dict(feature_name=f"feature_{tree_group}", values=tree_support))
-            statistics.update(
-                get_summary_statistics_dict(feature_name=f'feature_{tree_group}_binary', values=tree_binary_support))
+def get_node_support_feautres_among_tree_groups(mle_tree_obj,node_name, trees, name):
+    tree_support = ([(tree_ete & (node_name)).support for tree_ete in trees])
+    tree_binary_support = [int((tree_ete & (node_name)).support == 1) for tree_ete in trees]
+
+    features = {f"feature_mean_{name}" : np.mean(tree_support), f"feature_mean_{name}_binary": np.mean(tree_binary_support)}
+    get_neighbouring_nodes_statistics(node_name, mle_tree_obj)
+
+    return features
+
+
+
+
+
+def generate_partition_statistics(node, mle_tree_obj, extra_tree_groups, extra_boot_ete, best_ML_vs_true_tree_ete,
+                                  ):
+        statistics = {}
+
+        for tree_group in extra_tree_groups:
+
+            statistics.update(get_node_support_feautres_among_tree_groups(node.name, extra_tree_groups[tree_group], name = tree_group))
 
 
         true_support = (best_ML_vs_true_tree_ete&(node.name)).support
         true_binary_support = (best_ML_vs_true_tree_ete & (node.name)).support==1
-        total_tree_divergence = get_tree_divergence(mle_tree_ete)
-        mle_tree_ete_cp = mle_tree_ete.copy()
+        total_tree_divergence = get_tree_divergence(mle_tree_obj)
+        mle_tree_ete_cp = mle_tree_obj.copy()
         node_cp = mle_tree_ete_cp & node.name
         removed_node = node_cp.detach()
-        mean_bl = np.mean(get_branch_lengths(mle_tree_ete))
+        mean_bl = np.mean(get_branch_lengths(mle_tree_obj))
         remaining_tree = mle_tree_ete_cp
         min_partition_divergence = min(get_tree_divergence(removed_node), get_tree_divergence(remaining_tree))
         divergence_ratio = min_partition_divergence/total_tree_divergence
-        min_partition_size = min(len(get_list_of_taxa(removed_node)), len(get_list_of_taxa(remaining_tree)))
-        partition_size_ratio = min_partition_size / len(get_list_of_taxa(mle_tree_ete))
+        min_partition_size = min(len((removed_node.get_tree_root())), len((remaining_tree.get_tree_root())))
+        partition_size_ratio = min_partition_size / len((mle_tree_obj.get_tree_root()))
+        grandchildrens = [len(c_node) for c_node in node.children ]
+        childs_brlen = [c_node.dist for c_node in node.children]
 
-        statistics.update({'feature_partition_branch': node.dist, 'feature_partition_branch_vs_mean': node.dist/mean_bl,'bootstrap_support': node.support, 'true_support': true_support, 'true_binary_support': true_binary_support, 'feature_partition_size': min_partition_size,'feature_partition_size_ratio': partition_size_ratio,
+        statistics.update({'feature_min_grchin': np.min(grandchildrens),'feature_min_child_brlen': np.min(childs_brlen),'feature_max_child_brlen': np.max(childs_brlen),'feature_min_grchin': np.min(grandchildrens),'feature_max_grchin': np.max(grandchildrens), 'feature_partition_branch': node.dist,'feature_partition_branch_parent': node.up.dist, 'feature_partition_branch_vs_mean': node.dist/mean_bl,'bootstrap_support': node.support, 'true_support': true_support, 'true_binary_support': true_binary_support, 'feature_partition_size': min_partition_size,'feature_partition_size_ratio': partition_size_ratio,
                     'feature_partition_divergence': min_partition_divergence, 'feature_divergence_ratio': divergence_ratio})
         for b_method in extra_boot_ete:
             statistics.update({f'feature_{b_method}_support':(extra_boot_ete[b_method]&node.name).support})
@@ -268,12 +252,13 @@ def main():
 
 
             for node in mle_tree_ete.iter_descendants():
+
                 if not node.is_leaf():
-                    statistics = generate_partition_statistics(node,mle_tree_ete,extra_tree_groups, extra_boot, best_ML_vs_true_tree_ete
-                                                               )
-                    statistics.update(bootstrap_tree_details.to_dict())
-                    all_splits = all_splits.append(statistics, ignore_index=True)
-                    all_splits.to_csv(args.job_final_output_path, sep='\t')
+                   statistics = generate_partition_statistics(node,mle_tree_ete,extra_tree_groups, extra_boot, best_ML_vs_true_tree_ete
+                                                             )
+                   statistics.update(bootstrap_tree_details.to_dict())
+                   all_splits = all_splits.append(statistics, ignore_index=True)
+                   all_splits.to_csv(args.job_final_output_path, sep='\t')
 
             # sns.scatterplot(data=total_data, x='parsimony_support', y='Support',  s=30, alpha=0.6)
             # plt.show()

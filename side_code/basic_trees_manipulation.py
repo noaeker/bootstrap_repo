@@ -4,6 +4,8 @@ from side_code.code_submission import execute_command_and_write_to_log
 from side_code.config import *
 from ete3 import *
 import logging
+import matplotlib as plt
+import networkx as nx
 import re
 import shutil
 
@@ -136,11 +138,39 @@ def extract_mad_file_statistic(mad_log_path):
     return value
 
 
+def translate_to_networkx_graph(tree):
+    G = nx.Graph()
+    for i, node in enumerate(tree.iter_descendants("levelorder")):
+        if node.up:
+            G.add_edge(node.name, node.up.name,length = node.dist)
+    return G
+
+def get_hyperbolic_tree_embeddings(curr_msa_stats, curr_data, partition_folder, i):
+    relaxed_lasso = 1 if curr_msa_stats["relaxed_lasso"] else 0
+    curr_data_path = os.path.join(partition_folder, f"partition_{i}_sitelh.csv")
+    curr_data.to_csv(curr_data_path, index=False)
+    command = f"module load R/3.6.1;Rscript --vanila {R_CODE_PATH} {curr_data_path} {partition_folder} {relaxed_lasso} {lasso_thresholds}"
+    logging.info(f"About to run lasso command in glmnet: {command}")
+    lasso_start_time = time.time()
+    # os.system('module load R/3.6.1')
+    os.system(command)
+    logging.info("R glmnet command is done!")
+
+    lasso_output_file_path = os.path.join(partition_folder, "r_lasso_relaxed.csv") if curr_msa_stats[
+        "relaxed_lasso"] else os.path.join(partition_folder, "r_lasso.csv")
+    glmnet_lasso_path = pd.read_csv(lasso_output_file_path)
+    glmnet_running_time = time.time() - lasso_start_time
+    logging.info(f"Lasso results should be found in : {lasso_output_file_path} ")
+    return glmnet_lasso_path, glmnet_running_time
+
 
 def main():
     t = Tree('((((H,K)D,(F,I)G)B,E)A,((L,(N,Q)O)J,(P,S)M)C);', format=1)
     add_internal_names(t)
     (print(t.get_ascii(attributes=['name'], show_internal=True)))
+
+    G = translate_to_networkx_graph(t)
+    pass
     # for i, pruning_head_node in enumerate(t.iter_descendants("levelorder")):
     #     if not pruning_head_node.up.is_root(): # if this is not one of the two direct child nodes of the root
     #         pruning_edge = Edge(node_a=pruning_head_node.name, node_b=pruning_head_node.up.name)
