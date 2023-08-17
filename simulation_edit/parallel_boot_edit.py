@@ -55,13 +55,6 @@ def distribute_MSAS_over_jobs(raw_data, all_jobs_results_folder,args):
         job_dict[job_ind] = {"current_feature_output_path": current_feature_output_path, "job_name": job_name}
     return job_dict
 
-def finish_all_running_jobs(job_names):
-    logging.info("Deleting all jobs")
-    for job_name in job_names: # remove all remaining folders
-            delete_current_job_cmd = f"qstat | grep {job_name} | xargs qdel"
-            execute_command_and_write_to_log(delete_current_job_cmd, print_to_log=True)
-
-
 def main():
     parser = main_parser()
     args = parser.parse_args()
@@ -69,8 +62,18 @@ def main():
     create_or_clean_dir(feature_pipeline_dir)
     log_file_path = os.path.join(feature_pipeline_dir, "general_features.log")
     logging.basicConfig(filename=log_file_path, level=logging.DEBUG)
-    raw_data = pd.read_csv(args.data_path, sep = CSV_SEP)
+    raw_data_fasttree = pd.read_csv(args.data_path_fasttree, sep = CSV_SEP)
+    raw_data_fasttree["program"] = 'fasttree'
+    raw_data_raxml = pd.read_csv(args.data_path_raxml, sep=CSV_SEP)
+    raw_data_raxml["program"] = 'raxml'
+    raw_data_iqtree = pd.read_csv(args.data_path_iqtree, sep=CSV_SEP)
+    raw_data_iqtree["program"] = 'iqtree'
 
+    raw_data = pd.concat([raw_data_fasttree, raw_data_iqtree, raw_data_raxml])
+
+    common_tree_ids = np.intersect1d(np.intersect1d(np.unique(raw_data_fasttree["tree_id"]),np.unique(raw_data_raxml["tree_id"])),np.unique(raw_data_iqtree["tree_id"]))
+
+    raw_data = raw_data.loc[raw_data.tree_id.isin(common_tree_ids)]
     distribute_MSAS_over_jobs(raw_data, feature_pipeline_dir,args)
 
 

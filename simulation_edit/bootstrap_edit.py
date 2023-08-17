@@ -216,7 +216,7 @@ def get_bootstrap_and_tree_groups(program, bootstrap_tree_details,mle_path,garba
         all_mle_path = bootstrap_tree_details['all_final_tree_topologies_path']
         all_ML_nw = get_file_rows(all_mle_path)
         all_ML_ete = generate_booster_trees(mle_path, all_ML_nw, garbage_dir, tree_tmp_path)
-        extra_tree_groups.update( {'all_ML_ete': all_ML_ete})
+        extra_tree_groups.update( {'all_ML_boot_raxml': all_ML_ete})
         extra_boot = {}
     elif program == 'iqtree':
         final_tree_aLRT = bootstrap_tree_details['final_tree_aLRT']
@@ -225,12 +225,12 @@ def get_bootstrap_and_tree_groups(program, bootstrap_tree_details,mle_path,garba
         final_tree_aBayes_path = bootstrap_tree_details['final_tree_aBayes']
         aBayes_ete = Tree(newick=final_tree_aBayes_path, format=0)
         add_internal_names(aBayes_ete)
-        extra_boot = {'aLRT_ete ': aLRT_ete, 'aBayes_ete': aBayes_ete}
+        extra_boot = {'aLRT_iqtree': aLRT_ete, 'aBayes_iqtree': aBayes_ete}
     elif program == 'fasttree':
         standard_bootstrap = bootstrap_tree_details['sh_bootstrap']
         standard_ete = Tree(newick=standard_bootstrap, format=0)
         add_internal_names(standard_ete)
-        extra_boot = {'standard_ete': standard_ete}
+        extra_boot = {'standard_fasttree_boot': standard_ete}
     return extra_boot, extra_tree_groups
 
 def main():
@@ -241,32 +241,34 @@ def main():
     all_splits = pd.DataFrame()
     for true_tree_path in data['true_tree_path'].unique():
         tree_data = data.loc[data.true_tree_path == true_tree_path]
-        for msa_path in tree_data['msa_path'].unique():
-            bootstrap_tree_details = tree_data.loc[tree_data.msa_path == msa_path].head(1).squeeze()
+        for program in tree_data['program'].unique():
+            tree_program_data = tree_data.loc[tree_data.program==program]
+            for msa_path in tree_data['msa_path'].unique():
+                bootstrap_tree_details = tree_program_data.loc[tree_program_data.msa_path == msa_path].head(1).squeeze()
 
-            mle_path =  bootstrap_tree_details[get_program_default_ML_tree(args.program)]
-            mle_tree_ete  = Tree(mle_path, format=0)
-            add_internal_names(mle_tree_ete)
-            garbage_dir = os.path.join(args.job_work_path, 'garbage')
-            create_dir_if_not_exists(garbage_dir)
-            best_ML_vs_true_tree_ete = get_booster_tree(mle_path, true_tree_path,
-                                                      out_path=os.path.join(garbage_dir,"booster_true.nw"))
-
-
-
-
-            extra_boot, extra_tree_groups = get_bootstrap_and_tree_groups(args.program, bootstrap_tree_details,mle_path,garbage_dir,args.n_pars)
+                mle_path =  bootstrap_tree_details[get_program_default_ML_tree(program)]
+                mle_tree_ete  = Tree(mle_path, format=0)
+                add_internal_names(mle_tree_ete)
+                garbage_dir = os.path.join(args.job_work_path, 'garbage')
+                create_dir_if_not_exists(garbage_dir)
+                best_ML_vs_true_tree_ete = get_booster_tree(mle_path, true_tree_path,
+                                                          out_path=os.path.join(garbage_dir,"booster_true.nw"))
 
 
 
-            for node in mle_tree_ete.iter_descendants():
 
-                if not node.is_leaf():
-                   statistics = generate_partition_statistics(node,mle_tree_ete,extra_tree_groups, extra_boot, best_ML_vs_true_tree_ete
-                                                             )
-                   statistics.update(bootstrap_tree_details.to_dict())
-                   all_splits = all_splits.append(statistics, ignore_index=True)
-                   all_splits.to_csv(args.job_final_output_path, sep='\t')
+                extra_boot, extra_tree_groups = get_bootstrap_and_tree_groups(program, bootstrap_tree_details,mle_path,garbage_dir,args.n_pars)
+
+
+
+                for node in mle_tree_ete.iter_descendants():
+
+                    if not node.is_leaf():
+                       statistics = generate_partition_statistics(node,mle_tree_ete,extra_tree_groups, extra_boot, best_ML_vs_true_tree_ete
+                                                                 )
+                       statistics.update(bootstrap_tree_details.to_dict())
+                       all_splits = all_splits.append(statistics, ignore_index=True)
+                       all_splits.to_csv(args.job_final_output_path, sep='\t')
 
             # sns.scatterplot(data=total_data, x='parsimony_support', y='Support',  s=30, alpha=0.6)
             # plt.show()
