@@ -10,6 +10,7 @@ from side_code.file_handling import create_dir_if_not_exists, create_or_clean_di
 from side_code.config import *
 from side_code.code_submission import generate_argument_str, submit_linux_job, generate_argument_list, submit_local_job, execute_command_and_write_to_log
 from simulation_edit.simulations_edit_argparser import main_parser
+from side_code.combine_current_results import unify_results_across_jobs
 import pandas as pd
 import os
 import numpy as np
@@ -62,12 +63,17 @@ def main():
     create_or_clean_dir(feature_pipeline_dir)
     log_file_path = os.path.join(feature_pipeline_dir, "general_features.log")
     logging.basicConfig(filename=log_file_path, level=logging.DEBUG)
-    raw_data_fasttree = pd.read_csv(args.data_path_fasttree, sep = CSV_SEP)
-    raw_data_fasttree["program"] = 'fasttree'
-    raw_data_raxml = pd.read_csv(args.data_path_raxml, sep=CSV_SEP)
+    raw_results_folder = args.raw_results_folder
+    data_path_raxml = unify_results_across_jobs(raw_results_folder, name = 'simulations_df_raxml')
+    data_path_iqtree = unify_results_across_jobs(raw_results_folder, name='simulations_df_iqtree')
+    data_path_fasttree = unify_results_across_jobs(raw_results_folder, name='simulations_df_fasttree')
+    raw_data_raxml = pd.read_csv(data_path_raxml, sep=CSV_SEP)
     raw_data_raxml["program"] = 'raxml'
-    raw_data_iqtree = pd.read_csv(args.data_path_iqtree, sep=CSV_SEP)
+    raw_data_iqtree = pd.read_csv(data_path_iqtree, sep=CSV_SEP)
     raw_data_iqtree["program"] = 'iqtree'
+    raw_data_fasttree = pd.read_csv(data_path_fasttree, sep=CSV_SEP)
+    raw_data_fasttree["program"] = 'fasttree'
+
 
     raw_data = pd.concat([raw_data_fasttree, raw_data_iqtree, raw_data_raxml])
 

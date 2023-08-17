@@ -1,16 +1,14 @@
 import argparse
+
 def main_parser():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--data_path_fasttree', type=str,
-                        default="/Users/noa/Workspace/bootstrap_results/test2/job_0/simulations_df_fasttree.tsv")
-    parser.add_argument('--data_path_raxml', type=str,
-                        default="/Users/noa/Workspace/bootstrap_results/test2/job_0/simulations_df_raxml.tsv")
-    parser.add_argument('--data_path_iqtree', type=str,
-                        default="/Users/noa/Workspace/bootstrap_results/test2/job_0/simulations_df_iqtree.tsv")
+    parser.add_argument('--raw_results_folder', type=str,
+                        default="/Users/noa/Workspace/bootstrap_results/test2")
     parser.add_argument('--work_path', type=str,
                         default='/Users/noa/Workspace/bootstrap_results/bootstrap_edit_results')
     parser.add_argument('--n_pars', type=int, default=50)
     parser.add_argument('--n_jobs', type=int, default=2)
+    parser.add_argument('--n_jobs_max_unify', type=int, default=1000)
     parser.add_argument('--jobs_prefix', type=str, default = 'test_boot_edit')
     parser.add_argument('--queue', type = str, default = 'power-pupko')
     return parser
