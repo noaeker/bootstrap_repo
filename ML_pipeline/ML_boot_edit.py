@@ -83,18 +83,22 @@ def bootstrap_feature_analysis(bootstrap_col,train,test, y_train, y_test, featur
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--program', type = str, default = 'fasttree')
-    full_data = pd.read_csv("/Users/noa/Workspace/bootstrap_results/job_raw_data_with_features_fasttree.tsv", sep = '\t')
+    parser.add_argument('--program', type = str, default = 'iqtree')
+    full_data = pd.read_csv("/Users/noa/Workspace/bootstrap_results/job_raw_data_with_features.tsv", sep = '\t')
+    full_data['true_binary_support'] = full_data['true_support']==1
     args = parser.parse_args()
     if args.program=='raxml':
-        full_data["feature_ML_vs_pars"] = full_data["feature_parsimony_trees_binary_mean"]- full_data["feature_all_ML_ete_binary_mean"]
+        #full_data["feature_ML_vs_pars"] = full_data["feature_parsimony_trees_binary_mean"]- full_data["feature_all_ML_ete_binary_mean"]
         bootstrap_cols = ['bootstrap_support']
     elif args.program=='iqtree':
-        bootstrap_cols = ['feature_aLRT_ete _support', 'bootstrap_support','feature_aBayes_ete_support']
+        bootstrap_cols = ['bootstrap_support','feature_aLRT_iqtree_support','feature_aBayes_iqtree_support']
     elif args.program=='fasttree':
-        bootstrap_cols = ['feature_standard_ete_support','bootstrap_support']
+        bootstrap_cols = ['feature_standard_fasttree_boot_support','bootstrap_support']
     #full_data["feature_pars_vs_b_pars"] = full_data["pars_support_mean"] - full_data["bootstrap_support_mean"]
 
+    full_data = full_data.loc[full_data.program==args.program]
+    full_data = full_data.dropna(axis=1, how='all')
+    full_data = full_data.dropna(axis=0)
     train, test = train_test_validation_splits(full_data, test_pct=0.3,
                                                          subsample_train=False, subsample_train_frac=-1)
 

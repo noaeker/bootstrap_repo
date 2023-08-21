@@ -64,14 +64,11 @@ def main():
     log_file_path = os.path.join(feature_pipeline_dir, "general_features.log")
     logging.basicConfig(filename=log_file_path, level=logging.DEBUG)
     raw_results_folder = args.raw_results_folder
-    data_path_raxml = unify_results_across_jobs(raw_results_folder, name = 'simulations_df_raxml')
-    data_path_iqtree = unify_results_across_jobs(raw_results_folder, name='simulations_df_iqtree')
-    data_path_fasttree = unify_results_across_jobs(raw_results_folder, name='simulations_df_fasttree')
-    raw_data_raxml = pd.read_csv(data_path_raxml, sep=CSV_SEP)
+    raw_data_raxml = unify_results_across_jobs(raw_results_folder, name = 'simulations_df_raxml')
+    raw_data_iqtree = unify_results_across_jobs(raw_results_folder, name='simulations_df_iqtree')
+    raw_data_fasttree = unify_results_across_jobs(raw_results_folder, name='simulations_df_fasttree')
     raw_data_raxml["program"] = 'raxml'
-    raw_data_iqtree = pd.read_csv(data_path_iqtree, sep=CSV_SEP)
     raw_data_iqtree["program"] = 'iqtree'
-    raw_data_fasttree = pd.read_csv(data_path_fasttree, sep=CSV_SEP)
     raw_data_fasttree["program"] = 'fasttree'
 
 

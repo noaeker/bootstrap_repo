@@ -237,7 +237,7 @@ def model_metrics(model, X, y_true, metrics_path, sampling_frac, is_classificati
 
 def train_test_validation_splits(full_data, test_pct, subsample_train=False,
                                  subsample_train_frac=-1):
-    logging.info(f"Original number of trees in full data is {len(full_data.msa_path.unique())}")
+    logging.info(f"Original number of trees in full data is {len(full_data.tree_id.unique())}")
     np.random.seed(SEED)
     logging.info("Partitioning MSAs according to number of sequences")
     msa_n_seq_group = pd.qcut(full_data["feature_msa_n_seq"], 3)
