@@ -84,6 +84,7 @@ def bootstrap_feature_analysis(bootstrap_col,train,test, y_train, y_test, featur
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--program', type = str, default = 'iqtree')
+    parser.add_argument('--program', type=str, default='iqtree')
     full_data = pd.read_csv("/Users/noa/Workspace/bootstrap_results/job_raw_data_with_features.tsv", sep = '\t')
     full_data['true_binary_support'] = full_data['true_support']==1
     args = parser.parse_args()
@@ -96,26 +97,30 @@ def main():
         bootstrap_cols = ['feature_standard_fasttree_boot_support','bootstrap_support']
     #full_data["feature_pars_vs_b_pars"] = full_data["pars_support_mean"] - full_data["bootstrap_support_mean"]
 
-    full_data = full_data.loc[full_data.program==args.program]
-    full_data = full_data.dropna(axis=1, how='all')
-    full_data = full_data.dropna(axis=0)
-    train, test = train_test_validation_splits(full_data, test_pct=0.3,
-                                                         subsample_train=False, subsample_train_frac=-1)
+    all_results_df = pd.DataFrame()
+    for program in full_data["program"].unique():
 
-    print(len(full_data['tree_id'].unique()))
-    features = [col for col in full_data.columns if 'feature' in col and col not in bootstrap_cols]#+['partition_branch_vs_mean','partition_branch','partition_size','partition_size_ratio','partition_divergence','divergence_ratio']
+        full_data = full_data.loc[full_data.program==args.program]
+        full_data = full_data.dropna(axis=1, how='all')
+        full_data = full_data.dropna(axis=0)
+        train, test = train_test_validation_splits(full_data, test_pct=0.3,
+                                                             subsample_train=False, subsample_train_frac=-1)
 
-    X_train = train[[col for col in train.columns if col in features]]
-    X_test = test[[col for col in train.columns if col in features]]
-    y_train = train["true_binary_support"]  # default_status
-    y_test = test["true_binary_support"]
+        print(len(full_data['tree_id'].unique()))
+        features = [col for col in full_data.columns if 'feature' in col and col not in bootstrap_cols]#+['partition_branch_vs_mean','partition_branch','partition_size','partition_size_ratio','partition_divergence','divergence_ratio']
+
+        X_train = train[[col for col in train.columns if col in features]]
+        X_test = test[[col for col in train.columns if col in features]]
+        y_train = train["true_binary_support"]  # default_status
+        y_test = test["true_binary_support"]
 
 
-    model = model_pipeline(X_train, y_train, name = "standard")
-    mp_fast = overall_model_performance_analysis(model, X_train, y_train, X_test, y_test, test,name = "standard")
-    print(f"Overall model performance: \n { mp_fast}")
-    for bootstrap_col in bootstrap_cols:
-        bootstrap_feature_analysis(bootstrap_col, train, test, y_train, y_test, features)
+        model = model_pipeline(X_train, y_train, name = "standard")
+        mp_fast = overall_model_performance_analysis(model, X_train, y_train, X_test, y_test, test,name = "standard")
+        print(f"Overall model performance: \n { mp_fast}")
+        for bootstrap_col in bootstrap_cols:
+            print((f"\n\n####{bootstrap_col}:"))
+            bootstrap_feature_analysis(bootstrap_col, train, test, y_train, y_test, features)
 
 
     #per_tree_analysis(test, features, model)

@@ -19,19 +19,18 @@ def unify_results_across_jobs(raw_results_folder, name,n_jobs = 1000):
     out_csv_path = os.path.join(raw_results_folder, f'{name}.tsv')
     if os.path.exists(out_csv_path):
         logging.info(f"Using existing data in {out_csv_path}")
-        return out_csv_path
+        return pd.read_csv(out_csv_path, sep='\t')
     logging.info("unifying csvs from all_jobs")
     csv_paths = [f"{raw_results_folder}/job_{i}/{name}.tsv" for i in range(n_jobs)]
     existing_csv_path = [path for path in csv_paths if os.path.exists(path)]
-    unify_csvs(existing_csv_path, out_csv_path)
+    res = unify_csvs(existing_csv_path, out_csv_path)
     logging.info(f"Csvs were unified to {out_csv_path}")
-    return out_csv_path
+    return res
 
 
 def main():
-    out_path = unify_results_across_jobs(raw_results_folder='/Users/noa/Workspace/bootstrap_results/bootstrap_edit_results', name = 'job_raw_data_with_features')
-    data = pd.read_csv(out_path, sep = '\t')
-    pass
+    res = unify_results_across_jobs(raw_results_folder='/Users/noa/Workspace/bootstrap_results/bootstrap_edit_results', name = 'job_raw_data_with_features')
+
 
 
 if __name__ == "__main__":
