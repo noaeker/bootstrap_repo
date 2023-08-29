@@ -200,6 +200,25 @@ def extract_parsimony_unique_topologies(curr_run_directory, trees_path, dist_pat
     return unique_file_path
 
 
+
+def extract_bootstrap_running_time(raxml_log_path):
+    with open(raxml_log_path) as raxml_log_file:
+        data = raxml_log_file.read()
+    start_pattern = r'\[(\d{2,}:\d{2,}:\d{2,})\] Starting bootstrapping analysis with'
+    end_pattern = r'\[(\d{2,}:\d{2,}:\d{2,})\] Bootstrapping converged after'
+    start_time = re.search(start_pattern,data).group(1)
+    try:
+        end_time = re.search(end_pattern, data).group(1)
+    except Exception as E:
+        end_pattern_1000 = r'\[(\d{2,}:\d{2,}:\d{2,})\] Bootstrap tree #1000'
+        end_time = re.search(end_pattern_1000, data).group(1)
+    start_time_hours, start_time_min, start_time_sec = [int(t) for t in start_time.split(':')]
+    end_time_hours,end_time_min, end_time_sec = [int(t) for t in end_time.split(':')]
+    total_seconds = (end_time_sec-start_time_sec)+(end_time_min-start_time_min)*60+(end_time_hours-start_time_hours)*3600
+    return total_seconds
+
+
+
 def raxml_bootstrap_pipeline(curr_run_directory, results_folder, msa_path, prefix, model, n_cpus = 1, n_workers ='auto'):
 
     search_prefix = os.path.join(curr_run_directory, prefix)
@@ -212,19 +231,18 @@ def raxml_bootstrap_pipeline(curr_run_directory, results_folder, msa_path, prefi
     execute_command_and_write_to_log(search_command, print_to_log=True)
     with open(model_file,'r') as MODEL:
         model_str = MODEL.read().split(',')[0]
-    elapsed_running_time = extract_param_from_raxmlNG_log(raxml_log_file, 'time')
-    best_ll = extract_param_from_raxmlNG_log(raxml_log_file, 'search_ll')
+    bootstrap_run_time = extract_bootstrap_running_time(raxml_log_file)
     best_tree_topology_path_orig = search_prefix + ".raxml.support"
     all_final_trees_path_orig = search_prefix + ".raxml.mlTrees"
 
-    model_str = re.sub('\+FU\{[^{}]*\}', '', model_str)
-    model_str = model_str.replace('4m', '')
+    #model_str = re.sub('\+FU\{[^{}]*\}', '', model_str)
+    #model_str = model_str.replace('4m', '')
     final_tree_topology_path = os.path.join(results_folder,'raxml_final_tree_topology.tree')
     shutil.move(best_tree_topology_path_orig,final_tree_topology_path)
     all_final_tree_topologies_path = os.path.join(results_folder, 'raxml_all_final_tree_topologies.tree')
     shutil.move(all_final_trees_path_orig,all_final_tree_topologies_path)
     res = {
-           'final_tree_topology_path': final_tree_topology_path, 'all_final_tree_topologies_path':all_final_tree_topologies_path}
+           'final_tree_topology_path': final_tree_topology_path, 'all_final_tree_topologies_path':all_final_tree_topologies_path,'boot_run_time':bootstrap_run_time}
     return res
 
 

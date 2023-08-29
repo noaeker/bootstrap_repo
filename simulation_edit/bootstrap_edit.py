@@ -233,6 +233,33 @@ def get_bootstrap_and_tree_groups(program, bootstrap_tree_details,mle_path,garba
         extra_boot = {'standard_fasttree_boot': standard_ete}
     return extra_boot, extra_tree_groups
 
+def msa_path_bootstrap_analysis(curr_run_dir, mle_path, true_tree_path, program, bootstrap_tree_details_dict, n_pars):
+
+    msa_splits = pd.DataFrame()
+    mle_tree_ete = Tree(mle_path, format=0)
+    add_internal_names(mle_tree_ete)
+    garbage_dir = os.path.join(curr_run_dir, 'garbage')
+    create_dir_if_not_exists(garbage_dir)
+    st = time.time()
+    best_ML_vs_true_tree_ete = get_booster_tree(mle_path, true_tree_path,
+                                                out_path=os.path.join(garbage_dir, "booster_true.nw"))
+
+    extra_boot, extra_tree_groups = get_bootstrap_and_tree_groups(program, bootstrap_tree_details_dict, mle_path,
+                                                                  garbage_dir, n_pars)
+
+    end = time.time()
+    feature_extraction_time = end - st
+    for node in mle_tree_ete.iter_descendants():
+
+        if not node.is_leaf():
+            statistics = generate_partition_statistics(node, mle_tree_ete, extra_tree_groups, extra_boot,
+                                                       best_ML_vs_true_tree_ete
+                                                       )
+            statistics.update(bootstrap_tree_details_dict)
+            msa_splits = msa_splits.append(statistics, ignore_index= True)
+    return msa_splits,feature_extraction_time
+
+
 def main():
     parser = job_parser()
     args = parser.parse_args()
@@ -247,28 +274,9 @@ def main():
                 bootstrap_tree_details = tree_program_data.loc[tree_program_data.msa_path == msa_path].head(1).squeeze()
 
                 mle_path =  bootstrap_tree_details[get_program_default_ML_tree(program)]
-                mle_tree_ete  = Tree(mle_path, format=0)
-                add_internal_names(mle_tree_ete)
-                garbage_dir = os.path.join(args.job_work_path, 'garbage')
-                create_dir_if_not_exists(garbage_dir)
-                best_ML_vs_true_tree_ete = get_booster_tree(mle_path, true_tree_path,
-                                                          out_path=os.path.join(garbage_dir,"booster_true.nw"))
-
-
-
-
-                extra_boot, extra_tree_groups = get_bootstrap_and_tree_groups(program, bootstrap_tree_details,mle_path,garbage_dir,args.n_pars)
-
-
-
-                for node in mle_tree_ete.iter_descendants():
-
-                    if not node.is_leaf():
-                       statistics = generate_partition_statistics(node,mle_tree_ete,extra_tree_groups, extra_boot, best_ML_vs_true_tree_ete
-                                                                 )
-                       statistics.update(bootstrap_tree_details.to_dict())
-                       all_splits = all_splits.append(statistics, ignore_index=True)
-                       all_splits.to_csv(args.job_final_output_path, sep='\t')
+                msa_splits,feature_extraction_time = msa_path_bootstrap_analysis(args.job_work_path,mle_path,true_tree_path,program,bootstrap_tree_details.to_dict(), args.n_pars)
+                all_splits = pd.concat([all_splits, msa_splits])
+                all_splits.to_csv(args.job_final_output_path, sep='\t')
 
             # sns.scatterplot(data=total_data, x='parsimony_support', y='Support',  s=30, alpha=0.6)
             # plt.show()

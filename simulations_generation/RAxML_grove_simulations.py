@@ -14,8 +14,10 @@ from side_code.code_submission import execute_command_and_write_to_log
 from side_code.raxml import raxml_bootstrap_pipeline
 from side_code.FastTree import fasttree_pipeline
 from side_code.IQTREE import iqtree_pipeline
+from simulation_edit.bootstrap_edit import msa_path_bootstrap_analysis
 from simulations_generation.simulations_argparser import  job_parser
 from simulations_generation.msa_features import get_msa_stats
+from simulation_edit.bootstrap_edit import msa_path_bootstrap_analysis
 from side_code.file_handling import create_dir_if_not_exists, create_or_clean_dir
 import sys
 import pandas as pd
@@ -80,30 +82,48 @@ def RAxML_grove_tree_simulation( out_dir, min_n_taxa, max_n_taxa, min_n_loci, ma
 
 
 
-def single_simulated_MSA_pipeline(tree_sim_dict, j, args):
-    iqtree_folder = os.path.join(tree_sim_dict["tree_folder"], f"iqtree_msa_{j}")
-    create_dir_if_not_exists(iqtree_folder)
-    logging.info(f"Simulating MSA {j} in {iqtree_folder}")
-    msa_path = simulate_msa(output_prefix=os.path.join(iqtree_folder, 'sim_msa'), tree_file=tree_sim_dict["true_tree_path"],
+def single_simulated_MSA_pipeline(tree_sim_dict, curr_run_dir, args):
+    msa_path = simulate_msa(output_prefix=os.path.join(curr_run_dir, 'sim_msa'), tree_file=tree_sim_dict["true_tree_path"],
                             model=tree_sim_dict["model"], length=tree_sim_dict["length"])
     logging.info("Evaluating likelihood on current MSA")
     msa_results_dict = get_msa_stats(msa_path, tree_sim_dict["model"])
     msa_results_dict.update(tree_sim_dict)
-    tree_searches_folder = os.path.join(iqtree_folder, "all_tree_searches")
-    results_folder = os.path.join(iqtree_folder, "results_folder")
+    tree_searches_folder = os.path.join(curr_run_dir, "all_tree_searches")
+    results_folder = os.path.join(curr_run_dir, "results_folder")
     create_or_clean_dir(tree_searches_folder)
     create_or_clean_dir(results_folder)
     boot_tree_raxml =  raxml_bootstrap_pipeline(tree_searches_folder,results_folder , msa_path, prefix ="boot", model =tree_sim_dict["model_short"],  n_cpus=1,
                                                 n_workers='auto')
-    boot_tree_raxml.update(msa_results_dict)
     boot_tree_iqtree = iqtree_pipeline(tree_searches_folder,results_folder , msa_path, model = tree_sim_dict["model_short"], nb=args.nb_iqtree, prefix = "iqtree_boot")
-    boot_tree_iqtree.update(msa_results_dict)
     boot_tree_fasttree = fasttree_pipeline(tree_searches_folder,results_folder ,msa_path, msa_type = args.msa_type, nb = args.nb_fasttree)
-    boot_tree_fasttree.update(msa_results_dict)
-    create_or_clean_dir(tree_searches_folder) # remove redundant files
+    for d in [boot_tree_raxml, boot_tree_iqtree, boot_tree_fasttree]:
+        d.update(msa_results_dict)
+        d.update(tree_sim_dict)
+        d['msa_path'] = msa_path
+    #create_or_clean_dir(tree_searches_folder) # remove redundant files
     return boot_tree_raxml, boot_tree_iqtree,boot_tree_fasttree
 
 
+def add_features_to_data(msa_dir,boot_tree_raxml_metrics,boot_tree_iqtree_metrics,boot_tree_fasttree_metrics,tree_sim_dict):
+        curr_boot_tree_raxml_df, raxml_feature_running_time = msa_path_bootstrap_analysis(msa_dir, mle_path=
+        boot_tree_raxml_metrics['final_tree_topology_path'], true_tree_path=tree_sim_dict['true_tree_path'],
+                                                                                          program='raxml',
+                                                                                          bootstrap_tree_details_dict=boot_tree_raxml_metrics,
+                                                                                          n_pars=100)
+        curr_boot_tree_raxml_df["feature_running_time"] = raxml_feature_running_time
+        curr_boot_tree_iqtree_df, iqtree_feature_running_time = msa_path_bootstrap_analysis(msa_dir, mle_path=
+        boot_tree_iqtree_metrics['final_tree_ultrafast'], true_tree_path=tree_sim_dict['true_tree_path'],
+                                                                                            program='iqtree',
+                                                                                            bootstrap_tree_details_dict=boot_tree_iqtree_metrics,
+                                                                                            n_pars=100)
+        curr_boot_tree_iqtree_df["feature_running_time"] = iqtree_feature_running_time
+        curr_boot_tree_fasttree_df, fasttree_feature_running_time = msa_path_bootstrap_analysis(msa_dir, mle_path=
+        boot_tree_fasttree_metrics['sh_bootstrap'], true_tree_path=tree_sim_dict['true_tree_path'],
+                                                                                                program='fasttree',
+                                                                                                bootstrap_tree_details_dict=boot_tree_fasttree_metrics,
+                                                                                                n_pars=100)
+        curr_boot_tree_fasttree_df["feature_running_time"] = fasttree_feature_running_time
+        return curr_boot_tree_raxml_df, curr_boot_tree_iqtree_df, curr_boot_tree_fasttree_df
 
 def main():
     parser = job_parser()
@@ -125,21 +145,26 @@ def main():
                                                                          args.max_n_loci, args.msa_type)
         for j in range(args.number_of_MSAs_per_tree):
             logging.info(f"Starting with MSA {j} ")
-            boot_tree_raxml, boot_tree_iqtree,boot_tree_fasttree = single_simulated_MSA_pipeline(tree_sim_dict, j, args,
-                                                           )
-            st = time.time()
-            all_results_df_raxml = all_results_df_raxml.append(boot_tree_raxml, ignore_index=True)
-            raxml_et = time.time()
-            logging.info(f"Done with RAxML pipeline, it took {(raxml_et-st)/60} minutes")
-            all_results_df_iqtree = all_results_df_iqtree.append(boot_tree_iqtree, ignore_index=True)
-            iqtree_et = time.time()
-            logging.info(f"Done with IQTREE pipeline, it took {(iqtree_et - raxml_et) / 60} minutes")
-            all_results_df_fasttree = all_results_df_fasttree.append(boot_tree_fasttree, ignore_index=True)
-            fasttree_et = time.time()
-            logging.info(f"Done with Fasttree pipeline, it took {(fasttree_et - iqtree_et) / 60} minutes")
-       #except Exception as E:
-       #         logging.error(f"Could not run simulation at iteration {i}\n Exception : {E}")
-        logging.info(f"Updating tree {i} to csv")
+            msa_dir = os.path.join(tree_sim_dict["tree_folder"], f"iqtree_msa_{j}")
+            create_dir_if_not_exists(msa_dir)
+            logging.info(f"Simulating MSA {j} in {msa_dir}")
+            boot_tree_raxml_metrics, boot_tree_iqtree_metrics,boot_tree_fasttree_metrics = single_simulated_MSA_pipeline(tree_sim_dict, msa_dir, args)
+            if args.calc_features:
+                try:
+                    curr_boot_tree_raxml_df, curr_boot_tree_iqtree_df, curr_boot_tree_fasttree_df = add_features_to_data(msa_dir,boot_tree_raxml_metrics,boot_tree_iqtree_metrics,boot_tree_fasttree_metrics,tree_sim_dict)
+                except:
+                    logging.error("Could not calculate features on current msa")
+                    continue
+            else:
+                curr_boot_tree_raxml_df = pd.DataFrame([boot_tree_raxml_metrics])
+                curr_boot_tree_iqtree_df = pd.DataFrame([boot_tree_raxml_metrics])
+                curr_boot_tree_fasttree_df = pd.DataFrame([boot_tree_raxml_metrics])
+        #### Update global dataframes ####
+            all_results_df_raxml = pd.concat([curr_boot_tree_raxml_df,all_results_df_raxml])
+            all_results_df_iqtree = pd.concat([curr_boot_tree_iqtree_df, all_results_df_iqtree])
+            all_results_df_fasttree = pd.concat([curr_boot_tree_fasttree_df, all_results_df_fasttree])
+
+        ### Write temporary files to csv ###
         all_results_df_raxml.to_csv(os.path.join(curr_job_folder, "simulations_df_raxml.tsv"), sep='\t')
         all_results_df_iqtree.to_csv(os.path.join(curr_job_folder, "simulations_df_iqtree.tsv"), sep='\t')
         all_results_df_fasttree.to_csv(os.path.join(curr_job_folder, "simulations_df_fasttree.tsv"), sep='\t')

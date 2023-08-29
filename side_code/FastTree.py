@@ -1,5 +1,6 @@
 from side_code.config import *
 import os
+import time
 import shutil
 from side_code.MSA_manipulation import bootstrap_MSA
 from side_code.code_submission import execute_command_and_write_to_log
@@ -40,15 +41,18 @@ def fasttree_pipeline(curr_run_dir, results_folder, msa_path, msa_type, nb):
     bootstrap_trees = []
     tmp_msa_path = os.path.join(curr_run_dir, 'tmp_msa.fasta')
     bootstrap_trees_file = os.path.join(curr_run_dir,'bootstrap_trees')
+    st = time.time()
     for i in range(nb):
         bootstrap_msa = bootstrap_MSA(msa_path, tmp_msa_path)
         bootstrap_tree = fasttree_bootstrap_replicate(bootstrap_msa, msa_type, output_tree_file, output_tree_file = os.path.join(curr_run_dir,f'bootstrap.tree'))
         bootstrap_trees.append(bootstrap_tree)
+    end = time.time()
+    bootsrtap_time = end-st
     with open(bootstrap_trees_file,'w') as BF:
         BF.write("\n".join(bootstrap_trees))
     bootstrap_output_path = os.path.join(results_folder,'fasttree_standard_bootstrap')
     get_booster_tree(output_tree_file, bootstrap_trees_file, out_path ="booster.nw")
-    return {'sh_bootstrap': output_tree_file, 'standard_bootstrap': bootstrap_output_path}
+    return {'sh_bootstrap': output_tree_file, 'standard_bootstrap': bootstrap_output_path,'boot_run_time': bootsrtap_time}
 
 #t = fasttree_pipeline(curr_run_dir= os.path.join(os.getcwd(), 'trash'),msa_path="/Users/noa/Workspace/bootstrap_results/test/job_0/raxml_tree_0/25117/iqtree_msa_0/sim_msa.fa", msa_type='DNA', nb = 30)
 #print(t)
