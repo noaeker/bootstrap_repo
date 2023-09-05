@@ -104,6 +104,17 @@ def count_unique_n_seq(original_seq_records):
     return len(seq_values)
 
 
+
+
+def get_MSA_seq_names(msa_path):
+    names = []
+    records = get_alignment_data(msa_path)
+    for record in records:
+        names.append(record.name)
+    return names
+
+
+
 def trim_MSA(original_alignment_path, trimmed_alignment_path, number_of_sequences,max_n_loci, loci_shift):
     original_alignment_data = get_alignment_data(original_alignment_path)
     obtained_n_seq = -1

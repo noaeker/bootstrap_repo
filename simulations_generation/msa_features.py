@@ -7,25 +7,16 @@ else:
     PROJECT_ROOT_DIRECRTORY = "/Users/noa/Workspace/RAxML_params_tuning"
 sys.path.append(PROJECT_ROOT_DIRECRTORY)
 
-from side_code.raxml import *
 from side_code.basic_trees_manipulation import *
-from side_code.file_handling import create_or_clean_dir, create_dir_if_not_exists
-from side_code.MSA_manipulation import get_alignment_data, alignment_list_to_df, get_msa_name, \
-    get_local_path
+from side_code.MSA_manipulation import get_alignment_data, alignment_list_to_df, get_local_path
 from side_code.config import *
-from feature_extraction.features_job_functions import feature_job_parser
-from sklearn.manifold import MDS, Isomap, TSNE, LocallyLinearEmbedding
-from sklearn.decomposition import PCA
-import pandas as pd
-import pickle
 from pypythia.predictor import DifficultyPredictor
 from pypythia.prediction import get_all_features
 from pypythia.raxmlng import RAxMLNG
 from pypythia.msa import MSA
-from sklearn.preprocessing import StandardScaler
-from sklearn.pipeline import Pipeline
 import numpy as np
-import time
+
+
 def pct_25(values):
     return np.percentile(values, 25)
 
@@ -69,8 +60,10 @@ def get_msa_stats(msa_path, model):
                      list(alignment_df)]
     entropy = [sum(list(map(lambda x: -x * np.log(x), probabilities[col]))) for col in list(alignment_df)]
     constant_sites_pct = sum([1 for et in entropy if et == 0]) / len(entropy)
-    msa_difficulty = pypythia(get_local_path(msa_path), model)
-
+    try:
+        msa_difficulty = pypythia(get_local_path(msa_path), model)
+    except Exception:
+        msa_difficulty = -1
     all_msa_features.update({"feature_msa_constant_sites_pct": constant_sites_pct,
                              "feature_msa_n_unique_sites": len(alignment_df_unique.columns),
                              "feature_msa_pypythia_msa_difficulty": msa_difficulty})

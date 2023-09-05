@@ -1,5 +1,4 @@
 import sys
-import sys
 if sys.platform == "linux" or sys.platform == "linux2":
     PROJECT_ROOT_DIRECRTORY = "/groups/pupko/noaeker/bootstrap_repo"
 else:
@@ -11,13 +10,11 @@ sys.path.append(PROJECT_ROOT_DIRECRTORY)
 from simulation_edit.simulations_edit_argparser import job_parser
 import dendropy
 import numpy as np
-import argparse
-import random
 from side_code.basic_trees_manipulation import *
 from side_code.MSA_manipulation import bootstrap_MSA
 from side_code.spr_prune_and_regraft import *
 from side_code.file_handling import *
-from side_code.raxml import generate_n_unique_tree_topologies_as_starting_trees, raxml_compute_tree_per_site_ll, generate_n_tree_topologies
+from programs.raxml import raxml_compute_tree_per_site_ll, generate_n_tree_topologies
 from side_code.code_submission import execute_command_and_write_to_log
 
 
@@ -233,7 +230,38 @@ def get_bootstrap_and_tree_groups(program, bootstrap_tree_details,mle_path,garba
         extra_boot = {'standard_fasttree_boot': standard_ete}
     return extra_boot, extra_tree_groups
 
-def msa_path_bootstrap_analysis(curr_run_dir, mle_path, true_tree_path, program, bootstrap_tree_details_dict, n_pars):
+
+
+def generate_tree(node_pair1, node_pair2):
+    sub_tree1 = Tree()
+    sub_tree1.add_child(node_pair1[0])
+    sub_tree1.add_child(node_pair1[1])
+    sub_tree2 = Tree()
+    sub_tree2.add_child(node_pair2[0])
+    sub_tree2.add_child(node_pair2[1])
+    final_tree = Tree()
+    final_tree.add_child(sub_tree1)
+    final_tree.add_child(sub_tree2)
+    return final_tree
+
+def get_nni_neighbors(tree_path,node_name):
+    tree = Tree(tree_path, format = 1)
+    tree.set_outgroup(tree&node_name)
+    node_sister = [node for node in (tree&node_name).up.children if node.name!=node_name][0]
+    cousins = node_sister.children
+    kids = (tree & node_name).children
+    pruned_first_child = (kids[0]).detach()
+    pruned_second_child = (kids[0]).detach()
+    pruned_first_cousin = (cousins[0]).detach()
+    pruned_second_cousin = (cousins[0]).detach()
+    first_final_tree = generate_tree((pruned_first_child,pruned_first_cousin),(pruned_second_child,pruned_second_cousin))
+    second_final_tree = generate_tree((pruned_first_child,pruned_second_cousin),(pruned_second_child,pruned_first_cousin))
+    neighbors = (first_final_tree, second_final_tree)
+    return neighbors
+
+
+
+def msa_path_bootstrap_analysis(msa_path,curr_run_dir, mle_path, true_tree_path, program, bootstrap_tree_details_dict, n_pars):
 
     msa_splits = pd.DataFrame()
     mle_tree_ete = Tree(mle_path, format=0)
@@ -249,15 +277,44 @@ def msa_path_bootstrap_analysis(curr_run_dir, mle_path, true_tree_path, program,
 
     end = time.time()
     feature_extraction_time = end - st
+
+    mle_tmp_path = os.path.join(curr_run_dir,"tree_tmp.nw")
+    mle_tree_ete.write(format=1, outfile=mle_tmp_path)
+    neighbors_tmp_path = os.path.join(curr_run_dir, "neighbors_tmp.nw")
+    neig_ll_evaluation_time = 0
     for node in mle_tree_ete.iter_descendants():
 
         if not node.is_leaf():
             statistics = generate_partition_statistics(node, mle_tree_ete, extra_tree_groups, extra_boot,
                                                        best_ML_vs_true_tree_ete
                                                        )
+            per_site_original_tree_ll = np.array(raxml_compute_tree_per_site_ll(garbage_dir, msa_path, mle_tmp_path, ll_on_data_prefix = "orig_tree_ll", model = bootstrap_tree_details_dict["model_short"], opt = True))
+            nni_neighbors = get_nni_neighbors(mle_tmp_path, node.name)
+            neighbors_per_site_ll = []
+            for neighbor in  nni_neighbors:
+                neighbor.write(format=1,outfile = neighbors_tmp_path)
+                st_ll = time.time()
+                neighbor_ll = raxml_compute_tree_per_site_ll(garbage_dir, msa_path, neighbors_tmp_path, ll_on_data_prefix = "nni_neighbors", model = bootstrap_tree_details_dict["model_short"], opt = True)
+                end_ll = time.time()
+                neig_ll_evaluation_time+= end_ll-st_ll
+                neighbors_per_site_ll.append(np.array(neighbor_ll))
+            orig_tree_ll = np.sum(per_site_original_tree_ll)
+            nei1_ll = np.sum(neighbors_per_site_ll[0])
+            nei2_ll = np.sum(neighbors_per_site_ll[1])
+            min_ll_diff = orig_tree_ll-max(nei1_ll,nei2_ll)
+            max_ll_diff = orig_tree_ll-min(nei1_ll,nei2_ll)
+            column_variance = np.mean([np.var(neighbors_per_site_ll[0]-per_site_original_tree_ll),np.var(neighbors_per_site_ll[1]-per_site_original_tree_ll)])
+
+            nni_statistics = {'feature_min_ll_diff': min_ll_diff, 'feature_max_ll_diff': max_ll_diff, 'feature_column_variance': column_variance,
+                              'feature_min_ll_diff_norm': min_ll_diff/orig_tree_ll,'feature_max_ll_diff_norm': min_ll_diff/orig_tree_ll,'feature_column_variance_norm': column_variance/np.mean(per_site_original_tree_ll)
+                              }
+            statistics.update(nni_statistics)
+
             statistics.update(bootstrap_tree_details_dict)
             msa_splits = msa_splits.append(statistics, ignore_index= True)
-    return msa_splits,feature_extraction_time
+            create_or_clean_dir(garbage_dir)
+
+    return msa_splits,feature_extraction_time,neig_ll_evaluation_time
 
 
 def main():
@@ -274,7 +331,7 @@ def main():
                 bootstrap_tree_details = tree_program_data.loc[tree_program_data.msa_path == msa_path].head(1).squeeze()
 
                 mle_path =  bootstrap_tree_details[get_program_default_ML_tree(program)]
-                msa_splits,feature_extraction_time = msa_path_bootstrap_analysis(args.job_work_path,mle_path,true_tree_path,program,bootstrap_tree_details.to_dict(), args.n_pars)
+                msa_splits,feature_extraction_time,neig_ll_evaluation_time = msa_path_bootstrap_analysis(msa_path,args.job_work_path,mle_path,true_tree_path,program,bootstrap_tree_details.to_dict(), args.n_pars)
                 all_splits = pd.concat([all_splits, msa_splits])
                 all_splits.to_csv(args.job_final_output_path, sep='\t')
 

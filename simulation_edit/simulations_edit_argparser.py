@@ -3,7 +3,7 @@ import argparse
 def main_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument('--raw_results_folder', type=str,
-                        default="/Users/noa/Workspace/bootstrap_results/test2")
+                        default="/Users/noa/Workspace/bootstrap_results/test4")
     parser.add_argument('--work_path', type=str,
                         default='/Users/noa/Workspace/bootstrap_results/bootstrap_edit_results')
     parser.add_argument('--n_pars', type=int, default=50)

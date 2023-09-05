@@ -1,5 +1,5 @@
-from side_code.raxml import raxml_bootstrap_pipeline
-from side_code.file_handling import create_dir_if_not_exists, create_or_clean_dir
+from programs.raxml import raxml_bootstrap_pipeline
+from side_code.file_handling import create_or_clean_dir
 import os
 
 

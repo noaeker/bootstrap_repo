@@ -3,10 +3,14 @@ from side_code.config import *
 from side_code.file_handling import create_or_clean_dir, delete_dir_content, unify_text_files
 from side_code.code_submission import execute_command_and_write_to_log
 from side_code.basic_trees_manipulation import get_tree_string, generate_multiple_tree_object_from_newick_file,generate_multiple_newicks_from_newick_file
+from side_code.MSA_manipulation import get_alignment_data
 import os
 import shutil
 import time
 import numpy as np
+from Bio import SeqIO
+from Bio.SeqRecord import SeqRecord
+from Bio.Seq import Seq
 import re
 # from side_code.basic_trees_manipulation import *
 import datetime
@@ -16,6 +20,10 @@ import datetime
 
 class GENERAL_RAXML_ERROR(Exception):
     pass
+
+
+
+
 
 
 def extract_param_from_raxmlNG_log(raxml_log_path, param_name, raise_error=True):
@@ -218,6 +226,24 @@ def extract_bootstrap_running_time(raxml_log_path):
     return total_seconds
 
 
+
+
+def remove_redundant_sequences(curr_run_directory, prefix,msa_path, model):
+    search_prefix = os.path.join(curr_run_directory, prefix)
+    search_command = (
+        "{raxml_exe} --check --msa {msa_path} --model {model}  --seed {seed} --prefix {prefix} --redo").format(
+        raxml_exe=RAXML_NG_EXE,
+        msa_path=msa_path, seed=SEED,
+        prefix=search_prefix, model=model)
+    execute_command_and_write_to_log(search_command, print_to_log=True)
+    reduced_path = search_prefix + ".raxml.reduced.phy"
+    if os.path.exists(reduced_path):
+        logging.info("Generating a reduced alignment")
+        all_msa_records = get_alignment_data(reduced_path)
+        SeqIO.write(all_msa_records, msa_path, 'fasta')
+    for file in os.listdir(curr_run_directory):
+        if prefix in file:
+            os.remove(os.path.join(curr_run_directory,file))
 
 def raxml_bootstrap_pipeline(curr_run_directory, results_folder, msa_path, prefix, model, n_cpus = 1, n_workers ='auto'):
 

@@ -4,7 +4,7 @@ import time
 import shutil
 from side_code.MSA_manipulation import bootstrap_MSA
 from side_code.code_submission import execute_command_and_write_to_log
-
+from ete3 import Tree
 
 def get_booster_tree(mle_tree_path, comparison_trees, out_path):
     cmd = f"{BOOSTER_EXE} -a fbp -i {mle_tree_path} -b {comparison_trees} -@ 1 -o {out_path}"
