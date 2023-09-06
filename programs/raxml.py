@@ -268,7 +268,7 @@ def raxml_bootstrap_pipeline(curr_run_directory, results_folder, msa_path, prefi
     all_final_tree_topologies_path = os.path.join(results_folder, 'raxml_all_final_tree_topologies.tree')
     shutil.move(all_final_trees_path_orig,all_final_tree_topologies_path)
     res = {
-           'final_tree_topology_path': final_tree_topology_path, 'all_final_tree_topologies_path':all_final_tree_topologies_path,'boot_run_time':bootstrap_run_time}
+           'final_tree_topology_path': final_tree_topology_path, 'all_final_tree_topologies_path':all_final_tree_topologies_path,'program_boot_run_time':bootstrap_run_time}
     return res
 
 
