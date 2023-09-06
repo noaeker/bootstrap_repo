@@ -141,11 +141,14 @@ def obtain_results_per_MSA(tree_sim_dict,j, args):
 
 def obtain_all_results_per_tree(args, tree_sim_dict,curr_job_folder,all_results_df_raxml,all_results_df_iqtree,all_results_df_fasttree):
     for j in range(args.number_of_MSAs_per_tree):
-        curr_boot_tree_raxml_df, curr_boot_tree_iqtree_df, curr_boot_tree_fasttree_df = obtain_results_per_MSA(
-            tree_sim_dict, j, args)
-        all_results_df_raxml = pd.concat([curr_boot_tree_raxml_df, all_results_df_raxml])
-        all_results_df_iqtree = pd.concat([curr_boot_tree_iqtree_df, all_results_df_iqtree])
-        all_results_df_fasttree = pd.concat([curr_boot_tree_fasttree_df, all_results_df_fasttree])
+        try:
+            curr_boot_tree_raxml_df, curr_boot_tree_iqtree_df, curr_boot_tree_fasttree_df = obtain_results_per_MSA(
+                tree_sim_dict, j, args)
+            all_results_df_raxml = pd.concat([curr_boot_tree_raxml_df, all_results_df_raxml])
+            all_results_df_iqtree = pd.concat([curr_boot_tree_iqtree_df, all_results_df_iqtree])
+            all_results_df_fasttree = pd.concat([curr_boot_tree_fasttree_df, all_results_df_fasttree])
+        except Exception as E:
+            continue
     all_results_df_raxml.to_csv(os.path.join(curr_job_folder, "simulations_df_raxml.tsv"), sep='\t')
     all_results_df_iqtree.to_csv(os.path.join(curr_job_folder, "simulations_df_iqtree.tsv"), sep='\t')
     all_results_df_fasttree.to_csv(os.path.join(curr_job_folder, "simulations_df_fasttree.tsv"), sep='\t')

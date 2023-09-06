@@ -25,11 +25,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/simulation_edit/bootstrap_edit.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="298" column="54" lean-forward="true" selection-start-line="298" selection-start-column="54" selection-end-line="298" selection-end-column="54" />
+            <state relative-caret-position="-600">
+              <caret line="296" column="46" selection-start-line="296" selection-start-column="44" selection-end-line="296" selection-end-column="46" />
             </state>
           </provider>
         </entry>
@@ -37,8 +37,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/programs/raxml_grove.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="143">
-              <caret line="23" column="4" selection-start-line="23" selection-start-column="4" selection-end-line="23" selection-end-column="4" />
+            <state relative-caret-position="261">
+              <caret line="49" column="35" selection-start-line="49" selection-start-column="35" selection-end-line="49" selection-end-column="35" />
               <folding>
                 <element signature="e#0#30#0" expanded="true" />
               </folding>
@@ -46,11 +46,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/simulations_generation/run_parallel_simulations.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="95">
-              <caret line="46" column="26" lean-forward="true" selection-start-line="46" selection-start-column="26" selection-end-line="46" selection-end-column="26" />
+            <state relative-caret-position="132">
+              <caret line="51" column="70" lean-forward="true" selection-start-line="51" selection-start-column="70" selection-end-line="51" selection-end-column="70" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -61,8 +61,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/simulations_generation/simulations.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="465">
-              <caret line="86" column="73" selection-start-line="86" selection-start-column="73" selection-end-line="86" selection-end-column="73" />
+            <state relative-caret-position="153">
+              <caret line="171" column="48" lean-forward="true" selection-start-line="171" selection-start-column="48" selection-end-line="171" selection-end-column="48" />
             </state>
           </provider>
         </entry>
@@ -70,8 +70,20 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/simulations_generation/simulations_argparser.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="317">
-              <caret line="29" column="71" selection-start-line="29" selection-start-column="71" selection-end-line="29" selection-end-column="71" />
+            <state relative-caret-position="132">
+              <caret line="6" column="60" selection-start-line="6" selection-start-column="60" selection-end-line="6" selection-end-column="60" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/programs/raxml.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="474">
+              <caret line="249" column="60" selection-start-line="249" selection-start-column="60" selection-end-line="249" selection-end-column="60" />
+              <folding>
+                <element signature="e#1#31#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -109,14 +121,14 @@
       <find>add_fe</find>
       <find>get_bootstrap_and_tree_groups</find>
       <find>true_tree_path</find>
-      <find>try</find>
       <find>shutil</find>
       <find>os.rm</find>
       <find>os.remo</find>
-      <find>RAxML_grove_tree_simulation</find>
       <find>feature_extraction_time</find>
       <find>msa_path_bootstrap_analysis</find>
       <find>os.rem</find>
+      <find>RAxML_grove_tree_simulation</find>
+      <find>try</find>
     </findStrings>
     <replaceStrings>
       <replace>job_data_path</replace>
@@ -152,16 +164,18 @@
         <option value="$PROJECT_DIR$/simulations_generation/msa_features.py" />
         <option value="$PROJECT_DIR$/simulations_generation/RAxML_grove_simulations.py" />
         <option value="$PROJECT_DIR$/side_code/raxml_grove.py" />
+        <option value="$PROJECT_DIR$/simulations_generation/run_parallel_simulations.py" />
+        <option value="$PROJECT_DIR$/simulation_edit/bootstrap_edit.py" />
         <option value="$PROJECT_DIR$/programs/raxml_grove.py" />
         <option value="$PROJECT_DIR$/simulations_generation/simulations_argparser.py" />
-        <option value="$PROJECT_DIR$/simulations_generation/run_parallel_simulations.py" />
         <option value="$PROJECT_DIR$/simulations_generation/simulations.py" />
-        <option value="$PROJECT_DIR$/simulation_edit/bootstrap_edit.py" />
+        <option value="$PROJECT_DIR$/programs/raxml.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="y" value="64" />
+    <option name="x" value="-30" />
+    <option name="y" value="34" />
     <option name="width" value="1920" />
     <option name="height" value="980" />
   </component>
@@ -379,15 +393,15 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="64" width="1920" height="980" extended-state="0" />
+    <frame x="-30" y="34" width="1920" height="980" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.12743549" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13902053" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.28231293" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.31746033" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3117914" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.37755102" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -465,7 +479,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/simulations_generation/simulations.py</url>
-          <line>151</line>
+          <line>154</line>
           <option name="timeStamp" value="107" />
         </line-breakpoint>
       </breakpoints>
@@ -721,16 +735,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/programs/raxml.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="50">
-          <caret line="241" column="57" selection-start-line="241" selection-start-column="57" selection-end-line="241" selection-end-column="57" />
-          <folding>
-            <element signature="e#1#31#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pypythia/raxmlng.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="266">
@@ -797,20 +801,27 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/simulations_generation/simulations_argparser.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="132">
+          <caret line="6" column="60" selection-start-line="6" selection-start-column="60" selection-end-line="6" selection-end-column="60" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/programs/raxml_grove.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="143">
-          <caret line="23" column="4" selection-start-line="23" selection-start-column="4" selection-end-line="23" selection-end-column="4" />
+        <state relative-caret-position="261">
+          <caret line="49" column="35" selection-start-line="49" selection-start-column="35" selection-end-line="49" selection-end-column="35" />
           <folding>
             <element signature="e#0#30#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/simulations_generation/simulations_argparser.py">
+    <entry file="file://$PROJECT_DIR$/simulation_edit/bootstrap_edit.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="317">
-          <caret line="29" column="71" selection-start-line="29" selection-start-column="71" selection-end-line="29" selection-end-column="71" />
+        <state relative-caret-position="-600">
+          <caret line="296" column="46" selection-start-line="296" selection-start-column="44" selection-end-line="296" selection-end-column="46" />
         </state>
       </provider>
     </entry>
@@ -821,27 +832,30 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/simulations_generation/run_parallel_simulations.py">
+    <entry file="file://$PROJECT_DIR$/simulations_generation/simulations.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="95">
-          <caret line="46" column="26" lean-forward="true" selection-start-line="46" selection-start-column="26" selection-end-line="46" selection-end-column="26" />
+        <state relative-caret-position="153">
+          <caret line="171" column="48" lean-forward="true" selection-start-line="171" selection-start-column="48" selection-end-line="171" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/programs/raxml.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="474">
+          <caret line="249" column="60" selection-start-line="249" selection-start-column="60" selection-end-line="249" selection-end-column="60" />
           <folding>
-            <element signature="e#0#10#0" expanded="true" />
+            <element signature="e#1#31#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/simulations_generation/simulations.py">
+    <entry file="file://$PROJECT_DIR$/simulations_generation/run_parallel_simulations.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="465">
-          <caret line="86" column="73" selection-start-line="86" selection-start-column="73" selection-end-line="86" selection-end-column="73" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/simulation_edit/bootstrap_edit.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="298" column="54" lean-forward="true" selection-start-line="298" selection-start-column="54" selection-end-line="298" selection-end-column="54" />
+        <state relative-caret-position="132">
+          <caret line="51" column="70" lean-forward="true" selection-start-line="51" selection-start-column="70" selection-end-line="51" selection-end-column="70" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

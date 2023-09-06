@@ -47,7 +47,7 @@ def extract_model_specification_from_log(log_file, param):
 
 def RAxML_grove_tree_simulation( out_dir, min_n_taxa, max_n_taxa, min_n_loci, max_n_loci, msa_type, tree_id):
     msa_type = f"'{msa_type}'"
-    tree_id_cmd = "" if tree_id is not None else f" and TREE_ID={tree_id}"
+    tree_id_cmd = "" if tree_id is None else f" and TREE_ID={tree_id}"
     cmd_raxml_grove = f'{RAxML_alisim_path} generate -g alisim -o {out_dir} -q " NUM_TAXA>={min_n_taxa} and NUM_TAXA<={max_n_taxa} and OVERALL_NUM_ALIGNMENT_SITES>={min_n_loci} and OVERALL_NUM_ALIGNMENT_SITES<={max_n_loci}  and DATA_TYPE=={msa_type} {tree_id_cmd}" '
     logging.info(f'about to run {cmd_raxml_grove} to simulate tree')
     execute_command_and_write_to_log(cmd_raxml_grove)

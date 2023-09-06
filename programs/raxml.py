@@ -249,7 +249,7 @@ def raxml_bootstrap_pipeline(curr_run_directory, results_folder, msa_path, prefi
 
     search_prefix = os.path.join(curr_run_directory, prefix)
     search_command = (
-        "{raxml_exe} --all --bs-trees autoMRE --threads {n_cpus} --workers {n_workers}  --force msa --force perf_threads --msa {msa_path} --model {model}  --seed {seed} --prefix {prefix} --redo").format(raxml_exe=RAXML_NG_EXE,
+        "{raxml_exe} --blopt nr_safe --all --bs-trees autoMRE --threads {n_cpus} --workers {n_workers}  --force msa --force perf_threads --msa {msa_path} --model {model}  --seed {seed} --prefix {prefix} --redo").format(raxml_exe=RAXML_NG_EXE,
         msa_path=msa_path,  seed=SEED,
         prefix=search_prefix, model=model, n_cpus = n_cpus, n_workers = n_workers)
     raxml_log_file = search_prefix + ".raxml.log"
