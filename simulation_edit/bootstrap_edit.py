@@ -276,7 +276,7 @@ def get_pruned_tree_and_msa(curr_run_dir, msa_path, model,mle_tree_ete):
     pruned_tree_path = os.path.join(curr_run_dir, "pruned_tree.nw")
     add_unique_seq(msa_path, pruned_msa_path)
     pruned_tree = mle_tree_ete.copy()
-    mle_tree_ete.prune(get_MSA_seq_names(pruned_msa_path))
+    pruned_tree.prune(get_MSA_seq_names(pruned_msa_path))
     pruned_tree.write(outfile=pruned_tree_path, format=1)
     return pruned_tree_path, pruned_msa_path
 
