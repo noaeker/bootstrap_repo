@@ -324,11 +324,12 @@ def msa_path_bootstrap_analysis(msa_path,curr_run_dir, mle_path, true_tree_path,
             nni_neighbors = get_nni_neighbors(mle_with_internal_path, node.name)
             neighbors_per_site_ll = []
             for neighbor in  nni_neighbors:
+                neighbor.write(format=1, outfile=neighbors_tmp_path)
+                neighbor = Tree(neighbors_tmp_path, format=1)
                 curr_pruned_tree_path, curr_pruned_msa_path = get_pruned_tree_and_msa(curr_run_dir, msa_path,
                                                                                       bootstrap_tree_details_dict[
                                                                                           "model_short"], neighbor)
 
-                neighbor.write(format=1,outfile = neighbors_tmp_path)
                 st_ll = time.time()
                 neighbor_ll = raxml_compute_tree_per_site_ll(garbage_dir, curr_pruned_msa_path, curr_pruned_tree_path, ll_on_data_prefix = "nni_neighbors", model = bootstrap_tree_details_dict["model_short"], opt = True)
                 end_ll = time.time()

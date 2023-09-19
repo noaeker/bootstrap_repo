@@ -16,20 +16,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/simulation_edit/simulations_edit_argparser.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="308">
-              <caret line="14" lean-forward="true" selection-start-line="14" selection-end-line="14" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/simulation_edit/bootstrap_edit.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="380">
-              <caret line="323" column="80" lean-forward="true" selection-start-line="323" selection-start-column="80" selection-end-line="323" selection-end-column="80" />
+            <state relative-caret-position="224">
+              <caret line="326" column="68" selection-start-line="326" selection-start-column="68" selection-end-line="326" selection-end-column="68" />
             </state>
           </provider>
         </entry>
@@ -37,11 +28,26 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/side_code/MSA_manipulation.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="168">
-              <caret line="97" column="42" selection-start-line="97" selection-start-column="4" selection-end-line="97" selection-end-column="42" />
-              <folding>
-                <element signature="e#0#30#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="150">
+              <caret line="11" selection-start-line="11" selection-end-line="11" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/opt/anaconda3/lib/python3.8/site-packages/sklearn/__init__.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="162">
+              <caret line="82" selection-start-line="82" selection-end-line="82" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$USER_HOME$/opt/anaconda3/lib/python3.8/site-packages/sklearn/utils/_show_versions.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="162">
+              <caret line="11" selection-start-line="11" selection-end-line="11" />
             </state>
           </provider>
         </entry>
@@ -81,18 +87,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-2665">
               <caret line="2" column="50" selection-start-line="2" selection-start-column="39" selection-end-line="2" selection-end-column="50" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/simulations_generation/run_parallel_simulations.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-692">
-              <caret line="24" lean-forward="true" selection-start-line="24" selection-end-line="24" />
-              <folding>
-                <element signature="e#0#10#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -431,7 +425,7 @@
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.28231293" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.23809524" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3117914" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3117914" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -585,8 +579,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/ML_pipeline/only_boot_bootstrap_support_vi.tsv" />
-    <entry file="file://$PROJECT_DIR$/ML_pipeline/only_boot_feature_aLRT_ete _support_vi.tsv" />
     <entry file="file://$PROJECT_DIR$/ML_pipeline/inc_boot_feature_aLRT_ete _support_vi.tsv" />
     <entry file="file://$PROJECT_DIR$/ML_pipeline/inc_boot_feature_standard_ete_support_vi.tsv" />
     <entry file="file://$USER_HOME$/opt/anaconda3/lib/python3.8/site-packages/sklearn/metrics/_classification.py">
@@ -874,18 +866,29 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/side_code/MSA_manipulation.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="168">
-          <caret line="97" column="42" selection-start-line="97" selection-start-column="4" selection-end-line="97" selection-end-column="42" />
-          <folding>
-            <element signature="e#0#30#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="150">
+          <caret line="11" selection-start-line="11" selection-end-line="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/opt/anaconda3/lib/python3.8/site-packages/sklearn/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="82" selection-start-line="82" selection-end-line="82" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/opt/anaconda3/lib/python3.8/site-packages/sklearn/utils/_show_versions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="11" selection-start-line="11" selection-end-line="11" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/simulation_edit/bootstrap_edit.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="380">
-          <caret line="323" column="80" lean-forward="true" selection-start-line="323" selection-start-column="80" selection-end-line="323" selection-end-column="80" />
+        <state relative-caret-position="224">
+          <caret line="326" column="68" selection-start-line="326" selection-start-column="68" selection-end-line="326" selection-end-column="68" />
         </state>
       </provider>
     </entry>
