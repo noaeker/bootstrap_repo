@@ -11,10 +11,10 @@ from simulation_edit.simulations_edit_argparser import job_parser
 import dendropy
 import numpy as np
 from side_code.basic_trees_manipulation import *
-from side_code.MSA_manipulation import bootstrap_MSA
+from side_code.MSA_manipulation import bootstrap_MSA,get_MSA_seq_names
 from side_code.spr_prune_and_regraft import *
 from side_code.file_handling import *
-from programs.raxml import raxml_compute_tree_per_site_ll, generate_n_tree_topologies
+from programs.raxml import raxml_compute_tree_per_site_ll, generate_n_tree_topologies,remove_redundant_sequences
 from side_code.code_submission import execute_command_and_write_to_log
 
 
@@ -261,55 +261,89 @@ def get_nni_neighbors(tree_path,node_name):
 
 
 
+def check_tree_is_ok(tree):
+    if len(tree.get_tree_root().children)>3:
+        return False
+    for node in tree.iter_descendants():
+        if len(node.children)>2:
+            return False
+    return True
+
+
+
+def get_pruned_tree_and_msa(curr_run_dir, msa_path, model,mle_tree_ete):
+    pruned_msa_path = os.path.join(curr_run_dir, "pruned_msa.fasta")
+    pruned_tree_path = os.path.join(curr_run_dir, "pruned_tree.nw")
+    remove_redundant_sequences(curr_run_dir, prefix="check", msa_path=msa_path,
+                               model=model, out_msa_path=pruned_msa_path)
+    pruned_tree = mle_tree_ete.copy()
+    pruned_tree
+    mle_tree_ete.prune(get_MSA_seq_names(pruned_tree))
+    return mle_tree_ete, pruned_msa_path
+
+#model=bootstrap_tree_details_dict["model_short"]
+
+
 def msa_path_bootstrap_analysis(msa_path,curr_run_dir, mle_path, true_tree_path, program, bootstrap_tree_details_dict, n_pars):
 
     msa_splits = pd.DataFrame()
     mle_tree_ete = Tree(mle_path, format=0)
     add_internal_names(mle_tree_ete)
+    mle_with_internal_path = os.path.join(curr_run_dir, "mle_with_internal.nw")
+    mle_tree_ete.write(outfile=mle_with_internal_path, format=1)
+
+
     garbage_dir = os.path.join(curr_run_dir, 'garbage')
     create_dir_if_not_exists(garbage_dir)
     st = time.time()
-    best_ML_vs_true_tree_ete = get_booster_tree(mle_path, true_tree_path,
+    best_ML_vs_true_tree_ete = get_booster_tree(mle_with_internal_path, true_tree_path,
                                                 out_path=os.path.join(garbage_dir, "booster_true.nw"))
 
-    extra_boot, extra_tree_groups = get_bootstrap_and_tree_groups(program, bootstrap_tree_details_dict, mle_path,
+    extra_boot, extra_tree_groups = get_bootstrap_and_tree_groups(program, bootstrap_tree_details_dict, mle_with_internal_path,
                                                                   garbage_dir, n_pars)
 
     end = time.time()
     feature_extraction_time = end - st
 
-    mle_tmp_path = os.path.join(curr_run_dir,"tree_tmp.nw")
-    mle_tree_ete.write(format=1, outfile=mle_tmp_path)
+
     neighbors_tmp_path = os.path.join(curr_run_dir, "neighbors_tmp.nw")
     neig_ll_evaluation_time = 0
+    try:
+        per_site_original_tree_ll = np.array(
+            raxml_compute_tree_per_site_ll(garbage_dir, msa_path, mle_with_internal_path, ll_on_data_prefix="orig_tree_ll",
+                                           model=bootstrap_tree_details_dict["model_short"], opt=True))
+    except:
+        per_site_original_tree_ll = None
+        logging.info("Could not estimate ll on original tree")
     for node in mle_tree_ete.iter_descendants():
 
         if not node.is_leaf():
             statistics = generate_partition_statistics(node, mle_tree_ete, extra_tree_groups, extra_boot,
                                                        best_ML_vs_true_tree_ete
                                                        )
-            per_site_original_tree_ll = np.array(raxml_compute_tree_per_site_ll(garbage_dir, msa_path, mle_tmp_path, ll_on_data_prefix = "orig_tree_ll", model = bootstrap_tree_details_dict["model_short"], opt = True))
-            nni_neighbors = get_nni_neighbors(mle_tmp_path, node.name)
-            neighbors_per_site_ll = []
-            for neighbor in  nni_neighbors:
-                neighbor.write(format=1,outfile = neighbors_tmp_path)
-                st_ll = time.time()
-                neighbor_ll = raxml_compute_tree_per_site_ll(garbage_dir, msa_path, neighbors_tmp_path, ll_on_data_prefix = "nni_neighbors", model = bootstrap_tree_details_dict["model_short"], opt = True)
-                end_ll = time.time()
-                neig_ll_evaluation_time+= end_ll-st_ll
-                neighbors_per_site_ll.append(np.array(neighbor_ll))
-            orig_tree_ll = np.sum(per_site_original_tree_ll)
-            nei1_ll = np.sum(neighbors_per_site_ll[0])
-            nei2_ll = np.sum(neighbors_per_site_ll[1])
-            min_ll_diff = orig_tree_ll-max(nei1_ll,nei2_ll)
-            max_ll_diff = orig_tree_ll-min(nei1_ll,nei2_ll)
-            column_variance = np.mean([np.var(neighbors_per_site_ll[0]-per_site_original_tree_ll),np.var(neighbors_per_site_ll[1]-per_site_original_tree_ll)])
+            nni_neighbors = get_nni_neighbors(mle_with_internal_path, node.name)
+            try:
+                neighbors_per_site_ll = []
+                for neighbor in  nni_neighbors:
+                    neighbor.write(format=1,outfile = neighbors_tmp_path)
+                    st_ll = time.time()
+                    neighbor_ll = raxml_compute_tree_per_site_ll(garbage_dir, msa_path, neighbors_tmp_path, ll_on_data_prefix = "nni_neighbors", model = bootstrap_tree_details_dict["model_short"], opt = True)
+                    end_ll = time.time()
+                    neig_ll_evaluation_time+= end_ll-st_ll
+                    neighbors_per_site_ll.append(np.array(neighbor_ll))
+                orig_tree_ll = np.sum(per_site_original_tree_ll)
+                nei1_ll = np.sum(neighbors_per_site_ll[0])
+                nei2_ll = np.sum(neighbors_per_site_ll[1])
+                min_ll_diff = orig_tree_ll-max(nei1_ll,nei2_ll)
+                max_ll_diff = orig_tree_ll-min(nei1_ll,nei2_ll)
+                column_variance = np.mean([np.var(neighbors_per_site_ll[0]-per_site_original_tree_ll),np.var(neighbors_per_site_ll[1]-per_site_original_tree_ll)])
 
-            nni_statistics = {'feature_min_ll_diff': min_ll_diff, 'feature_max_ll_diff': max_ll_diff, 'feature_column_variance': column_variance,
-                              'feature_min_ll_diff_norm': min_ll_diff/orig_tree_ll,'feature_max_ll_diff_norm': min_ll_diff/orig_tree_ll,'feature_column_variance_norm': column_variance/np.mean(per_site_original_tree_ll)
-                              }
-            statistics.update(nni_statistics)
-
+                nni_statistics = {'feature_min_ll_diff': min_ll_diff, 'feature_max_ll_diff': max_ll_diff, 'feature_column_variance': column_variance,
+                                  'feature_min_ll_diff_norm': min_ll_diff/orig_tree_ll,'feature_max_ll_diff_norm': min_ll_diff/orig_tree_ll,'feature_column_variance_norm': column_variance/np.mean(per_site_original_tree_ll)
+                                  }
+                statistics.update(nni_statistics)
+            except:
+                logging.info("Could not estimate ll on neighbors")
             statistics.update(bootstrap_tree_details_dict)
             msa_splits = msa_splits.append(statistics, ignore_index= True)
             create_or_clean_dir(garbage_dir)

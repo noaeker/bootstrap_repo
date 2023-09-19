@@ -1,5 +1,6 @@
 from ML_utils.ML_algorithms_and_hueristics import *
 from side_code.file_handling import create_or_clean_dir, create_dir_if_not_exists
+from side_code.MSA_manipulation import get_MSA_seq_names
 from sklearn.metrics import balanced_accuracy_score
 import os
 import matplotlib.pyplot as plt
@@ -109,7 +110,7 @@ def main():
     #full_data["feature_pars_vs_b_pars"] = full_data["pars_support_mean"] - full_data["bootstrap_support_mean"]
 
 
-    for program in ['raxml','iqtree','fasttree']:
+    for program in full_data['program'].unique():
         program_data = full_data.loc[full_data.program == program]
         working_dir = os.path.join(args.working_dir, program)
         create_dir_if_not_exists(working_dir)
@@ -129,7 +130,9 @@ def main():
         y_test = test["true_binary_support"]
 
 
-        model = model_pipeline(working_dir,X_train, y_train, name = "standard")
+
+        model = ML_model(X_train, groups, y_train, n_jobs, path, classifier=False, model='lightgbm', calibrate=True, name="standard", large_grid = False, do_RFE = False, n_cv_folds = 3)
+        #model = model_pipeline(working_dir,X_train, y_train, name = "standard")
         model_performance = overall_model_performance_analysis(working_dir,model, X_train, y_train, X_test, y_test, test,name = "standard")
         model_performance['type'] = 'features_based_analysis'
         print(f"Overall model performance: \n { model_performance}")

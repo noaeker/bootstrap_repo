@@ -228,7 +228,9 @@ def extract_bootstrap_running_time(raxml_log_path):
 
 
 
-def remove_redundant_sequences(curr_run_directory, prefix,msa_path, model):
+def remove_redundant_sequences(curr_run_directory, prefix,msa_path, model, out_msa_path = None):
+    if out_msa_path==None:
+        out_msa_path = msa_path
     search_prefix = os.path.join(curr_run_directory, prefix)
     search_command = (
         "{raxml_exe} --check --msa {msa_path} --model {model}  --seed {seed} --prefix {prefix} --redo").format(
@@ -240,7 +242,9 @@ def remove_redundant_sequences(curr_run_directory, prefix,msa_path, model):
     if os.path.exists(reduced_path):
         logging.info("Generating a reduced alignment")
         all_msa_records = get_alignment_data(reduced_path)
-        SeqIO.write(all_msa_records, msa_path, 'fasta')
+        SeqIO.write(all_msa_records, out_msa_path, 'fasta')
+    else:
+        shutil.copyfile(msa_path,out_msa_path)
     for file in os.listdir(curr_run_directory):
         if prefix in file:
             os.remove(os.path.join(curr_run_directory,file))

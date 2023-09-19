@@ -41,7 +41,7 @@ def add_internal_names(original_tree):
     for i, node in enumerate(original_tree.traverse()):
         if not node.is_leaf():
             node.name = "N{}".format(i)
-        original_tree.get_tree_root().name = "ROOT"
+    original_tree.get_tree_root().name = "ROOT"
     return original_tree
 
 
