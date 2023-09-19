@@ -356,7 +356,7 @@ def raxml_compute_tree_per_site_ll(curr_run_directory, full_data_path, tree_file
     if not opt:
         opt_model_cmd+=" --opt-branches off --opt-model off "
     compute_site_ll_run_command = (
-            "{raxml_exe_path} --sitelh --msa {msa_path} --model {model} {opt_model_cmd} --tree {tree_file} --prefix {prefix}  --redo").format(raxml_exe_path =RAXML_NG_EXE,
+            "{raxml_exe_path} --sitelh --msa {msa_path} --threads 1 --force perf_threads --model {model} {opt_model_cmd} --tree {tree_file} --prefix {prefix}  --redo").format(raxml_exe_path =RAXML_NG_EXE,
         model=model, msa_path=full_data_path, tree_file=tree_file,
         prefix=compute_site_ll_prefix,opt_model_cmd=opt_model_cmd)
     execute_command_and_write_to_log( compute_site_ll_run_command)
