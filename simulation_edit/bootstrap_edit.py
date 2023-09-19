@@ -320,6 +320,7 @@ def msa_path_bootstrap_analysis(msa_path,curr_run_dir, mle_path, true_tree_path,
             statistics = generate_partition_statistics(node, mle_tree_ete, extra_tree_groups, extra_boot,
                                                        best_ML_vs_true_tree_ete
                                                        )
+            statistics["feature_n_unique_seq"] = len(get_MSA_seq_names(curr_pruned_msa_path))
             nni_neighbors = get_nni_neighbors(mle_with_internal_path, node.name)
             neighbors_per_site_ll = []
             for neighbor in  nni_neighbors:
