@@ -94,6 +94,23 @@ def trim_n_seq(original_seq_records, number_of_sequences, seed):
     return seq_trimmed_seq_records
 
 
+
+def add_unique_seq(msa_path, out_msa_path):
+    all_msa_records = get_alignment_data(msa_path)
+    unique_seq_records = []
+    seq_values = set()
+    for record in all_msa_records:
+        if str(record.seq) in seq_values:
+            continue
+        else:
+            sampled_record = SeqRecord(record.seq, id=record.id, name=record.name,
+                                       description=record.description)
+            seq_values.add(str(record.seq))
+            unique_seq_records.append(sampled_record)
+    SeqIO.write(unique_seq_records, out_msa_path, 'fasta')
+
+
+
 def count_unique_n_seq(original_seq_records):
     seq_values = set()
     for record in original_seq_records:

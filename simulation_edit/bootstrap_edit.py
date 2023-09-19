@@ -11,7 +11,7 @@ from simulation_edit.simulations_edit_argparser import job_parser
 import dendropy
 import numpy as np
 from side_code.basic_trees_manipulation import *
-from side_code.MSA_manipulation import bootstrap_MSA,get_MSA_seq_names
+from side_code.MSA_manipulation import bootstrap_MSA,get_MSA_seq_names, add_unique_seq
 from side_code.spr_prune_and_regraft import *
 from side_code.file_handling import *
 from programs.raxml import raxml_compute_tree_per_site_ll, generate_n_tree_topologies,remove_redundant_sequences
@@ -274,8 +274,7 @@ def check_tree_is_ok(tree):
 def get_pruned_tree_and_msa(curr_run_dir, msa_path, model,mle_tree_ete):
     pruned_msa_path = os.path.join(curr_run_dir, "pruned_msa.fasta")
     pruned_tree_path = os.path.join(curr_run_dir, "pruned_tree.nw")
-    remove_redundant_sequences(curr_run_dir, prefix="check", msa_path=msa_path,
-                               model=model, out_msa_path=pruned_msa_path)
+    add_unique_seq(msa_path, pruned_msa_path)
     pruned_tree = mle_tree_ete.copy()
     pruned_tree.write(outfile=pruned_tree_path, format = 1)
     mle_tree_ete.prune(get_MSA_seq_names(pruned_msa_path))
@@ -358,6 +357,8 @@ def main():
     create_dir_if_not_exists(args.job_work_path)
     data = pd.read_csv(args.job_data_path, sep='\t')
     all_splits = pd.DataFrame()
+    log_file_path = os.path.join(args.job_work_path, "general_features.log")
+    logging.basicConfig(filename=log_file_path, level=logging.DEBUG)
     for true_tree_path in data['true_tree_path'].unique():
         tree_data = data.loc[data.true_tree_path == true_tree_path]
         for program in tree_data['program'].unique():
