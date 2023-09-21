@@ -17,8 +17,8 @@ def main_parser():
     parser.add_argument('--msa_type', type = str, default= 'DNA')
     parser.add_argument('--nb_iqtree',type = int, default= 1000)
     parser.add_argument('--nb_fasttree', type=int, default=10)
-    parser.add_argument('--calc_features', action='store_true', default=True)
-    parser.add_argument('--pre_chosen_tree_ids',action='store_true', default= True)
+    parser.add_argument('--calc_features', action='store_true', default=False)
+    parser.add_argument('--pre_chosen_tree_ids',action='store_true', default= False)
     parser.add_argument('--n_k_means_clusters',type=int, default =3)
     return parser
 

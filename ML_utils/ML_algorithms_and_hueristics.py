@@ -8,6 +8,7 @@ from sklearn.metrics import matthews_corrcoef, balanced_accuracy_score, log_loss
     recall_score
 import numpy as np
 import os
+from sklearn.metrics import balanced_accuracy_score
 import lightgbm
 from matplotlib import pyplot
 from sklearn.model_selection import GridSearchCV, GroupKFold
@@ -25,10 +26,10 @@ def regression_per_group(df):
     return r2_score(y, y_pred)
 
 
-def AUC_per_group(df):
+def performance_per_group(df):
     y_pred = list(df.y_pred)
     y = list(df.y)
-    return roc_auc_score(y, y_pred)
+    return balanced_accuracy_score(y, y_pred)
 
 
 def AUPRC_per_group(df):
@@ -42,7 +43,7 @@ def score_func(y, y_pred, classification, groups_data):
     for group in groups_data:
         df = pd.DataFrame({'y': y, 'y_pred': y_pred, 'grouping_col': groups_data[group]})
         if classification:
-            df = df.groupby('grouping_col').apply(AUC_per_group).reset_index(name='AUC')
+            df = df.groupby('grouping_col').apply(performance_per_group).reset_index(name='Balanced_Accuracy')
         else:
             df = df.groupby('grouping_col').apply(regression_per_group).reset_index(name='R2')
         df["grouping_col_name"] = group
@@ -67,7 +68,6 @@ def RFE(model, X, y, group_splitter, n_jobs, scoring, do_RFE):
 
 
 def ML_model(X_train, groups, y_train, n_jobs, path, classifier=False, model='lightgbm', calibrate=True, name="", large_grid = False, do_RFE = False, n_cv_folds = 3):
-    path = path + name
     logging.info(f"Building a {name} model and saving to {path}")
     if path and os.path.exists(path):
         logging.info(f"Using existing model in {path}")
@@ -143,7 +143,7 @@ def enrich_with_single_feature_metrics(var_impt, train_X, y_train, test_X, y_tes
 
 
 
-def print_model_statistics_pipeline(model, train_X, test_X, y_train, y_test, val_expanded_dict, is_classification, vi_path, error_vs_size_path, classification_metrics_path,
+def print_model_statistics_pipeline(model, train_X, test_X, y_train, y_test,X_val, y_val, val_expanded_dict, is_classification, vi_path, error_vs_size_path, classification_metrics_path, validation_metrics_path,
                                     group_metrics_path, name, sampling_frac, feature_importance=True):
     if feature_importance:
         try:
@@ -174,14 +174,23 @@ def print_model_statistics_pipeline(model, train_X, test_X, y_train, y_test, val
     test_metrics["dataset"] = "test"
     all_metrics.append(test_metrics)
     logging.info(f"{name} test metrics: \n {test_metrics}")
+    if X_val is not None:
+        val_metrics = model_metrics(model, X_val, y_val, group_metrics_path, sampling_frac,
+                                     is_classification=is_classification, groups_data=None)
+        val_metrics["dataset"] = "val"
+        all_metrics.append(val_metrics)
+        logging.info(f"{name} val metrics: \n {test_metrics}")
 
-    for file in val_expanded_dict:
-        file_validation_metrics = model_metrics(model, val_expanded_dict[file]["X_val"], val_expanded_dict[file]["y_val"], group_metrics_path, sampling_frac,
+
+    all_validation_metrics = pd.DataFrame()
+    for sample in val_expanded_dict:
+
+        sample_validation_metrics = model_metrics(model, val_expanded_dict[sample]["X_val"], val_expanded_dict[sample]["y_val"], group_metrics_path, sampling_frac,
                                                 is_classification=is_classification,
-                                                groups_data=None)
-        file_validation_metrics["dataset"] = file
-        all_metrics.append(file_validation_metrics)
-        logging.info(f"{file} validation metrics of size {val_expanded_dict[file]['size']}: \n { file_validation_metrics}")
+                                                groups_data=None, safe_calc= True)
+        all_validation_metrics = all_validation_metrics.append(sample_validation_metrics, ignore_index= True)
+        #logging.info(f"{file} validation metrics of size {val_expanded_dict[file]['size']}: \n { file_validation_metrics}")
+    all_validation_metrics.to_csv(validation_metrics_path, sep = '\t')
     classification_metrics_df = pd.DataFrame(all_metrics)
     classification_metrics_df.to_csv(classification_metrics_path, sep= '\t')
 
@@ -190,8 +199,8 @@ def print_model_statistics_pipeline(model, train_X, test_X, y_train, y_test, val
     test_metrics["sample_fraction"] = sampling_frac
     add_to_csv(csv_path=error_vs_size_path, new_data=test_metrics)
 
-    if is_classification:
-        calibration_plot(model, test_X, y_test)
+    #if is_classification:
+    #    calibration_plot(model, test_X, y_test)
 
 
 def add_to_csv(csv_path, new_data):
@@ -203,7 +212,7 @@ def add_to_csv(csv_path, new_data):
         metric_df.to_csv(csv_path, sep=CSV_SEP)
 
 
-def model_metrics(model, X, y_true, metrics_path, sampling_frac, is_classification, groups_data):
+def model_metrics(model, X, y_true, metrics_path, sampling_frac, is_classification, groups_data, safe_calc = False):
 
     predictions = model['best_model'].predict((model['selector']).transform(X))
     if is_classification:
@@ -211,21 +220,25 @@ def model_metrics(model, X, y_true, metrics_path, sampling_frac, is_classificati
     else:
         prob_predictions = predictions
     if is_classification:
-        if groups_data and (sampling_frac==1 or sampling_frac==-1):
-                auc_per_group = score_func(y_true, prob_predictions, classification=True, groups_data=groups_data)
-                auc_per_group["sampling_frac"] = sampling_frac
-                add_to_csv(metrics_path, auc_per_group)
-                logging.info(auc_per_group)
+        if groups_data and (sampling_frac==-1):
+                performance_per_group = score_func(y_true, predictions, classification=True, groups_data=groups_data)
+                performance_per_group["sampling_frac"] = sampling_frac
+                add_to_csv(metrics_path, performance_per_group)
+                logging.info(performance_per_group)
         # PrecisionRecallDisplay.from_predictions(y_test, prob_predictions)
         # plt.show()
-        return {'AUC': roc_auc_score(y_true, prob_predictions),
-                'logloss': log_loss(y_true, prob_predictions),
-                'average_precision': average_precision_score(y_true, prob_predictions),
+        res =  {
+                'balanced_accuracy': balanced_accuracy_score(y_true, predictions),
                 'accuracy_score': accuracy_score(y_true, predictions),
                 'precision': precision_score(y_true, predictions), 'recall': recall_score(y_true, predictions),
                 'mcc': matthews_corrcoef(y_true, predictions)}
+        if not safe_calc:
+            res.update({'AUC': roc_auc_score(y_true, prob_predictions),
+                'logloss': log_loss(y_true, prob_predictions),
+                'average_precision': average_precision_score(y_true, prob_predictions)})
+        return res
     else:
-        if groups_data and (sampling_frac==1 or sampling_frac==-1):
+        if groups_data and (sampling_frac==1):
             r2_per_group = score_func(y_true, predictions, classification=False, groups_data=groups_data)
             r2_per_group["sampling_frac"] = sampling_frac
             add_to_csv(metrics_path, r2_per_group)
@@ -245,6 +258,9 @@ def train_test_validation_splits(full_data, test_pct, subsample_train=False,
     full_sampling_data  = full_sampling_data.sort_values('tree') # Sort according to MSAs
     test_trees = full_sampling_data.groupby('msa_n_seq').sample(frac=test_pct, random_state= SEED)
     train_trees = full_sampling_data.loc[~full_sampling_data['tree'].isin(test_trees['tree'])]
+    if subsample_train:
+        logging.info(f"Subsampling training data to {subsample_train_frac}")
+        train_trees = train_trees.groupby('msa_n_seq').sample(frac=subsample_train_frac, random_state=SEED)
 
     train_data = full_data[full_data['true_tree_path'].isin(train_trees['tree'])]
     logging.info(f"Number of MSAs in training data is {len(train_data.msa_path.unique())}")

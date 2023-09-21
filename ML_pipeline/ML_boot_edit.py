@@ -101,39 +101,98 @@ def get_bootstrap_col(program):
         bootstrap_cols = ['feature_standard_fasttree_boot_support', 'bootstrap_support']
     return bootstrap_cols
 
+
+
+
+def ML_pipeline(program_data, bootstrap_cols, cpus_per_main_job, working_dir, sample_frac,subsample_train, do_RFE , large_grid, name, validation_data = None):
+    program_data = program_data.dropna(axis=1, how='all')
+    program_data = program_data.dropna(axis=0)
+    train, test = train_test_validation_splits(program_data, test_pct=0.3,
+                                               subsample_train=subsample_train, subsample_train_frac=sample_frac)
+
+    print(len(program_data['tree_id'].unique()))
+    features = [col for col in program_data.columns if
+                'feature' in col and col not in bootstrap_cols]  # +['partition_branch_vs_mean','partition_branch','partition_size','partition_size_ratio','partition_divergence','divergence_ratio']
+
+    X_train = train[[col for col in train.columns if col in features]]
+    X_test = test[[col for col in train.columns if col in features]]
+    y_train = train["true_binary_support"]  # default_status
+    y_test = test["true_binary_support"]
+
+    groups = train["tree_id"]
+    model = ML_model(X_train, groups, y_train, n_jobs=cpus_per_main_job, path=os.path.join(working_dir, f'model_{sample_frac}'),
+                     classifier=True, model='lightgbm', calibrate=True, name=name, large_grid=large_grid, do_RFE=do_RFE,
+                     n_cv_folds=3)
+    val_expended_dict = {}
+    if validation_data is not None:
+        for tree_ind in validation_data["tree_id"]:
+            tree_validation_data = validation_data.loc[validation_data.tree_id==tree_ind]
+            X_val = tree_validation_data[[col for col in tree_validation_data.columns if col in features]]
+            y_val = tree_validation_data["true_binary_support"]
+            val_expended_dict[tree_ind] = {'X_val': X_val, 'y_val': y_val}
+    else:
+        X_val = None
+        y_val = None
+
+    print_model_statistics_pipeline(model, X_train, X_test, y_train, y_test, X_val, y_val,  val_expanded_dict=val_expended_dict,
+                                    is_classification=True,
+                                    vi_path=os.path.join(working_dir, 'vi.tsv'),
+                                    error_vs_size_path=os.path.join(working_dir, 'erorr_vs_size.tsv'),
+                                    classification_metrics_path=os.path.join(working_dir,
+                                                                             'all_clasissification_metrics.tsv'),
+                                    validation_metrics_path=os.path.join(working_dir,
+                                                                             'validation_metrics.tsv'),
+                                    group_metrics_path=os.path.join(working_dir, 'group_metrics.tsv'), name="testing",
+                                    sampling_frac=sample_frac,
+                                    feature_importance=True)
+
+
+def transform_data(df):
+    df['true_binary_support'] = df['true_support'] == 1
+    df['feature_msa_n_seq'] = df['feature_n_unique_seq']
+    df.drop(columns = ['feature_n_unique_seq'], inplace= True)
+    #+[col for col in df.columns if 'msa_entropy' in col]
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--working_dir', type = str, default = os.getcwd())
+    parser.add_argument('--cpus_per_main_job', type = int, default=1)
+    parser.add_argument('--sample_fracs', type = str, default='0.3_0.7_1')
+
     full_data = pd.read_csv("/Users/noa/Workspace/bootstrap_results/job_raw_data_with_features.tsv", sep = '\t')
-    full_data['true_binary_support'] = full_data['true_support']==1
+
+    validation_raxml = pd.read_csv("/Users/noa/Workspace/bootstrap_results/simulations_df_raxml.tsv", sep = '\t')
+    transform_data(validation_raxml)
+    validation_iqtree = pd.read_csv("/Users/noa/Workspace/bootstrap_results/simulations_df_iqtree.tsv", sep='\t')
+    transform_data(validation_iqtree)
+    validation_fasttree = pd.read_csv("/Users/noa/Workspace/bootstrap_results/simulations_df_fasttree.tsv", sep='\t')
+    transform_data(validation_fasttree)
+    validation_dict = {'raxml': validation_raxml, 'iqtree': validation_iqtree, 'fasttree': validation_fasttree}
+
+    transform_data(full_data)
     args = parser.parse_args()
-    #full_data["feature_pars_vs_b_pars"] = full_data["pars_support_mean"] - full_data["bootstrap_support_mean"]
-
-
     for program in full_data['program'].unique():
         program_data = full_data.loc[full_data.program == program]
         working_dir = os.path.join(args.working_dir, program)
         create_dir_if_not_exists(working_dir)
-        program_results = pd.DataFrame()
         bootstrap_cols = get_bootstrap_col(program)
         program_data = program_data.dropna(axis=1, how='all')
         program_data = program_data.dropna(axis=0)
-        train, test = train_test_validation_splits(program_data, test_pct=0.3,
-                                                             subsample_train=False, subsample_train_frac=-1)
+        sample_fracs = [float(frac) for frac in (args.sample_fracs).split('_')]
+        for sample_frac in sample_fracs:
+            ML_pipeline(program_data, bootstrap_cols, args.cpus_per_main_job, working_dir, sample_frac,subsample_train = True,do_RFE = False, large_grid = False, name = f"frac_{sample_frac}")
 
-        print(len(program_data['tree_id'].unique()))
-        features = [col for col in program_data.columns if 'feature' in col and col not in bootstrap_cols]#+['partition_branch_vs_mean','partition_branch','partition_size','partition_size_ratio','partition_divergence','divergence_ratio']
-
-        X_train = train[[col for col in train.columns if col in features]]
-        X_test = test[[col for col in train.columns if col in features]]
-        y_train = train["true_binary_support"]  # default_status
-        y_test = test["true_binary_support"]
+        ML_pipeline(program_data, bootstrap_cols, args.cpus_per_main_job, working_dir, sample_frac = -1,subsample_train = False, do_RFE=False,
+                    large_grid=False, name=f"final_model", validation_data = validation_dict[program])
 
 
 
-        model = ML_model(X_train, groups, y_train, n_jobs, path, classifier=False, model='lightgbm', calibrate=True, name="standard", large_grid = False, do_RFE = False, n_cv_folds = 3)
-        #model = model_pipeline(working_dir,X_train, y_train, name = "standard")
-        model_performance = overall_model_performance_analysis(working_dir,model, X_train, y_train, X_test, y_test, test,name = "standard")
+
+'''
+
+        program_results = pd.DataFrame()
+        model_performance = overall_model_performance_analysis(working_dir,model["best_model"], X_train, y_train, X_test, y_test, test,name = "standard")
         model_performance['type'] = 'features_based_analysis'
         print(f"Overall model performance: \n { model_performance}")
         program_results = program_results.append(model_performance, ignore_index= True)
@@ -141,12 +200,12 @@ def main():
             print((f"\n\n####{bootstrap_col}:"))
             boot_performance = bootstrap_feature_analysis(working_dir,bootstrap_col, train, test, y_train, y_test, features)
             program_results = pd.concat([program_results, boot_performance])
-        program_results.to_csv(f"{program}_res.csv")
+        program_results.to_csv(f"{working_dir}_performance_res.csv")
 
 
     #per_tree_analysis(test, features, model)
 
-
+'''
 
 
 

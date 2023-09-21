@@ -29,7 +29,9 @@ def extract_representative_sample(out_dir, min_n_taxa, max_n_taxa, min_n_loci, m
     kmeans = KMeans(n_clusters=n_k_means_clusters)
     kmeans_fit = kmeans.fit(scaled_k_means_data)
     k_means_data["label"] = kmeans_fit.labels_
-    repersentative_sample = k_means_data.groupby("label").head(1).reset_index()
+    scaled_k_means_data_distances = (kmeans.transform(scaled_k_means_data)**2).sum(axis=1)
+    k_means_data["dist_from_center"] = scaled_k_means_data_distances
+    repersentative_sample = k_means_data.sort_values("dist_from_center").groupby("label").head(1).reset_index()
     return list(repersentative_sample["TREE_ID"])
 
 
