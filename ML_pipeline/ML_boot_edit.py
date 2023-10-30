@@ -8,17 +8,7 @@ import argparse
 
 
 
-def get_test_metrics(y_true, predictions, prob_predictions):
-    metrics = {
-                    'balanced_accuracy_score': balanced_accuracy_score(y_true, predictions),
-                    'accuracy_score': accuracy_score(y_true, predictions),
-                    'precision': precision_score(y_true, predictions), 'recall': recall_score(y_true, predictions),
-                    'mcc': matthews_corrcoef(y_true, predictions)}
-    if prob_predictions is not None:
-        prob_metrics = {'AUC': roc_auc_score(y_true, prob_predictions),
-                        'logloss': log_loss(y_true, prob_predictions), 'average_precision': average_precision_score(y_true, prob_predictions), }
-        metrics.update(prob_metrics)
-    return metrics
+
 
 def per_tree_analysis(test, features,model):
     balanced_accuracies = []
@@ -28,7 +18,7 @@ def per_tree_analysis(test, features,model):
         curr_X_test = tree_data_test[[col for col in test.columns if col in features]]
         #prob_predictions = model.predict_proba(curr_X_test)[:, 1]
         predictions = model.predict(( curr_X_test))
-        metrics = get_test_metrics(curr_y_true,predictions,None)
+        metrics = model_evaluation_metrics(curr_y_true, predictions, None)
         balanced_accuracies.append(metrics["balanced_accuracy_score"])
     plt.hist(balanced_accuracies)
     plt.show()
@@ -46,49 +36,8 @@ def model_pipeline(working_dir,X_train, y_train,name):
     return model
 
 
-def overall_model_performance_analysis(working_dir,model, X_train, y_train, X_test, y_test, test, name):
-    var_impt = variable_importance(X_train, model)
-    enrich_with_single_feature_metrics(var_impt, X_train, y_train, X_test, y_test)
-    vi_path = os.path.join(working_dir, f'{name}_vi.tsv')
-    var_impt.to_csv(vi_path, sep=CSV_SEP)
-
-    y_true = test["true_binary_support"]
-    prob_predictions = model.predict_proba(X_test)[:, 1]
-    predictions = model.predict((X_test))
-    test_metrics = get_test_metrics(y_true, predictions, prob_predictions)
-    return test_metrics
 
 
-def raw_bootstrap_performance(test, bootstrap_col, y_true):
-    prob_predictions_test_boot = test[bootstrap_col] / 100
-    predictions_test_boot = test[bootstrap_col] > 0.5
-    test_metrics_boot = get_test_metrics(y_true, predictions_test_boot, prob_predictions_test_boot)
-    return test_metrics_boot
-
-def bootstrap_feature_analysis(working_dir,bootstrap_col,train,test, y_train, y_test, features):
-    res = pd.DataFrame()
-    X_train_only_boot = train[[bootstrap_col]]
-    X_test_inc_boot = test[[col for col in train.columns if col in features] + [bootstrap_col]]
-    X_train_inc_boot = train[[col for col in train.columns if col in features] + [bootstrap_col]]
-    X_test_only_boot = test[[bootstrap_col]]
-    model_inc_boot = model_pipeline(working_dir,X_train_inc_boot, y_train, name=f"inc_boot_{bootstrap_col}")
-    mp_inc_boot = overall_model_performance_analysis(working_dir,model_inc_boot, X_train_inc_boot, y_train, X_test_inc_boot,
-                                                     y_test, test, name=f"inc_boot_{bootstrap_col}")
-    mp_inc_boot["type"] = f'{bootstrap_col} including bootstrap'
-    res = res.append(mp_inc_boot, ignore_index= True)
-    print(f"Model performance including boot: \n {mp_inc_boot}")
-    raw_boot_performance = raw_bootstrap_performance(test, bootstrap_col, y_test)
-    raw_boot_performance["type"] = f'{bootstrap_col} using raw bootstrap values'
-    res = res.append(raw_boot_performance, ignore_index=True)
-    print(f"Raw model performance is: \n {raw_boot_performance}")
-    model_only_boot = model_pipeline(working_dir,X_train_only_boot, y_train, name=f"only_boot_{bootstrap_col}")
-    mp_only_boot = overall_model_performance_analysis(working_dir,model_only_boot, X_train_only_boot, y_train, X_test_only_boot,
-                                                      y_test,
-                                                      test, name=f"only_boot_{bootstrap_col}")
-    mp_only_boot["type"] = f'{bootstrap_col} using single bootstrap feature'
-    res = res.append(mp_only_boot, ignore_index=True)
-    print(f"Model performance using only boot: \n{mp_only_boot}")
-    return res
 
 
 def get_bootstrap_col(program):
@@ -102,15 +51,47 @@ def get_bootstrap_col(program):
     return bootstrap_cols
 
 
+def bootstrap_model_pipeline(working_dir,train, y_train,test, y_test,features,bootstrap_col,groups,cpus_per_main_job,sample_frac,do_RFE , large_grid, name):
+    X_train_only_boot = train[[bootstrap_col]]
+    X_train_only_boot["ignore"] = 1
+    X_test_only_boot = test[[bootstrap_col]]
+    X_test_only_boot["ignore"] = 1
+    X_train_inc_boot = train[[col for col in train.columns if col in features] + [bootstrap_col]]
+    X_test_inc_boot = test[[col for col in train.columns if col in features] + [bootstrap_col]]
+    model_only_boot = ML_model(X_train_only_boot, groups, y_train, n_jobs=cpus_per_main_job,
+                               path=os.path.join(working_dir, f'model_{sample_frac}_only_boot'),
+                               classifier=True, model='lightgbm', calibrate=True, name=name,
+                               large_grid=large_grid, do_RFE=do_RFE,
+                               n_cv_folds=3)
+    model_inc_boot = ML_model(X_train_inc_boot, groups, y_train, n_jobs=cpus_per_main_job,
+                              path=os.path.join(working_dir, f'model_{sample_frac}_inc_boot'
+                              f''),
+                              classifier=True, model='lightgbm', calibrate=True, name=name, large_grid=large_grid,
+                              do_RFE=do_RFE,
+                              n_cv_folds=3)
+    data_dict_only_boot = {'test': {'X': X_test_only_boot, 'y': y_test, 'full_data': test},
+                           'train': {'X': X_train_only_boot, 'y': y_train, 'full_data': train}}
+    raw_boot_performance,groups_data_raw_boot = overall_model_performance_analysis(working_dir, None, data_dict_only_boot,
+                                                              name="raw_only_boot",extract_predictions = False)
+
+    only_boot_performance,groups_data_only_boot = overall_model_performance_analysis(working_dir, model_only_boot, data_dict_only_boot,
+                                                               name="only_boot",extract_predictions = False)
+    data_dict_inc_boot = {'test': {'X': X_test_inc_boot, 'y': y_test, 'full_data': test},
+                          'train': {'X': X_train_inc_boot, 'y': y_train, 'full_data': train}}
+    inc_boot_performance,groups_data_inc_boot = overall_model_performance_analysis(working_dir, model_inc_boot, data_dict_inc_boot,
+                                                              name="inc_boot",extract_predictions = False)
+    bootstrap_models_performance = pd.concat([raw_boot_performance, only_boot_performance, inc_boot_performance])
+    bootstrap_models_performance["analysis_type"] = bootstrap_col
+    return bootstrap_models_performance
 
 
-def ML_pipeline(program_data, bootstrap_cols, cpus_per_main_job, working_dir, sample_frac,subsample_train, do_RFE , large_grid, name, validation_data = None):
+def ML_pipeline(program_data, bootstrap_cols, cpus_per_main_job, working_dir, sample_frac,subsample_train, do_RFE , large_grid, name, validation_dict, compare_to_bootstrap_models = False, extract_predictions = False):
     program_data = program_data.dropna(axis=1, how='all')
     program_data = program_data.dropna(axis=0)
     train, test = train_test_validation_splits(program_data, test_pct=0.3,
                                                subsample_train=subsample_train, subsample_train_frac=sample_frac)
 
-    print(len(program_data['tree_id'].unique()))
+    logging.info(f"Number of different trees is {len(program_data['tree_id'].unique())}")
     features = [col for col in program_data.columns if
                 'feature' in col and col not in bootstrap_cols]  # +['partition_branch_vs_mean','partition_branch','partition_size','partition_size_ratio','partition_divergence','divergence_ratio']
 
@@ -123,28 +104,27 @@ def ML_pipeline(program_data, bootstrap_cols, cpus_per_main_job, working_dir, sa
     model = ML_model(X_train, groups, y_train, n_jobs=cpus_per_main_job, path=os.path.join(working_dir, f'model_{sample_frac}'),
                      classifier=True, model='lightgbm', calibrate=True, name=name, large_grid=large_grid, do_RFE=do_RFE,
                      n_cv_folds=3)
-    val_expended_dict = {}
-    if validation_data is not None:
-        for tree_ind in validation_data["tree_id"]:
-            tree_validation_data = validation_data.loc[validation_data.tree_id==tree_ind]
-            X_val = tree_validation_data[[col for col in tree_validation_data.columns if col in features]]
-            y_val = tree_validation_data["true_binary_support"]
-            val_expended_dict[tree_ind] = {'X_val': X_val, 'y_val': y_val}
-    else:
-        X_val = None
-        y_val = None
 
-    print_model_statistics_pipeline(model, X_train, X_test, y_train, y_test, X_val, y_val,  val_expanded_dict=val_expended_dict,
-                                    is_classification=True,
-                                    vi_path=os.path.join(working_dir, 'vi.tsv'),
-                                    error_vs_size_path=os.path.join(working_dir, 'erorr_vs_size.tsv'),
-                                    classification_metrics_path=os.path.join(working_dir,
-                                                                             'all_clasissification_metrics.tsv'),
-                                    validation_metrics_path=os.path.join(working_dir,
-                                                                             'validation_metrics.tsv'),
-                                    group_metrics_path=os.path.join(working_dir, 'group_metrics.tsv'), name="testing",
-                                    sampling_frac=sample_frac,
-                                    feature_importance=True)
+    data_dict = {'test': {'X': X_test, 'y': y_test, 'full_data': test},'train': {'X': X_train, 'y': y_train, 'full_data': train}}
+    for val_name in validation_dict:
+        validation_data = validation_dict[val_name]
+        data_dict[val_name]={'X': validation_data[[col for col in validation_data.columns if col in features]],'y': validation_data["true_binary_support"], 'full_data': validation_data}
+    all_models_performance = pd.DataFrame()
+    model_performance,group_performance = overall_model_performance_analysis(working_dir, model,data_dict, name=f"model_standard",extract_predictions = extract_predictions)
+    model_performance["analysis_type"] = "standard"
+    all_models_performance = pd.concat([all_models_performance, model_performance])
+
+    if compare_to_bootstrap_models:
+        for bootstrap_col in bootstrap_cols:
+            bootstrap_models_performance = bootstrap_model_pipeline(working_dir,train, y_train,test, y_test,features,bootstrap_col,groups,cpus_per_main_job,sample_frac,do_RFE , large_grid, name)
+            all_models_performance = pd.concat([all_models_performance, bootstrap_models_performance])
+
+    all_models_performance["sample_frac"] = sample_frac
+    group_performance["sample_frac"] = sample_frac
+    return all_models_performance,group_performance
+
+
+
 
 
 def transform_data(df):
@@ -158,20 +138,25 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--working_dir', type = str, default = os.getcwd())
     parser.add_argument('--cpus_per_main_job', type = int, default=1)
-    parser.add_argument('--sample_fracs', type = str, default='0.3_0.7_1')
+    parser.add_argument('--sample_fracs', type = str, default='0.5_1')
+    parser.add_argument('--main_data_path',type = str, default = '/Users/noa/Workspace/bootstrap_results/job_raw_data_with_features.tsv')
+    parser.add_argument('--validation_data_path_raxml',type = str, default ='/Users/noa/Workspace/bootstrap_results/simulations_df_raxml.tsv')
+    parser.add_argument('--validation_data_path_iqtree', type=str,
+                        default='/Users/noa/Workspace/bootstrap_results/simulations_df_iqtree.tsv')
+    parser.add_argument('--validation_data_path_fasttree', type=str,
+                        default='/Users/noa/Workspace/bootstrap_results/simulations_df_fasttree.tsv')
+    args = parser.parse_args()
+    full_data = pd.read_csv(args.main_data_path, sep = '\t').sample(n = 2000)
 
-    full_data = pd.read_csv("/Users/noa/Workspace/bootstrap_results/job_raw_data_with_features.tsv", sep = '\t')
-
-    validation_raxml = pd.read_csv("/Users/noa/Workspace/bootstrap_results/simulations_df_raxml.tsv", sep = '\t')
+    validation_raxml = pd.read_csv(args.validation_data_path_raxml, sep = '\t').sample(n=200)
     transform_data(validation_raxml)
-    validation_iqtree = pd.read_csv("/Users/noa/Workspace/bootstrap_results/simulations_df_iqtree.tsv", sep='\t')
+    validation_iqtree = pd.read_csv(args.validation_data_path_iqtree, sep='\t').sample(n=200)
     transform_data(validation_iqtree)
-    validation_fasttree = pd.read_csv("/Users/noa/Workspace/bootstrap_results/simulations_df_fasttree.tsv", sep='\t')
+    validation_fasttree = pd.read_csv(args.validation_data_path_fasttree, sep='\t').sample(n=200)
     transform_data(validation_fasttree)
-    validation_dict = {'raxml': validation_raxml, 'iqtree': validation_iqtree, 'fasttree': validation_fasttree}
+    validation_dict = {'raxml': {'val':validation_raxml}, 'iqtree': {'val':validation_iqtree}, 'fasttree': {'val':validation_fasttree}}
 
     transform_data(full_data)
-    args = parser.parse_args()
     for program in full_data['program'].unique():
         program_data = full_data.loc[full_data.program == program]
         working_dir = os.path.join(args.working_dir, program)
@@ -180,35 +165,15 @@ def main():
         program_data = program_data.dropna(axis=1, how='all')
         program_data = program_data.dropna(axis=0)
         sample_fracs = [float(frac) for frac in (args.sample_fracs).split('_')]
+        all_model_merics = pd.DataFrame()
         for sample_frac in sample_fracs:
-            ML_pipeline(program_data, bootstrap_cols, args.cpus_per_main_job, working_dir, sample_frac,subsample_train = True,do_RFE = False, large_grid = False, name = f"frac_{sample_frac}")
-
-        ML_pipeline(program_data, bootstrap_cols, args.cpus_per_main_job, working_dir, sample_frac = -1,subsample_train = False, do_RFE=False,
-                    large_grid=False, name=f"final_model", validation_data = validation_dict[program])
-
-
-
-
-'''
-
-        program_results = pd.DataFrame()
-        model_performance = overall_model_performance_analysis(working_dir,model["best_model"], X_train, y_train, X_test, y_test, test,name = "standard")
-        model_performance['type'] = 'features_based_analysis'
-        print(f"Overall model performance: \n { model_performance}")
-        program_results = program_results.append(model_performance, ignore_index= True)
-        for bootstrap_col in bootstrap_cols:
-            print((f"\n\n####{bootstrap_col}:"))
-            boot_performance = bootstrap_feature_analysis(working_dir,bootstrap_col, train, test, y_train, y_test, features)
-            program_results = pd.concat([program_results, boot_performance])
-        program_results.to_csv(f"{working_dir}_performance_res.csv")
-
-
-    #per_tree_analysis(test, features, model)
-
-'''
-
-
-
+            curr_model_metrics, groups_analysis = ML_pipeline(program_data, bootstrap_cols, args.cpus_per_main_job, working_dir, sample_frac,compare_to_bootstrap_models= False,subsample_train = True,do_RFE = False, large_grid = False, name = f"frac_{sample_frac}", validation_dict = validation_dict[program])
+            all_model_merics = pd.concat([all_model_merics,curr_model_metrics])
+        all_model_merics.to_csv(os.path.join(working_dir, 'all_models_performance.tsv'), sep=CSV_SEP)
+        final_model_metrics,groups_analysis = ML_pipeline(program_data, bootstrap_cols, args.cpus_per_main_job, working_dir, sample_frac = -1,subsample_train = False, do_RFE=False,
+                    large_grid=False, name=f"final_model", validation_dict = validation_dict[program], compare_to_bootstrap_models= True, extract_predictions = True)
+        final_model_metrics.to_csv(os.path.join(working_dir, 'final_model_performance.tsv'), sep=CSV_SEP)
+        groups_analysis.to_csv(os.path.join(working_dir, 'groups_performance.tsv'), sep=CSV_SEP)
 
     #     print(test_metrics)
 

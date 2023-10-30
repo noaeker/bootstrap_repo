@@ -26,7 +26,7 @@ def generate_results_folder(curr_run_prefix):
 
 def submit_single_job(all_jobs_results_folder, job_ind,curr_job_trees, args):
     curr_job_folder = os.path.join(all_jobs_results_folder, "job_" + str(job_ind))
-    create_dir_if_not_exists(curr_job_folder)
+    create_or_clean_dir(curr_job_folder)
     job_trees_file = os.path.join(curr_job_folder,'job_trees.nw')
     with open(job_trees_file,'w') as JOB_TREES_FILE:
         JOB_TREES_FILE.write("\n".join(curr_job_trees))
