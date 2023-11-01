@@ -153,8 +153,11 @@ def main():
     parser.add_argument('--validation_data_folder', type=str,
                         default='/Users/noa/Workspace/bootstrap_results/job_raw_data_with_features.tsv')
     args = parser.parse_args()
+    log_file_path = os.path.join(args.working_dir, "ML.log")
+    logging.basicConfig(filename=log_file_path, level=logging.DEBUG)
     for program in ['iqtree','fasttree','raxml']:
-        program_data = pd.read_csv(os.path.join(args.main_data_folder,f'simulation_df_{program}.tsv'))
+        logging.info(f"Program = {program}")
+        program_data = pd.read_csv(os.path.join(args.main_data_folder,f'simulations_df_{program}.tsv'))
         transform_data(program_data)
         program_validation_data = pd.read_csv(os.path.join(args.validation_data_folder,f'simulation_df_{program}.tsv'))
         transform_data(program_validation_data)
@@ -166,9 +169,11 @@ def main():
         sample_fracs = [float(frac) for frac in (args.sample_fracs).split('_')]
         all_model_merics = pd.DataFrame()
         for sample_frac in sample_fracs:
+            logging.info(f"Sample frac = {sample_frac}")
             curr_model_metrics, groups_analysis = ML_pipeline(program_data, bootstrap_cols, args.cpus_per_main_job, working_dir, sample_frac,compare_to_bootstrap_models= False,subsample_train = True,do_RFE = args.RFE, large_grid = False, name = f"frac_{sample_frac}", validation_dict = validation_dict[program])
             all_model_merics = pd.concat([all_model_merics,curr_model_metrics])
         all_model_merics.to_csv(os.path.join(working_dir, 'all_models_performance.tsv'), sep=CSV_SEP)
+        logging.info(f"Generating optimized final model")
         final_model_metrics,groups_analysis = ML_pipeline(program_data, bootstrap_cols, args.cpus_per_main_job, working_dir, sample_frac = -1,subsample_train = False, do_RFE=args.RFE,
                     large_grid=args.full_grid, name=f"final_model", validation_data = program_validation_data, compare_to_bootstrap_models= True, extract_predictions = True)
         final_model_metrics.to_csv(os.path.join(working_dir, 'final_model_performance.tsv'), sep=CSV_SEP)
