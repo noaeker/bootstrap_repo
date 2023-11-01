@@ -1,3 +1,12 @@
+import sys
+if sys.platform == "linux" or sys.platform == "linux2":
+    PROJECT_ROOT_DIRECRTORY = "/groups/pupko/noaeker/bootstrap_repo"
+else:
+    PROJECT_ROOT_DIRECRTORY = "/Users/noa/Workspace/bootstrap_repo"
+sys.path.append(PROJECT_ROOT_DIRECRTORY)
+
+
+
 from ML_utils.ML_algorithms_and_hueristics import *
 from side_code.file_handling import create_or_clean_dir, create_dir_if_not_exists
 from side_code.MSA_manipulation import get_MSA_seq_names
@@ -133,23 +142,22 @@ def transform_data(df):
     df.drop(columns = ['feature_n_unique_seq'], inplace= True)
     #+[col for col in df.columns if 'msa_entropy' in col]
 
-
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--working_dir', type = str, default = os.getcwd())
+    parser.add_argument('--RFE', action='store_true', default= False)
+    parser.add_argument('--full_grid', action='store_true', default=False)
     parser.add_argument('--cpus_per_main_job', type = int, default=1)
     parser.add_argument('--sample_fracs', type = str, default='0.5_1')
     parser.add_argument('--main_data_folder',type = str, default = '/Users/noa/Workspace/bootstrap_results/job_raw_data_with_features.tsv')
     parser.add_argument('--validation_data_folder', type=str,
                         default='/Users/noa/Workspace/bootstrap_results/job_raw_data_with_features.tsv')
-
     args = parser.parse_args()
-
     for program in ['iqtree','fasttree','raxml']:
         program_data = pd.read_csv(os.path.join(args.main_data_folder,f'simulation_df_{program}.tsv'))
         transform_data(program_data)
-        validation_data = pd.read_csv(os.path.join(args.validation_data_folder,f'simulation_df_{program}.tsv'))
-        transform_data(validation_data)
+        program_validation_data = pd.read_csv(os.path.join(args.validation_data_folder,f'simulation_df_{program}.tsv'))
+        transform_data(program_validation_data)
         working_dir = os.path.join(args.working_dir, program)
         create_dir_if_not_exists(working_dir)
         bootstrap_cols = get_bootstrap_col(program)
@@ -158,11 +166,11 @@ def main():
         sample_fracs = [float(frac) for frac in (args.sample_fracs).split('_')]
         all_model_merics = pd.DataFrame()
         for sample_frac in sample_fracs:
-            curr_model_metrics, groups_analysis = ML_pipeline(program_data, bootstrap_cols, args.cpus_per_main_job, working_dir, sample_frac,compare_to_bootstrap_models= False,subsample_train = True,do_RFE = False, large_grid = False, name = f"frac_{sample_frac}", validation_dict = validation_dict[program])
+            curr_model_metrics, groups_analysis = ML_pipeline(program_data, bootstrap_cols, args.cpus_per_main_job, working_dir, sample_frac,compare_to_bootstrap_models= False,subsample_train = True,do_RFE = args.RFE, large_grid = False, name = f"frac_{sample_frac}", validation_dict = validation_dict[program])
             all_model_merics = pd.concat([all_model_merics,curr_model_metrics])
         all_model_merics.to_csv(os.path.join(working_dir, 'all_models_performance.tsv'), sep=CSV_SEP)
-        final_model_metrics,groups_analysis = ML_pipeline(program_data, bootstrap_cols, args.cpus_per_main_job, working_dir, sample_frac = -1,subsample_train = False, do_RFE=False,
-                    large_grid=False, name=f"final_model", validation_data = program_validation_data, compare_to_bootstrap_models= True, extract_predictions = True)
+        final_model_metrics,groups_analysis = ML_pipeline(program_data, bootstrap_cols, args.cpus_per_main_job, working_dir, sample_frac = -1,subsample_train = False, do_RFE=args.RFE,
+                    large_grid=args.full_grid, name=f"final_model", validation_data = program_validation_data, compare_to_bootstrap_models= True, extract_predictions = True)
         final_model_metrics.to_csv(os.path.join(working_dir, 'final_model_performance.tsv'), sep=CSV_SEP)
         groups_analysis.to_csv(os.path.join(working_dir, 'groups_performance.tsv'), sep=CSV_SEP)
 
