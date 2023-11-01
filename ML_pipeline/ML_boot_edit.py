@@ -139,26 +139,17 @@ def main():
     parser.add_argument('--working_dir', type = str, default = os.getcwd())
     parser.add_argument('--cpus_per_main_job', type = int, default=1)
     parser.add_argument('--sample_fracs', type = str, default='0.5_1')
-    parser.add_argument('--main_data_path',type = str, default = '/Users/noa/Workspace/bootstrap_results/job_raw_data_with_features.tsv')
-    parser.add_argument('--validation_data_path_raxml',type = str, default ='/Users/noa/Workspace/bootstrap_results/simulations_df_raxml.tsv')
-    parser.add_argument('--validation_data_path_iqtree', type=str,
-                        default='/Users/noa/Workspace/bootstrap_results/simulations_df_iqtree.tsv')
-    parser.add_argument('--validation_data_path_fasttree', type=str,
-                        default='/Users/noa/Workspace/bootstrap_results/simulations_df_fasttree.tsv')
+    parser.add_argument('--main_data_folder',type = str, default = '/Users/noa/Workspace/bootstrap_results/job_raw_data_with_features.tsv')
+    parser.add_argument('--validation_data_folder', type=str,
+                        default='/Users/noa/Workspace/bootstrap_results/job_raw_data_with_features.tsv')
+
     args = parser.parse_args()
-    full_data = pd.read_csv(args.main_data_path, sep = '\t').sample(n = 2000)
 
-    validation_raxml = pd.read_csv(args.validation_data_path_raxml, sep = '\t').sample(n=200)
-    transform_data(validation_raxml)
-    validation_iqtree = pd.read_csv(args.validation_data_path_iqtree, sep='\t').sample(n=200)
-    transform_data(validation_iqtree)
-    validation_fasttree = pd.read_csv(args.validation_data_path_fasttree, sep='\t').sample(n=200)
-    transform_data(validation_fasttree)
-    validation_dict = {'raxml': {'val':validation_raxml}, 'iqtree': {'val':validation_iqtree}, 'fasttree': {'val':validation_fasttree}}
-
-    transform_data(full_data)
-    for program in full_data['program'].unique():
-        program_data = full_data.loc[full_data.program == program]
+    for program in ['iqtree','fasttree','raxml']:
+        program_data = pd.read_csv(os.path.join(args.main_data_folder,f'simulation_df_{program}.tsv'))
+        transform_data(program_data)
+        validation_data = pd.read_csv(os.path.join(args.validation_data_folder,f'simulation_df_{program}.tsv'))
+        transform_data(validation_data)
         working_dir = os.path.join(args.working_dir, program)
         create_dir_if_not_exists(working_dir)
         bootstrap_cols = get_bootstrap_col(program)
@@ -171,7 +162,7 @@ def main():
             all_model_merics = pd.concat([all_model_merics,curr_model_metrics])
         all_model_merics.to_csv(os.path.join(working_dir, 'all_models_performance.tsv'), sep=CSV_SEP)
         final_model_metrics,groups_analysis = ML_pipeline(program_data, bootstrap_cols, args.cpus_per_main_job, working_dir, sample_frac = -1,subsample_train = False, do_RFE=False,
-                    large_grid=False, name=f"final_model", validation_dict = validation_dict[program], compare_to_bootstrap_models= True, extract_predictions = True)
+                    large_grid=False, name=f"final_model", validation_data = program_validation_data, compare_to_bootstrap_models= True, extract_predictions = True)
         final_model_metrics.to_csv(os.path.join(working_dir, 'final_model_performance.tsv'), sep=CSV_SEP)
         groups_analysis.to_csv(os.path.join(working_dir, 'groups_performance.tsv'), sep=CSV_SEP)
 
