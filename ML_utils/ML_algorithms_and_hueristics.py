@@ -175,8 +175,8 @@ def overall_model_performance_analysis(working_dir,model, data_dict, name,extrac
     all_group_metrics = pd.DataFrame()
     for dataset in data_dict:
         if model:
-            prob_predictions = model['best_model'].predict_proba(data_dict[dataset]["X"])[:, 1]
-            predictions = model['best_model'].predict(data_dict[dataset]["X"])
+            prob_predictions = model['best_model'].predict_proba((model['selector']).transform(data_dict[dataset]["X"]))[:, 1]
+            predictions = model['best_model'].predict((model['selector']).transform(data_dict[dataset]["X"]))
         else:
             raw_bootstrap_values = data_dict[dataset]["X"].drop(['ignore'],axis=1).iloc[:,0]
             prob_predictions = raw_bootstrap_values / 100
