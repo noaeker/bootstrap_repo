@@ -110,6 +110,7 @@ def ML_pipeline(program_data, bootstrap_cols, cpus_per_main_job, working_dir, sa
     y_test = test["true_binary_support"]
 
     groups = train["tree_id"]
+    logging.info("Training ML model")
     model = ML_model(X_train, groups, y_train, n_jobs=cpus_per_main_job, path=os.path.join(working_dir, f'model_{sample_frac}'),
                      classifier=True, model='lightgbm', calibrate=True, name=name, large_grid=large_grid, do_RFE=do_RFE,
                      n_cv_folds=3)
@@ -119,11 +120,13 @@ def ML_pipeline(program_data, bootstrap_cols, cpus_per_main_job, working_dir, sa
         validation_data = validation_dict[val_name]
         data_dict[val_name]={'X': validation_data[[col for col in validation_data.columns if col in features]],'y': validation_data["true_binary_support"], 'full_data': validation_data}
     all_models_performance = pd.DataFrame()
+    logging.info("Evaluating model performance")
     model_performance,group_performance = overall_model_performance_analysis(working_dir, model,data_dict, name=f"model_standard",extract_predictions = extract_predictions)
     model_performance["analysis_type"] = "standard"
     all_models_performance = pd.concat([all_models_performance, model_performance])
 
     if compare_to_bootstrap_models:
+        logging.info("Comparing to bootstrap models")
         for bootstrap_col in bootstrap_cols:
             bootstrap_models_performance = bootstrap_model_pipeline(working_dir,train, y_train,test, y_test,features,bootstrap_col,groups,cpus_per_main_job,sample_frac,do_RFE , large_grid, name)
             all_models_performance = pd.concat([all_models_performance, bootstrap_models_performance])
@@ -157,9 +160,9 @@ def main():
     logging.basicConfig(filename=log_file_path, level=logging.DEBUG)
     for program in ['iqtree','fasttree','raxml']:
         logging.info(f"Program = {program}")
-        program_data = pd.read_csv(os.path.join(args.main_data_folder,f'simulations_df_{program}.tsv'))
+        program_data = pd.read_csv(os.path.join(args.main_data_folder,f'simulations_df_{program}.tsv'),sep='\t')
         transform_data(program_data)
-        program_validation_data = pd.read_csv(os.path.join(args.validation_data_folder,f'simulation_df_{program}.tsv'))
+        program_validation_data = pd.read_csv(os.path.join(args.validation_data_folder,f'simulation_df_{program}.tsv'),sep='\t')
         transform_data(program_validation_data)
         working_dir = os.path.join(args.working_dir, program)
         create_dir_if_not_exists(working_dir)
@@ -169,7 +172,7 @@ def main():
         sample_fracs = [float(frac) for frac in (args.sample_fracs).split('_')]
         all_model_merics = pd.DataFrame()
         for sample_frac in sample_fracs:
-            logging.info(f"Sample frac = {sample_frac}")
+            logging.info(f"\n#Sample frac = {sample_frac}")
             curr_model_metrics, groups_analysis = ML_pipeline(program_data, bootstrap_cols, args.cpus_per_main_job, working_dir, sample_frac,compare_to_bootstrap_models= False,subsample_train = True,do_RFE = args.RFE, large_grid = False, name = f"frac_{sample_frac}", validation_dict = validation_dict[program])
             all_model_merics = pd.concat([all_model_merics,curr_model_metrics])
         all_model_merics.to_csv(os.path.join(working_dir, 'all_models_performance.tsv'), sep=CSV_SEP)
