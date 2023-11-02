@@ -171,14 +171,15 @@ def main():
         program_data = program_data.dropna(axis=0)
         sample_fracs = [float(frac) for frac in (args.sample_fracs).split('_')]
         all_model_merics = pd.DataFrame()
+        validation_dict = {'val': program_validation_data}
         for sample_frac in sample_fracs:
             logging.info(f"\n#Sample frac = {sample_frac}")
-            curr_model_metrics, groups_analysis = ML_pipeline(program_data, bootstrap_cols, args.cpus_per_main_job, working_dir, sample_frac,compare_to_bootstrap_models= False,subsample_train = True,do_RFE = args.RFE, large_grid = False, name = f"frac_{sample_frac}", validation_dict = validation_dict[program])
+            curr_model_metrics, groups_analysis = ML_pipeline(program_data, bootstrap_cols, args.cpus_per_main_job, working_dir, sample_frac,compare_to_bootstrap_models= False,subsample_train = True,do_RFE = args.RFE, large_grid = False, name = f"frac_{sample_frac}", validation_dict = validation_dict)
             all_model_merics = pd.concat([all_model_merics,curr_model_metrics])
         all_model_merics.to_csv(os.path.join(working_dir, 'all_models_performance.tsv'), sep=CSV_SEP)
         logging.info(f"Generating optimized final model")
         final_model_metrics,groups_analysis = ML_pipeline(program_data, bootstrap_cols, args.cpus_per_main_job, working_dir, sample_frac = -1,subsample_train = False, do_RFE=args.RFE,
-                    large_grid=args.full_grid, name=f"final_model", validation_data = program_validation_data, compare_to_bootstrap_models= True, extract_predictions = True)
+                    large_grid=args.full_grid, name=f"final_model", validation_dict = validation_dict, compare_to_bootstrap_models= True, extract_predictions = True)
         final_model_metrics.to_csv(os.path.join(working_dir, 'final_model_performance.tsv'), sep=CSV_SEP)
         groups_analysis.to_csv(os.path.join(working_dir, 'groups_performance.tsv'), sep=CSV_SEP)
 
