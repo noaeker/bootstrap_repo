@@ -162,7 +162,7 @@ def main():
         logging.info(f"Program = {program}")
         program_data = pd.read_csv(os.path.join(args.main_data_folder,f'simulations_df_{program}.tsv'),sep='\t')
         transform_data(program_data)
-        program_validation_data = pd.read_csv(os.path.join(args.validation_data_folder,f'simulation_df_{program}.tsv'),sep='\t')
+        program_validation_data = pd.read_csv(os.path.join(args.validation_data_folder,f'simulations_df_{program}.tsv'),sep='\t')
         transform_data(program_validation_data)
         working_dir = os.path.join(args.working_dir, program)
         create_dir_if_not_exists(working_dir)
