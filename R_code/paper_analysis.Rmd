@@ -14,6 +14,14 @@ library(caret)
 library(ggpubr)
 library(pROC)
 ```
+```{r}
+validation_data_prefix = "/Users/noa/Workspace/bootstrap_results/validation_data"
+fasttree_validation_data = read_tsv(paste(validation_data_prefix,"/simulations_df_fasttree.tsv", sep = ""))
+raxml_validation_data = read_tsv(paste(validation_data_prefix,"/simulations_df_raxml.tsv", sep = ""))
+iqtree_validation_data = read_tsv(paste(validation_data_prefix,"/simulations_df_iqtree.tsv", sep = ""))
+```
+
+
 
 ```{r}
 prefix = "/Users/noa/Workspace/bootstrap_repo/ML_pipeline"
@@ -24,6 +32,7 @@ fasttree_final_models_performance = read_tsv(paste(prefix,"/fasttree/final_model
 fasttree_group_performance = read_tsv(paste(prefix,"/fasttree/groups_performance.tsv", sep = ""))
 fasttree_vi =  read_tsv(paste(prefix,"/fasttree/model_standard_vi.tsv", sep = ""))
 fasttree_enriched_test = read_tsv(paste(prefix,"/fasttree/test_model_standard_enriched.tsv", sep = ""))
+validation_data_fasttree = 
 #####
 iqtree_all_models_performance = read_tsv(paste(prefix,"/iqtree/all_models_performance.tsv", sep = ""))
 iqtree_final_models_performance = read_tsv(paste(prefix,"/iqtree/final_model_performance.tsv", sep = ""))
@@ -42,13 +51,14 @@ raxml_enriched_test = read_tsv(paste(prefix,"/raxml/test_model_standard_enriched
 
 Choose specific program
 ```{r}
-program = 'raxml'
+program = 'fasttree'
 if (program=='fasttree') {
     all_models_performance = fasttree_all_models_performance
     final_models_performance = fasttree_final_models_performance
     group_performance = fasttree_group_performance
     vi = fasttree_vi
     enriched_test = fasttree_enriched_test
+    validation_data = fasttree_validation_data
     
 } else if (program=='iqtree') {
     all_models_performance = iqtree_all_models_performance
@@ -56,12 +66,14 @@ if (program=='fasttree') {
     group_performance = iqtree_group_performance
     vi = fasttree_vi
     enriched_test = iqtree_enriched_test
+    validation_data = iqtree_validation_data
 } else if (program=='raxml') {
     all_models_performance = raxml_all_models_performance
     final_models_performance = raxml_final_models_performance
     group_performance = raxml_group_performance
     vi = fasttree_vi
     enriched_test = raxml_enriched_test
+    validation_data = raxnk_validation_data
 }
 ```
 
@@ -157,6 +169,10 @@ ggarrange(seq_scatter,Pypythia_scatter,n_loci_scatter, n_seq_error,Pypythia_erro
 #error_vs_group_5_5_including_plt
 
 
+```
+Validation_data
+```{r}
+validation_data
 ```
 
 Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.

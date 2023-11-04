@@ -323,18 +323,21 @@ def msa_path_bootstrap_analysis(msa_path,curr_run_dir, mle_path, true_tree_path,
             statistics["feature_n_unique_seq"] = len(get_MSA_seq_names(curr_pruned_msa_path))
             nni_neighbors = get_nni_neighbors(mle_with_internal_path, node.name)
             neighbors_per_site_ll = []
-            for neighbor in  nni_neighbors:
+            st_ll = time.time()
+            for neighbor in nni_neighbors:
                 neighbor.write(format=1, outfile=neighbors_tmp_path)
                 neighbor = Tree(neighbors_tmp_path, format=1)
                 curr_pruned_tree_path, curr_pruned_msa_path = get_pruned_tree_and_msa(curr_run_dir, msa_path,
                                                                                       bootstrap_tree_details_dict[
                                                                                           "model_short"], neighbor)
 
-                st_ll = time.time()
                 neighbor_ll = raxml_compute_tree_per_site_ll(garbage_dir, curr_pruned_msa_path, curr_pruned_tree_path, ll_on_data_prefix = "nni_neighbors", model = bootstrap_tree_details_dict["model_short"], opt = True)
-                end_ll = time.time()
-                neig_ll_evaluation_time+= end_ll-st_ll
+
                 neighbors_per_site_ll.append(np.array(neighbor_ll))
+
+            end_ll = time.time()
+            statistics["partition_ll_eval_time_test"] = end_ll-st_ll
+            neig_ll_evaluation_time += end_ll - st_ll
             orig_tree_ll = np.sum(per_site_original_tree_ll)
             nei1_ll = np.sum(neighbors_per_site_ll[0])
             nei2_ll = np.sum(neighbors_per_site_ll[1])
@@ -347,10 +350,11 @@ def msa_path_bootstrap_analysis(msa_path,curr_run_dir, mle_path, true_tree_path,
                               }
             statistics.update(nni_statistics)
             statistics.update(bootstrap_tree_details_dict)
-            msa_splits = msa_splits.append(statistics, ignore_index= True)
+            msa_splits = msa_splits.append(statistics, ignore_index=True)
             create_or_clean_dir(garbage_dir)
 
-    return msa_splits,feature_extraction_time,neig_ll_evaluation_time
+    logging.info(f"Feature extraction time = {feature_extraction_time} total neig evaluation time = {neig_ll_evaluation_time}")
+    return msa_splits, feature_extraction_time, neig_ll_evaluation_time
 
 
 def main():
