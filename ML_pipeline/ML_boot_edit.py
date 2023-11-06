@@ -183,7 +183,7 @@ def main():
     parser.add_argument('--full_grid', action='store_true', default=False)
     parser.add_argument('--cpus_per_main_job', type = int, default=1)
     parser.add_argument('--sample_fracs', type = str, default='0.5_1')
-    parser.add_argument('--inc_sample_fracs', action='store_true', default=False)
+    parser.add_argument('--inc_sample_fracs', action='store_true', default=True)
     parser.add_argument('--main_data_folder',type = str, default = '/Users/noa/Workspace/bootstrap_results/remote_results')
     parser.add_argument('--validation_data_folder', type=str,
                         default='/Users/noa/Workspace/bootstrap_results/remote_results')
@@ -192,9 +192,9 @@ def main():
     logging.basicConfig(filename=log_file_path, level=logging.DEBUG)
     for program in ['fasttree']: #,'fasttree','raxml'
         logging.info(f"Program = {program}")
-        program_data = pd.read_csv(os.path.join(args.main_data_folder,f'simulations_df_{program}.tsv'),sep='\t').sample(frac=0.1)
+        program_data = pd.read_csv(os.path.join(args.main_data_folder,f'simulations_df_{program}.tsv'),sep='\t')
         transform_data(program_data)
-        program_validation_data = pd.read_csv(os.path.join(args.validation_data_folder,f'simulations_df_{program}.tsv'),sep='\t').sample(frac=0.1)
+        program_validation_data = pd.read_csv(os.path.join(args.validation_data_folder,f'simulations_df_{program}.tsv'),sep='\t')
         transform_data(program_validation_data)
         working_dir = os.path.join(args.working_dir, program)
         create_dir_if_not_exists(working_dir)
