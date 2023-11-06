@@ -51,7 +51,8 @@ def fasttree_pipeline(curr_run_dir, results_folder, msa_path, msa_type, nb):
     with open(bootstrap_trees_file,'w') as BF:
         BF.write("\n".join(bootstrap_trees))
     bootstrap_output_path = os.path.join(results_folder,'fasttree_standard_bootstrap')
-    get_booster_tree(output_tree_file, bootstrap_trees_file, out_path ="booster.nw")
+
+    get_booster_tree(output_tree_file, bootstrap_trees_file, out_path =bootstrap_output_path)
     return {'sh_bootstrap': output_tree_file, 'standard_bootstrap': bootstrap_output_path,'boot_run_time': bootsrtap_time}
 
 #t = fasttree_pipeline(curr_run_dir= os.path.join(os.getcwd(), 'trash'),msa_path="/Users/noa/Workspace/bootstrap_results/test/job_0/raxml_tree_0/25117/iqtree_msa_0/sim_msa.fa", msa_type='DNA', nb = 30)

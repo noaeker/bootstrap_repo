@@ -1,2 +1,287 @@
 INFO:root:Program = iqtree
 INFO:root:Program = iqtree
+INFO:root:Program = iqtree
+INFO:root:Program = iqtree
+INFO:root:Generating optimized final model
+DEBUG:matplotlib.pyplot:Loaded backend macosx version unknown.
+INFO:root:Original number of trees in full data is 6094
+INFO:root:Partitioning MSAs according to number of sequences
+INFO:root:Number of MSAs in training data is 4683
+INFO:root:Number of MSAs in test data is 2007
+INFO:root:Number of different trees is 6094
+INFO:root:Training ML model
+INFO:root:Building a final_model model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/model_-1
+INFO:root:Number of features after feature selection: 30 out of 30
+INFO:root:Generating calibrated model for classification model
+INFO:root:Evaluating model performance
+INFO:root:Comparing to bootstrap models
+INFO:root:Building a final_model model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/model_-1_only_boot
+INFO:root:Program = iqtree
+INFO:root:Generating optimized final model
+DEBUG:matplotlib.pyplot:Loaded backend macosx version unknown.
+INFO:root:Original number of trees in full data is 6094
+INFO:root:Partitioning MSAs according to number of sequences
+INFO:root:Number of MSAs in training data is 4683
+INFO:root:Number of MSAs in test data is 2007
+INFO:root:Number of different trees is 6094
+INFO:root:Training ML model
+INFO:root:Building a final_model model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/model_-1
+INFO:root:Using existing model in /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/model_-1
+INFO:root:Evaluating model performance
+INFO:root:Comparing to bootstrap models
+INFO:root:Building a final_model model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/model_-1_only_boot
+INFO:root:Number of features after feature selection: 2 out of 2
+INFO:root:Generating calibrated model for classification model
+INFO:root:Building a final_model model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/model_-1_inc_boot
+INFO:root:Number of features after feature selection: 31 out of 31
+INFO:root:Generating calibrated model for classification model
+INFO:root:Building a final_model model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/model_-1_only_boot
+INFO:root:Using existing model in /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/model_-1_only_boot
+INFO:root:Building a final_model model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/model_-1_inc_boot
+INFO:root:Using existing model in /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/model_-1_inc_boot
+INFO:root:Program = iqtree
+INFO:root:Generating optimized final model
+INFO:root:Original number of trees in full data is 6094
+INFO:root:Partitioning MSAs according to number of sequences
+INFO:root:Number of MSAs in training data is 4683
+INFO:root:Number of MSAs in test data is 2007
+INFO:root:Number of different trees is 6094
+INFO:root:Training ML model
+INFO:root:Building a final_model model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/model_-1
+INFO:root:Using existing model in /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/model_-1
+INFO:root:Evaluating model performance
+DEBUG:matplotlib.pyplot:Loaded backend macosx version unknown.
+INFO:root:Comparing to bootstrap models
+INFO:root:Building a final_model model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/model_-1_only_boot
+INFO:root:Using existing model in /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/model_-1_only_boot
+INFO:root:Building a final_model model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/model_-1_inc_boot
+INFO:root:Using existing model in /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/model_-1_inc_boot
+INFO:root:Program = iqtree
+INFO:root:Generating optimized final model
+INFO:root:Original number of trees in full data is 39
+INFO:root:Partitioning MSAs according to number of sequences
+INFO:root:Number of MSAs in training data is 26
+INFO:root:Number of MSAs in test data is 13
+INFO:root:Number of different trees is 39
+INFO:root:Training ML model
+INFO:root:Building a final_model model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/model_-1
+INFO:root:Number of features after feature selection: 30 out of 30
+INFO:root:Generating calibrated model for classification model
+INFO:root:Evaluating model performance
+INFO:root:Comparing to bootstrap models
+INFO:root:Building a final_modelbootstrap_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/model_-1_only_boot
+INFO:root:Number of features after feature selection: 2 out of 2
+INFO:root:Generating calibrated model for classification model
+INFO:root:Building a final_modelbootstrap_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/model_-1_inc_boot
+INFO:root:Number of features after feature selection: 31 out of 31
+INFO:root:Generating calibrated model for classification model
+INFO:root:Building a final_modelfeature_aLRT_iqtree_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/model_-1_only_boot
+INFO:root:Using existing model in /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/model_-1_only_boot
+INFO:root:Building a final_modelfeature_aLRT_iqtree_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/model_-1_inc_boot
+INFO:root:Using existing model in /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/model_-1_inc_boot
+INFO:root:Building a final_modelfeature_aBayes_iqtree_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/model_-1_only_boot
+INFO:root:Using existing model in /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/model_-1_only_boot
+INFO:root:Building a final_modelfeature_aBayes_iqtree_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/model_-1_inc_boot
+INFO:root:Using existing model in /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/model_-1_inc_boot
+INFO:root:Program = iqtree
+INFO:root:Generating optimized final model
+INFO:root:Original number of trees in full data is 6094
+INFO:root:Partitioning MSAs according to number of sequences
+INFO:root:Number of MSAs in training data is 4683
+INFO:root:Number of MSAs in test data is 2007
+INFO:root:Number of different trees is 6094
+INFO:root:Training ML model
+INFO:root:Building a final_model model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/model_-1
+INFO:root:Using existing model in /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/model_-1
+INFO:root:Evaluating model performance
+INFO:root:Comparing to bootstrap models
+INFO:root:Building a final_modelbootstrap_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/model_-1_only_boot
+INFO:root:Using existing model in /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/model_-1_only_boot
+INFO:root:Building a final_modelbootstrap_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/model_-1_inc_boot
+INFO:root:Using existing model in /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/model_-1_inc_boot
+INFO:root:Building a final_modelfeature_aLRT_iqtree_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/model_-1_only_boot
+INFO:root:Using existing model in /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/model_-1_only_boot
+INFO:root:Building a final_modelfeature_aLRT_iqtree_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/model_-1_inc_boot
+INFO:root:Using existing model in /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/model_-1_inc_boot
+INFO:root:Building a final_modelfeature_aBayes_iqtree_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/model_-1_only_boot
+INFO:root:Using existing model in /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/model_-1_only_boot
+INFO:root:Building a final_modelfeature_aBayes_iqtree_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/model_-1_inc_boot
+INFO:root:Using existing model in /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/model_-1_inc_boot
+INFO:root:Program = iqtree
+INFO:root:Generating optimized final model
+INFO:root:Original number of trees in full data is 5901
+INFO:root:Partitioning MSAs according to number of sequences
+INFO:root:Number of MSAs in training data is 4521
+INFO:root:Number of MSAs in test data is 1939
+INFO:root:Number of different trees is 5901
+INFO:root:Training ML model
+INFO:root:Building a final_model model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/model_-1
+INFO:root:Number of features after feature selection: 30 out of 30
+INFO:root:Generating calibrated model for classification model
+INFO:root:Evaluating model performance
+INFO:root:Comparing to bootstrap models
+INFO:root:Building a final_modelbootstrap_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/model_-1_only_boot
+INFO:root:Number of features after feature selection: 2 out of 2
+INFO:root:Generating calibrated model for classification model
+INFO:root:Building a final_modelbootstrap_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/model_-1_inc_boot
+INFO:root:Number of features after feature selection: 31 out of 31
+INFO:root:Generating calibrated model for classification model
+INFO:root:Building a final_modelfeature_aLRT_iqtree_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/model_-1_only_boot
+INFO:root:Using existing model in /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/model_-1_only_boot
+INFO:root:Building a final_modelfeature_aLRT_iqtree_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/model_-1_inc_boot
+INFO:root:Using existing model in /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/model_-1_inc_boot
+INFO:root:Program = iqtree
+INFO:root:Generating optimized final model
+INFO:root:Original number of trees in full data is 5910
+INFO:root:Partitioning MSAs according to number of sequences
+INFO:root:Number of MSAs in training data is 4535
+INFO:root:Number of MSAs in test data is 1943
+INFO:root:Number of different trees is 5910
+INFO:root:Training ML model
+INFO:root:Building a final_model model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/model_-1
+INFO:root:Number of features after feature selection: 30 out of 30
+INFO:root:Generating calibrated model for classification model
+INFO:root:Evaluating model performance
+INFO:root:Program = iqtree
+INFO:root:Generating optimized final model
+INFO:root:Original number of trees in full data is 5915
+INFO:root:Partitioning MSAs according to number of sequences
+INFO:root:Number of MSAs in training data is 4532
+INFO:root:Number of MSAs in test data is 1944
+INFO:root:Number of different trees is 5915
+INFO:root:Training ML model
+INFO:root:Building a final_model model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/model_stadard
+INFO:root:Number of features after feature selection: 30 out of 30
+INFO:root:Generating calibrated model for classification model
+INFO:root:Evaluating model performance
+INFO:root:Comparing to bootstrap models
+INFO:root:Building a final_modelbootstrap_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/bootstrap_support/model_only_boot
+INFO:root:Number of features after feature selection: 2 out of 2
+INFO:root:Generating calibrated model for classification model
+INFO:root:Building a final_modelbootstrap_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/bootstrap_support/model_inc_boot
+INFO:root:Number of features after feature selection: 31 out of 31
+INFO:root:Generating calibrated model for classification model
+INFO:root:Building a final_modelfeature_aLRT_iqtree_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/feature_aLRT_iqtree_support/model_only_boot
+INFO:root:Number of features after feature selection: 2 out of 2
+INFO:root:Generating calibrated model for classification model
+INFO:root:Building a final_modelfeature_aLRT_iqtree_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/feature_aLRT_iqtree_support/model_inc_boot
+INFO:root:Number of features after feature selection: 31 out of 31
+INFO:root:Generating calibrated model for classification model
+INFO:root:Building a final_modelfeature_aBayes_iqtree_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/feature_aBayes_iqtree_support/model_only_boot
+INFO:root:Number of features after feature selection: 2 out of 2
+INFO:root:Generating calibrated model for classification model
+INFO:root:Building a final_modelfeature_aBayes_iqtree_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/feature_aBayes_iqtree_support/model_inc_boot
+INFO:root:Number of features after feature selection: 31 out of 31
+INFO:root:Generating calibrated model for classification model
+INFO:root:Program = fasttree
+INFO:root:Generating optimized final model
+INFO:root:Original number of trees in full data is 1168
+INFO:root:Partitioning MSAs according to number of sequences
+INFO:root:Number of MSAs in training data is 835
+INFO:root:Number of MSAs in test data is 357
+INFO:root:Number of different trees is 1168
+INFO:root:Training ML model
+INFO:root:Building a final_model model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/fasttree/model_stadard
+INFO:root:Number of features after feature selection: 30 out of 30
+INFO:root:Generating calibrated model for classification model
+INFO:root:Evaluating model performance
+INFO:root:Comparing to bootstrap models
+INFO:root:Building a final_modelfeature_standard_fasttree_boot_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/fasttree/feature_standard_fasttree_boot_support/model_only_boot
+INFO:root:Number of features after feature selection: 2 out of 2
+INFO:root:Generating calibrated model for classification model
+INFO:root:Building a final_modelfeature_standard_fasttree_boot_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/fasttree/feature_standard_fasttree_boot_support/model_inc_boot
+INFO:root:Number of features after feature selection: 31 out of 31
+INFO:root:Generating calibrated model for classification model
+INFO:root:Building a final_modelbootstrap_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/fasttree/bootstrap_support/model_only_boot
+INFO:root:Number of features after feature selection: 2 out of 2
+INFO:root:Generating calibrated model for classification model
+INFO:root:Building a final_modelbootstrap_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/fasttree/bootstrap_support/model_inc_boot
+INFO:root:Number of features after feature selection: 31 out of 31
+INFO:root:Generating calibrated model for classification model
+INFO:root:Program = fasttree
+DEBUG:matplotlib.pyplot:Loaded backend macosx version unknown.
+INFO:root:Program = fasttree
+INFO:root:Generating optimized final model
+INFO:root:Original number of trees in full data is 1168
+INFO:root:Partitioning MSAs according to number of sequences
+INFO:root:Number of MSAs in training data is 833
+INFO:root:Number of MSAs in test data is 357
+INFO:root:Number of different trees is 1168
+INFO:root:Evaluating full standard model- including nni feautres
+INFO:root:Program = fasttree
+INFO:root:Generating optimized final model
+INFO:root:Original number of trees in full data is 1176
+INFO:root:Partitioning MSAs according to number of sequences
+INFO:root:Number of MSAs in training data is 840
+INFO:root:Number of MSAs in test data is 360
+INFO:root:Number of different trees is 1176
+INFO:root:Evaluating full standard model- including nni feautres
+INFO:root:Program = fasttree
+INFO:root:Program = fasttree
+INFO:root:Generating optimized final model
+INFO:root:Original number of trees in full data is 1174
+INFO:root:Partitioning MSAs according to number of sequences
+INFO:root:Number of MSAs in training data is 839
+INFO:root:Number of MSAs in test data is 359
+INFO:root:Number of different trees is 1174
+INFO:root:Evaluating full standard model- including nni feautres
+INFO:root:Training ML model
+INFO:root:Building a final_model model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/fasttree/model_stadard
+INFO:root:Number of features after feature selection: 30 out of 30
+INFO:root:Generating calibrated model for classification model
+INFO:root:Evaluating model performance
+INFO:root:Evaluating fast standard model- no nni feautres
+INFO:root:Training ML model
+INFO:root:Building a final_model model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/fasttree/model_stadard
+INFO:root:Using existing model in /Users/noa/Workspace/bootstrap_repo/ML_pipeline/fasttree/model_stadard
+INFO:root:Evaluating model performance
+INFO:root:Program = fasttree
+DEBUG:matplotlib.pyplot:Loaded backend macosx version unknown.
+INFO:root:Generating optimized final model
+INFO:root:Original number of trees in full data is 1177
+INFO:root:Partitioning MSAs according to number of sequences
+INFO:root:Number of MSAs in training data is 841
+INFO:root:Number of MSAs in test data is 360
+INFO:root:Number of different trees is 1177
+INFO:root:Evaluating full standard model- including nni feautres
+INFO:root:Training ML model
+INFO:root:Building a final_model model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/fasttree/model_stadard
+INFO:root:Using existing model in /Users/noa/Workspace/bootstrap_repo/ML_pipeline/fasttree/model_stadard
+INFO:root:Evaluating model performance
+INFO:root:Evaluating fast standard model- no nni feautres
+INFO:root:Training ML model
+INFO:root:Building a final_model model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/fasttree/model_stadard
+INFO:root:Using existing model in /Users/noa/Workspace/bootstrap_repo/ML_pipeline/fasttree/model_stadard
+INFO:root:Evaluating model performance
+INFO:root:Program = fasttree
+INFO:root:Generating optimized final model
+INFO:root:Original number of trees in full data is 1162
+INFO:root:Partitioning MSAs according to number of sequences
+INFO:root:Number of MSAs in training data is 830
+INFO:root:Number of MSAs in test data is 356
+INFO:root:Number of different trees is 1162
+INFO:root:Evaluating full standard model- including nni feautres
+INFO:root:Training ML model
+INFO:root:Building a final_model model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/fasttree/final_model/full_model/model_stadard
+INFO:root:Number of features after feature selection: 30 out of 30
+INFO:root:Generating calibrated model for classification model
+INFO:root:Evaluating model performance
+INFO:root:Evaluating fast standard model- no nni feautres
+INFO:root:Training ML model
+INFO:root:Building a final_model model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/fasttree/final_model/fast_model/model_stadard
+INFO:root:Number of features after feature selection: 24 out of 24
+INFO:root:Generating calibrated model for classification model
+INFO:root:Evaluating model performance
+INFO:root:Comparing to bootstrap models
+INFO:root:Building a final_modelfeature_standard_fasttree_boot_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/fasttree/final_model/feature_standard_fasttree_boot_support/model_only_boot
+INFO:root:Number of features after feature selection: 2 out of 2
+INFO:root:Generating calibrated model for classification model
+INFO:root:Building a final_modelfeature_standard_fasttree_boot_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/fasttree/final_model/feature_standard_fasttree_boot_support/model_inc_boot
+INFO:root:Number of features after feature selection: 31 out of 31
+INFO:root:Generating calibrated model for classification model
+INFO:root:Building a final_modelbootstrap_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/fasttree/final_model/bootstrap_support/model_only_boot
+INFO:root:Number of features after feature selection: 2 out of 2
+INFO:root:Generating calibrated model for classification model
+INFO:root:Building a final_modelbootstrap_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/fasttree/final_model/bootstrap_support/model_inc_boot
+INFO:root:Number of features after feature selection: 31 out of 31
+INFO:root:Generating calibrated model for classification model

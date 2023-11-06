@@ -224,7 +224,7 @@ def get_bootstrap_and_tree_groups(program, bootstrap_tree_details,mle_path,garba
         add_internal_names(aBayes_ete)
         extra_boot = {'aLRT_iqtree': aLRT_ete, 'aBayes_iqtree': aBayes_ete}
     elif program == 'fasttree':
-        standard_bootstrap = bootstrap_tree_details['sh_bootstrap']
+        standard_bootstrap = bootstrap_tree_details['standard_bootstrap']
         standard_ete = Tree(newick=standard_bootstrap, format=0)
         add_internal_names(standard_ete)
         extra_boot = {'standard_fasttree_boot': standard_ete}

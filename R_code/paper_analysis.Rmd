@@ -24,7 +24,7 @@ iqtree_validation_data = read_tsv(paste(validation_data_prefix,"/simulations_df_
 
 
 ```{r}
-prefix = "/Users/noa/Workspace/bootstrap_repo/ML_pipeline"
+prefix = "/Users/noa/Workspace/ML_results"
 
 
 fasttree_all_models_performance = read_tsv(paste(prefix,"/fasttree/all_models_performance.tsv", sep = ""))
@@ -32,7 +32,6 @@ fasttree_final_models_performance = read_tsv(paste(prefix,"/fasttree/final_model
 fasttree_group_performance = read_tsv(paste(prefix,"/fasttree/groups_performance.tsv", sep = ""))
 fasttree_vi =  read_tsv(paste(prefix,"/fasttree/model_standard_vi.tsv", sep = ""))
 fasttree_enriched_test = read_tsv(paste(prefix,"/fasttree/test_model_standard_enriched.tsv", sep = ""))
-validation_data_fasttree = 
 #####
 iqtree_all_models_performance = read_tsv(paste(prefix,"/iqtree/all_models_performance.tsv", sep = ""))
 iqtree_final_models_performance = read_tsv(paste(prefix,"/iqtree/final_model_performance.tsv", sep = ""))
@@ -51,7 +50,7 @@ raxml_enriched_test = read_tsv(paste(prefix,"/raxml/test_model_standard_enriched
 
 Choose specific program
 ```{r}
-program = 'fasttree'
+program = 'iqtree'
 if (program=='fasttree') {
     all_models_performance = fasttree_all_models_performance
     final_models_performance = fasttree_final_models_performance
@@ -73,20 +72,18 @@ if (program=='fasttree') {
     group_performance = raxml_group_performance
     vi = fasttree_vi
     enriched_test = raxml_enriched_test
-    validation_data = raxnk_validation_data
+    validation_data = raxml_validation_data
 }
 ```
 
 
 General performance
 ```{r}
-final_models_performance  %>% filter (dataset=='test', metric_type=='all_data') %>% dplyr::select (analysis_type,name,balanced_accuracy_score, mcc)
+final_models_performance  %>% filter (dataset=='test', metric_type=='all_data') %>% dplyr::select (analysis_type,name,balanced_accuracy_score, mcc, AUC)
 ```
 
 
-```{r}
 
-```
 
 
 
@@ -172,7 +169,8 @@ ggarrange(seq_scatter,Pypythia_scatter,n_loci_scatter, n_seq_error,Pypythia_erro
 ```
 Validation_data
 ```{r}
-validation_data
+validation_data %>% dplyr::select (boot_run_time, extraction_running_time,nni_ll_eval_running_time)
+
 ```
 
 Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
