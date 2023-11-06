@@ -132,9 +132,9 @@ def ML_pipeline(program_data, bootstrap_cols, cpus_per_main_job, working_dir, sa
     groups = train["tree_id"]
     logging.info(f"Number of different trees is {len(program_data['tree_id'].unique())}")
     full_features = [col for col in program_data.columns if
-                'feature' in col and col not in bootstrap_cols]  # +['partition_branch_vs_mean','partition_branch','partition_size','partition_size_ratio','partition_divergence','divergence_ratio']
+                'feature' in col and 'msa_entropy' not in col and col not in bootstrap_cols]  # +['partition_branch_vs_mean','partition_branch','partition_size','partition_size_ratio','partition_divergence','divergence_ratio']
 
-    logging.info("Evaluating full standard model- including nni feautres")
+    logging.info(f"Evaluating full standard model- including nni feautres, number of features is {len(full_features)}")
     full_model_working_dir = os.path.join(working_dir,'full_model')
     create_dir_if_not_exists(full_model_working_dir)
     model_performance_full,group_performance_full = standard_model_pipeline(train,test, y_train, y_test, groups,full_features, cpus_per_main_job, full_model_working_dir,do_RFE , large_grid, name, validation_dict,extract_predictions)
@@ -143,10 +143,9 @@ def ML_pipeline(program_data, bootstrap_cols, cpus_per_main_job, working_dir, sa
     nni_cols = ['feature_min_ll_diff','feature_max_ll_diff', 'feature_column_variance',
                               'feature_min_ll_diff_norm','feature_max_ll_diff_norm','feature_column_variance_norm']
 
-    fast_features = [col for col in program_data.columns if
-                     'feature' in col and col not in bootstrap_cols and col not in nni_cols]  # +['partition_branch_vs_mean','partition_branch','partition_size','partition_size_ratio','partition_divergence','divergence_ratio']
+    fast_features = [col for col in full_features if col not in nni_cols]  # +['partition_branch_vs_mean','partition_branch','partition_size','partition_size_ratio','partition_divergence','divergence_ratio']
 
-    logging.info("Evaluating fast standard model- no nni feautres")
+    logging.info(f"Evaluating fast standard model- no nni feautres, number of features is {len(fast_features)}")
     fast_model_working_dir = os.path.join(working_dir, 'fast_model')
     create_dir_if_not_exists(fast_model_working_dir)
     model_performance_fast, group_performance_fast = standard_model_pipeline(train,test, y_train, y_test, groups,fast_features, cpus_per_main_job, fast_model_working_dir,do_RFE , large_grid, name, validation_dict,extract_predictions)
