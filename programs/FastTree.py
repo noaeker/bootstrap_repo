@@ -25,9 +25,12 @@ def fasttree_bootstrap_replicate(msa_path, msa_type, starting_tree, output_tree_
         final_tree = B.read()
     return final_tree
 
-def obtain_ML_fasttree(msa_path, msa_type, output_tree_file):
+def obtain_ML_fasttree(msa_path, msa_type, output_tree_file, model):
     if msa_type == 'DNA':
-        model_str = '-nt -gtr'
+        if model=='JC':
+            model_str = '-nt'
+        else:
+            model_str = '-nt -gtr'
     else:
         model_str = '-wag'
 
@@ -35,9 +38,9 @@ def obtain_ML_fasttree(msa_path, msa_type, output_tree_file):
     execute_command_and_write_to_log(search_command)
     return output_tree_file
 
-def fasttree_pipeline(curr_run_dir, results_folder, msa_path, msa_type, nb):
+def fasttree_pipeline(curr_run_dir, results_folder, msa_path, msa_type, nb, model):
     output_tree_file = os.path.join(results_folder,'fasttree_sh_bootstrap')
-    obtain_ML_fasttree(msa_path, msa_type, output_tree_file)
+    obtain_ML_fasttree(msa_path, msa_type, output_tree_file, model)
     bootstrap_trees = []
     tmp_msa_path = os.path.join(curr_run_dir, 'tmp_msa.fasta')
     bootstrap_trees_file = os.path.join(curr_run_dir,'bootstrap_trees')

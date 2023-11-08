@@ -244,7 +244,8 @@ def remove_redundant_sequences(curr_run_directory, prefix,msa_path, model, out_m
         all_msa_records = get_alignment_data(reduced_path)
         SeqIO.write(all_msa_records, out_msa_path, 'fasta')
     else:
-        shutil.copyfile(msa_path,out_msa_path)
+        if msa_path!=out_msa_path:
+            shutil.copyfile(msa_path,out_msa_path)
     for file in os.listdir(curr_run_directory):
         if prefix in file:
             os.remove(os.path.join(curr_run_directory,file))

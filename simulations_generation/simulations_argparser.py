@@ -1,10 +1,10 @@
 import argparse
 def main_parser():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--number_of_trees', action='store', type=int, default=10)
+    parser.add_argument('--number_of_trees', action='store', type=int, default=2)
     parser.add_argument('--number_of_MSAs_per_tree', type=int, default=1)
-    parser.add_argument('--min_n_taxa', type = int, default = 20)
-    parser.add_argument('--max_n_taxa', type=int, default=30)
+    parser.add_argument('--min_n_taxa', type = int, default = 15)
+    parser.add_argument('--max_n_taxa', type=int, default=20)
     parser.add_argument('--min_n_loci', type=int, default=100)
     parser.add_argument('--max_n_loci',type=int,default = 200)
     parser.add_argument('--n_jobs', type = int, default= 1)
@@ -20,6 +20,7 @@ def main_parser():
     parser.add_argument('--calc_features', action='store_true', default=True)
     parser.add_argument('--pre_chosen_tree_ids',action='store_true', default= False)
     parser.add_argument('--n_k_means_clusters',type=int, default =3)
+    parser.add_argument('--model_modes', type=str, default='standard_downgrade_upgrade') #'mispecification
     return parser
 
 

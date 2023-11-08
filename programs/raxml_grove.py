@@ -25,7 +25,7 @@ def extract_representative_sample(out_dir, min_n_taxa, max_n_taxa, min_n_loci, m
     d = RAxML_grove_get_tree_statistics(out_dir, min_n_taxa, max_n_taxa, min_n_loci, max_n_loci, msa_type)
     k_means_data = d[["TREE_ID", "NUM_TAXA", "BRANCH_LENGTH_MEAN", "BRANCH_LENGTH_VARIANCE"]]
     scaler = preprocessing.StandardScaler()
-    scaled_k_means_data = scaler.fit_transform(k_means_data)
+    scaled_k_means_data = scaler.fit_transform(k_means_data.drop(columns=['TREE_ID']))
     kmeans = KMeans(n_clusters=n_k_means_clusters)
     kmeans_fit = kmeans.fit(scaled_k_means_data)
     k_means_data["label"] = kmeans_fit.labels_
@@ -47,7 +47,7 @@ def extract_model_specification_from_log(log_file, param):
     return res
 
 
-def RAxML_grove_tree_simulation( out_dir, min_n_taxa, max_n_taxa, min_n_loci, max_n_loci, msa_type, tree_id):
+def RAxML_grove_tree_simulation( out_dir, min_n_taxa, max_n_taxa, min_n_loci, max_n_loci, msa_type, tree_id, model_modes):
     msa_type = f"'{msa_type}'"
     tree_id_cmd = "" if tree_id is None else f" and TREE_ID={tree_id}"
     cmd_raxml_grove = f'{RAxML_alisim_path} generate -g alisim -o {out_dir} -q " NUM_TAXA>={min_n_taxa} and NUM_TAXA<={max_n_taxa} and OVERALL_NUM_ALIGNMENT_SITES>={min_n_loci} and OVERALL_NUM_ALIGNMENT_SITES<={max_n_loci}  and DATA_TYPE=={msa_type} {tree_id_cmd}" '
@@ -57,13 +57,30 @@ def RAxML_grove_tree_simulation( out_dir, min_n_taxa, max_n_taxa, min_n_loci, ma
     folder = os.listdir(out_dir)[0]
     true_tree_path_orig = os.path.join(out_dir, folder, 'tree_best.newick')
     model_formulation_file = os.path.join(out_dir, folder, 'tree_best.newick.log')
-    model = extract_model_specification_from_log(model_formulation_file, 'model')
+
     length = extract_model_specification_from_log(model_formulation_file, 'length')
+    file_model = extract_model_specification_from_log(model_formulation_file, 'model')
     for file in os.listdir(os.path.join(out_dir, folder)):
         full_path = os.path.join(out_dir,folder,file)
         if full_path!=true_tree_path_orig:
             os.remove(full_path)
-    sim_dict = {'model': model, 'model_short': re.sub(r'\{[^{}]*\}','',model) , 'length': length, 'tree_id': folder,'tree_folder': os.path.join(out_dir, folder), 'tree_id': folder,'true_tree_path_orig': true_tree_path_orig}
-    return sim_dict
+
+    base_sim_dict = {
+
+                'length': length, 'tree_id': folder, 'tree_folder': os.path.join(out_dir, folder), 'tree_id': folder,
+                'true_tree_path_orig': true_tree_path_orig}
+    all_tree_sim_dicts = {}
+    for model_mode in model_modes:
+        sim_dict_copy = base_sim_dict.copy()
+        if model_mode == 'standard':
+            model = file_model
+        elif model_mode == 'downgrade':
+            model = 'GTR+F+G+I'
+        else:
+            model = 'JC'
+        logging.info(f"Generating tree simulation dictionary for model mode is {model_mode} (using {model} model for simulation)")
+        sim_dict_copy.update({'model_mode': model_mode,'simulation_model': model,'simulation_model_short': re.sub(r'\{[^{}]*\}','',model) if model_mode=='standard' else model})
+        all_tree_sim_dicts[model_mode]=sim_dict_copy
+    return all_tree_sim_dicts
 
 

@@ -203,7 +203,7 @@ def get_bootstrap_and_tree_groups(program, bootstrap_tree_details,mle_path,garba
     parsimony_trees_path = generate_n_tree_topologies(n_pars, bootstrap_tree_details["msa_path"],
                                                       curr_run_directory=garbage_dir,
                                                       seed=1, tree_type='pars',
-                                                      model=bootstrap_tree_details["model_short"])
+                                                      model=bootstrap_tree_details["tree_search_model"])
     tree_tmp_path = os.path.join(garbage_dir, "tmp.tree")
     with open(parsimony_trees_path) as trees_path:
         parsimony_trees = trees_path.read().split("\n")[:-1]
@@ -307,12 +307,12 @@ def msa_path_bootstrap_analysis(msa_path,curr_run_dir, mle_path, true_tree_path,
 
     neighbors_tmp_path = os.path.join(curr_run_dir, "neighbors_tmp.nw")
 
-    curr_pruned_tree_path, curr_pruned_msa_path = get_pruned_tree_and_msa(curr_run_dir, msa_path, bootstrap_tree_details_dict["model_short"],mle_tree_ete)
+    curr_pruned_tree_path, curr_pruned_msa_path = get_pruned_tree_and_msa(curr_run_dir, msa_path, bootstrap_tree_details_dict["tree_search_model"],mle_tree_ete)
 
     neig_ll_evaluation_time = 0
     per_site_original_tree_ll = np.array(
         raxml_compute_tree_per_site_ll(garbage_dir, curr_pruned_msa_path, curr_pruned_tree_path, ll_on_data_prefix="orig_tree_ll",
-                                       model=bootstrap_tree_details_dict["model_short"], opt=True))
+                                       model=bootstrap_tree_details_dict["tree_search_model"], opt=True))
 
     for node in mle_tree_ete.iter_descendants():
 
@@ -329,9 +329,9 @@ def msa_path_bootstrap_analysis(msa_path,curr_run_dir, mle_path, true_tree_path,
                 neighbor = Tree(neighbors_tmp_path, format=1)
                 curr_pruned_tree_path, curr_pruned_msa_path = get_pruned_tree_and_msa(curr_run_dir, msa_path,
                                                                                       bootstrap_tree_details_dict[
-                                                                                          "model_short"], neighbor)
+                                                                                          "tree_search_model"], neighbor)
 
-                neighbor_ll = raxml_compute_tree_per_site_ll(garbage_dir, curr_pruned_msa_path, curr_pruned_tree_path, ll_on_data_prefix = "nni_neighbors", model = bootstrap_tree_details_dict["model_short"], opt = True)
+                neighbor_ll = raxml_compute_tree_per_site_ll(garbage_dir, curr_pruned_msa_path, curr_pruned_tree_path, ll_on_data_prefix = "nni_neighbors", model = bootstrap_tree_details_dict["tree_search_model"], opt = True)
 
                 neighbors_per_site_ll.append(np.array(neighbor_ll))
 
