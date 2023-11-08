@@ -7,6 +7,7 @@ import ast
 import pandas as pd
 from sklearn.cluster import KMeans
 from sklearn import preprocessing
+from sklearn.cluster import AgglomerativeClustering
 
 def RAxML_grove_get_tree_statistics(out_dir, min_n_taxa, max_n_taxa, min_n_loci, max_n_loci, msa_type):
     msa_type = f"'{msa_type}'"
@@ -27,12 +28,13 @@ def extract_representative_sample(out_dir, min_n_taxa, max_n_taxa, min_n_loci, m
     scaler = preprocessing.StandardScaler()
     scaled_k_means_data = scaler.fit_transform(k_means_data.drop(columns=['TREE_ID']))
     kmeans = KMeans(n_clusters=n_k_means_clusters)
+    #kmeans = AgglomerativeClustering().fit(scaled_k_means_data)
     kmeans_fit = kmeans.fit(scaled_k_means_data)
     k_means_data["label"] = kmeans_fit.labels_
     scaled_k_means_data_distances = (kmeans.transform(scaled_k_means_data)**2).sum(axis=1)
     k_means_data["dist_from_center"] = scaled_k_means_data_distances
-    repersentative_sample = k_means_data.sort_values("dist_from_center").groupby("label").head(1).reset_index()
-    return list(repersentative_sample["TREE_ID"])
+    repersentative_sample = k_means_data.sort_values("dist_from_center")[["label","TREE_ID"]].groupby("label").agg(list).to_dict()['TREE_ID']
+    return repersentative_sample
 
 
 def extract_model_specification_from_log(log_file, param):

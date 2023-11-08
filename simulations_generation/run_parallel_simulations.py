@@ -56,8 +56,8 @@ def main():
         representative_sample_trees = extract_representative_sample(out_dir, args.min_n_taxa, args.max_n_taxa, args.min_n_loci, args.max_n_loci, args.msa_type, args.n_k_means_clusters)
         logging.info(f"Chosen tree IDS are: {representative_sample_trees}")
         n_trees_per_jobs  = math.ceil(len(representative_sample_trees)/args.n_jobs)
-        for job_ind in range((args.n_jobs)):
-            curr_job_trees = representative_sample_trees[job_ind*n_trees_per_jobs:job_ind*n_trees_per_jobs+n_trees_per_jobs]
+        for job_ind in range((args.n_k_means_clusters)):
+            curr_job_trees = representative_sample_trees[job_ind]
             if len(curr_job_trees)==0:
                 break
             logging.info(f"Submitted job number {job_ind}")

@@ -285,3 +285,154 @@ INFO:root:Generating calibrated model for classification model
 INFO:root:Building a final_modelbootstrap_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/fasttree/final_model/bootstrap_support/model_inc_boot
 INFO:root:Number of features after feature selection: 31 out of 31
 INFO:root:Generating calibrated model for classification model
+INFO:root:Program = fasttree
+INFO:root:
+#Sample frac = 0.5
+INFO:root:Original number of trees in full data is 1216
+INFO:root:Partitioning MSAs according to number of sequences
+INFO:root:Subsampling training data to 0.5
+INFO:root:Number of MSAs in training data is 434
+INFO:root:Number of MSAs in test data is 373
+INFO:root:Number of different trees is 1216
+INFO:root:Evaluating full standard model- including nni feautres, number of features is 23
+INFO:root:Training ML model
+INFO:root:Building a frac_0.5 model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/fasttree/frac_0.5/full_model/model_stadard
+INFO:root:Number of features after feature selection: 23 out of 23
+INFO:root:Generating calibrated model for classification model
+INFO:root:Evaluating model performance
+INFO:root:Evaluating fast standard model- no nni feautres, number of features is 17
+INFO:root:Training ML model
+INFO:root:Building a frac_0.5 model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/fasttree/frac_0.5/fast_model/model_stadard
+INFO:root:Number of features after feature selection: 17 out of 17
+INFO:root:Generating calibrated model for classification model
+INFO:root:Evaluating model performance
+INFO:root:
+#Sample frac = 1.0
+INFO:root:Original number of trees in full data is 1216
+INFO:root:Partitioning MSAs according to number of sequences
+INFO:root:Subsampling training data to 1.0
+INFO:root:Number of MSAs in training data is 868
+INFO:root:Number of MSAs in test data is 373
+INFO:root:Number of different trees is 1216
+INFO:root:Evaluating full standard model- including nni feautres, number of features is 23
+INFO:root:Training ML model
+INFO:root:Building a frac_1.0 model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/fasttree/frac_1.0/full_model/model_stadard
+INFO:root:Number of features after feature selection: 23 out of 23
+INFO:root:Generating calibrated model for classification model
+INFO:root:Evaluating model performance
+INFO:root:Evaluating fast standard model- no nni feautres, number of features is 17
+INFO:root:Training ML model
+INFO:root:Building a frac_1.0 model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/fasttree/frac_1.0/fast_model/model_stadard
+INFO:root:Number of features after feature selection: 17 out of 17
+INFO:root:Generating calibrated model for classification model
+INFO:root:Evaluating model performance
+INFO:root:Generating optimized final model
+INFO:root:Original number of trees in full data is 1216
+INFO:root:Partitioning MSAs according to number of sequences
+INFO:root:Number of MSAs in training data is 868
+INFO:root:Number of MSAs in test data is 373
+INFO:root:Number of different trees is 1216
+INFO:root:Evaluating full standard model- including nni feautres, number of features is 23
+INFO:root:Training ML model
+INFO:root:Building a final_model model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/fasttree/final_model/full_model/model_stadard
+INFO:root:Number of features after feature selection: 23 out of 23
+INFO:root:Generating calibrated model for classification model
+INFO:root:Evaluating model performance
+INFO:root:Evaluating fast standard model- no nni feautres, number of features is 17
+INFO:root:Training ML model
+INFO:root:Building a final_model model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/fasttree/final_model/fast_model/model_stadard
+INFO:root:Number of features after feature selection: 17 out of 17
+INFO:root:Generating calibrated model for classification model
+INFO:root:Evaluating model performance
+INFO:root:Comparing to bootstrap models
+INFO:root:Building a final_modelfeature_standard_fasttree_boot_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/fasttree/final_model/feature_standard_fasttree_boot_support/model_only_boot
+INFO:root:Number of features after feature selection: 2 out of 2
+INFO:root:Generating calibrated model for classification model
+INFO:root:Building a final_modelfeature_standard_fasttree_boot_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/fasttree/final_model/feature_standard_fasttree_boot_support/model_inc_boot
+INFO:root:Number of features after feature selection: 24 out of 24
+INFO:root:Generating calibrated model for classification model
+INFO:root:Building a final_modelbootstrap_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/fasttree/final_model/bootstrap_support/model_only_boot
+INFO:root:Number of features after feature selection: 2 out of 2
+INFO:root:Generating calibrated model for classification model
+INFO:root:Building a final_modelbootstrap_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/fasttree/final_model/bootstrap_support/model_inc_boot
+INFO:root:Number of features after feature selection: 24 out of 24
+INFO:root:Generating calibrated model for classification model
+INFO:root:Program = iqtree
+INFO:root:
+#Sample frac = 0.5
+INFO:root:Original number of trees in full data is 6094
+INFO:root:Partitioning MSAs according to number of sequences
+INFO:root:Subsampling training data to 0.5
+INFO:root:Number of MSAs in training data is 2342
+INFO:root:Number of MSAs in test data is 2007
+INFO:root:Number of different trees is 6094
+INFO:root:Evaluating full standard model- including nni feautres, number of features is 23
+INFO:root:Training ML model
+INFO:root:Building a frac_0.5 model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/frac_0.5/full_model/model_stadard
+INFO:root:Number of features after feature selection: 23 out of 23
+INFO:root:Generating calibrated model for classification model
+INFO:root:Evaluating model performance
+INFO:root:Evaluating fast standard model- no nni feautres, number of features is 17
+INFO:root:Training ML model
+INFO:root:Building a frac_0.5 model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/frac_0.5/fast_model/model_stadard
+INFO:root:Number of features after feature selection: 17 out of 17
+INFO:root:Generating calibrated model for classification model
+INFO:root:Evaluating model performance
+INFO:root:
+#Sample frac = 1.0
+INFO:root:Original number of trees in full data is 6094
+INFO:root:Partitioning MSAs according to number of sequences
+INFO:root:Subsampling training data to 1.0
+INFO:root:Number of MSAs in training data is 4683
+INFO:root:Number of MSAs in test data is 2007
+INFO:root:Number of different trees is 6094
+INFO:root:Evaluating full standard model- including nni feautres, number of features is 23
+INFO:root:Training ML model
+INFO:root:Building a frac_1.0 model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/frac_1.0/full_model/model_stadard
+INFO:root:Number of features after feature selection: 23 out of 23
+INFO:root:Generating calibrated model for classification model
+INFO:root:Evaluating model performance
+INFO:root:Evaluating fast standard model- no nni feautres, number of features is 17
+INFO:root:Training ML model
+INFO:root:Building a frac_1.0 model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/frac_1.0/fast_model/model_stadard
+INFO:root:Number of features after feature selection: 17 out of 17
+INFO:root:Generating calibrated model for classification model
+INFO:root:Evaluating model performance
+INFO:root:Generating optimized final model
+INFO:root:Original number of trees in full data is 6094
+INFO:root:Partitioning MSAs according to number of sequences
+INFO:root:Number of MSAs in training data is 4683
+INFO:root:Number of MSAs in test data is 2007
+INFO:root:Number of different trees is 6094
+INFO:root:Evaluating full standard model- including nni feautres, number of features is 23
+INFO:root:Training ML model
+INFO:root:Building a final_model model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/full_model/model_stadard
+INFO:root:Number of features after feature selection: 23 out of 23
+INFO:root:Generating calibrated model for classification model
+INFO:root:Evaluating model performance
+INFO:root:Evaluating fast standard model- no nni feautres, number of features is 17
+INFO:root:Training ML model
+INFO:root:Building a final_model model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/fast_model/model_stadard
+INFO:root:Number of features after feature selection: 17 out of 17
+INFO:root:Generating calibrated model for classification model
+INFO:root:Evaluating model performance
+INFO:root:Comparing to bootstrap models
+INFO:root:Building a final_modelbootstrap_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/bootstrap_support/model_only_boot
+INFO:root:Number of features after feature selection: 2 out of 2
+INFO:root:Generating calibrated model for classification model
+INFO:root:Building a final_modelbootstrap_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/bootstrap_support/model_inc_boot
+INFO:root:Number of features after feature selection: 24 out of 24
+INFO:root:Generating calibrated model for classification model
+INFO:root:Building a final_modelfeature_aLRT_iqtree_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/feature_aLRT_iqtree_support/model_only_boot
+INFO:root:Number of features after feature selection: 2 out of 2
+INFO:root:Generating calibrated model for classification model
+INFO:root:Building a final_modelfeature_aLRT_iqtree_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/feature_aLRT_iqtree_support/model_inc_boot
+INFO:root:Number of features after feature selection: 24 out of 24
+INFO:root:Generating calibrated model for classification model
+INFO:root:Building a final_modelfeature_aBayes_iqtree_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/feature_aBayes_iqtree_support/model_only_boot
+INFO:root:Number of features after feature selection: 2 out of 2
+INFO:root:Generating calibrated model for classification model
+INFO:root:Building a final_modelfeature_aBayes_iqtree_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/feature_aBayes_iqtree_support/model_inc_boot
+INFO:root:Number of features after feature selection: 24 out of 24
+INFO:root:Generating calibrated model for classification model
+INFO:root:Program = raxml

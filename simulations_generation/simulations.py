@@ -179,11 +179,15 @@ def main():
             tree_ids = JOB_TREES_FILE.read().split("\n")
         for i,tree_id in enumerate(tree_ids):
             logging.info(f"Tree id = {tree_id}")
-            all_models_tree_sim_dict = obtain_tree_sim_dict(i, args, curr_job_folder, tree_id)
-            for model_mode in all_models_tree_sim_dict:
-                all_results_df_raxml,all_results_df_iqtree,all_results_df_fasttree = obtain_all_results_per_tree(args, all_models_tree_sim_dict[model_mode], curr_job_folder, all_results_df_raxml,
-                                            all_results_df_iqtree, all_results_df_fasttree)
-
+            try:
+                all_models_tree_sim_dict = obtain_tree_sim_dict(i, args, curr_job_folder, tree_id)
+                for model_mode in all_models_tree_sim_dict:
+                    all_results_df_raxml,all_results_df_iqtree,all_results_df_fasttree = obtain_all_results_per_tree(args, all_models_tree_sim_dict[model_mode], curr_job_folder, all_results_df_raxml,
+                                                all_results_df_iqtree, all_results_df_fasttree)
+                logging.info("Done with current tree id")
+                break
+            except:
+                logging.info(f"Could not run on id {tree_id}, trying next")
     else:
         logging.info("Using random chosen tree IDs")
         for i in range(args.number_of_trees):
