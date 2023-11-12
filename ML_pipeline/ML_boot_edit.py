@@ -188,7 +188,7 @@ def main():
                         default='/Users/noa/Workspace/bootstrap_results/remote_results/validation_data')
     args = parser.parse_args()
     log_file_path = os.path.join(args.working_dir, "ML.log")
-    logging.basicConfig(filename=log_file_path, level=logging.DEBUG)
+    logging.basicConfig(filename=log_file_path, level=logging.INFO)
     for program in ['fasttree','iqtree','raxml']: #,'fasttree','raxml'
         logging.info(f"Program = {program}")
         program_data = pd.read_csv(os.path.join(args.main_data_folder,f'simulations_df_{program}.tsv'),sep='\t')
