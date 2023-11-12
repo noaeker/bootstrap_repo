@@ -24,36 +24,39 @@ iqtree_validation_data = read_tsv(paste(validation_data_prefix,"/simulations_df_
 
 
 ```{r}
-prefix = "/Users/noa/Workspace/ML_results"
+prefix = "/Users/noa/Workspace/bootstrap_results/remote_results/"
 
 
-fasttree_all_models_performance = read_tsv(paste(prefix,"/fasttree/all_models_performance.tsv", sep = ""))
-fasttree_final_models_performance = read_tsv(paste(prefix,"/fasttree/final_model_performance.tsv", sep = ""))
-fasttree_group_performance = read_tsv(paste(prefix,"/fasttree/groups_performance.tsv", sep = ""))
-fasttree_vi =  read_tsv(paste(prefix,"/fasttree/model_standard_vi.tsv", sep = ""))
-fasttree_enriched_test = read_tsv(paste(prefix,"/fasttree/test_model_standard_enriched.tsv", sep = ""))
+fasttree_all_models_performance = read_tsv(paste(prefix,"ML_results/fasttree/all_models_performance.tsv", sep = ""))
+fasttree_final_models_performance = read_tsv(paste(prefix,"ML_results/fasttree/final_model_performance.tsv", sep = ""))
+fasttree_group_performance = read_tsv(paste(prefix,"ML_results/fasttree/groups_performance.tsv", sep = ""))
+fasttree_vi =  read_tsv(paste(prefix,"ML_results/fasttree/model_standard_vi.tsv", sep = ""))
+fasttree_enriched_test = read_tsv(paste(prefix,"ML_results/fasttree/test_model_standard_enriched.tsv", sep = ""))
+fasttree_validation = read_tsv(paste(prefix,"validation_data/simulations_df_fasttree.tsv", sep = ""))
 #####
-iqtree_all_models_performance = read_tsv(paste(prefix,"/iqtree/all_models_performance.tsv", sep = ""))
-iqtree_final_models_performance = read_tsv(paste(prefix,"/iqtree/final_model_performance.tsv", sep = ""))
-iqtree_group_performance = read_tsv(paste(prefix,"/iqtree/groups_performance.tsv", sep = ""))
-iqtree_vi =  read_tsv(paste(prefix,"/iqtree/model_standard_vi.tsv", sep = ""))
-iqtree_enriched_test = read_tsv(paste(prefix,"/iqtree/test_model_standard_enriched.tsv", sep = ""))
+iqtree_all_models_performance = read_tsv(paste(prefix,"ML_results/iqtree/all_models_performance.tsv", sep = ""))
+iqtree_final_models_performance = read_tsv(paste(prefix,"/ML_resultsiqtree/final_model_performance.tsv", sep = ""))
+iqtree_group_performance = read_tsv(paste(prefix,"ML_results/iqtree/groups_performance.tsv", sep = ""))
+iqtree_vi =  read_tsv(paste(prefix,"ML_results/iqtree/model_standard_vi.tsv", sep = ""))
+iqtree_enriched_test = read_tsv(paste(prefix,"ML_results/iqtree/test_model_standard_enriched.tsv", sep = ""))
+iqtree_validation = read_tsv(paste(prefix,"validation_data/simulations_df_iqtree.tsv", sep = ""))
 #####
-raxml_all_models_performance = read_tsv(paste(prefix,"/raxml/all_models_performance.tsv", sep = ""))
-raxml_final_models_performance = read_tsv(paste(prefix,"/raxml/final_model_performance.tsv", sep = ""))
-raxml_group_performance = read_tsv(paste(prefix,"/raxml/groups_performance.tsv", sep = ""))
-raxml_vi =  read_tsv(paste(prefix,"/raxml/model_standard_vi.tsv", sep = ""))
-raxml_enriched_test = read_tsv(paste(prefix,"/raxml/test_model_standard_enriched.tsv", sep = ""))
+raxml_all_models_performance = read_tsv(paste(prefix,"ML_results/raxml/all_models_performance.tsv", sep = ""))
+raxml_final_models_performance = read_tsv(paste(prefix,"ML_results/raxml/final_model_performance.tsv", sep = ""))
+raxml_group_performance = read_tsv(paste(prefix,"ML_results/raxml/groups_performance.tsv", sep = ""))
+raxml_vi =  read_tsv(paste(prefix,"ML_results/raxml/model_standard_vi.tsv", sep = ""))
+raxml_enriched_test = read_tsv(paste(prefix,"ML_results/raxml/test_model_standard_enriched.tsv", sep = ""))
+raxml_validation = read_tsv(paste(prefix,"validation_data/simulations_df_raxml.tsv", sep = ""))
 
 
 ```
 
 Choose specific program
 ```{r}
-program = 'iqtree'
+program = 'raxml'
 if (program=='fasttree') {
     all_models_performance = fasttree_all_models_performance
-    final_models_performance = fasttree_final_models_performance
+    final_models_performance = fasttree_final_models_performance %>% filter(analysis_type!='feature_standard_fasttree_boot_support')
     group_performance = fasttree_group_performance
     vi = fasttree_vi
     enriched_test = fasttree_enriched_test
@@ -79,11 +82,15 @@ if (program=='fasttree') {
 
 General performance
 ```{r}
-final_models_performance  %>% filter (dataset=='test', metric_type=='all_data') %>% dplyr::select (analysis_type,name,balanced_accuracy_score, mcc, AUC)
+
+out_path <-paste(prefix,"/",program,"/vi_text",".tsv", sep = "")
+
+paper_vi<-final_models_performance  %>% filter ((dataset=='test'|dataset=='train') , metric_type=='all_data') %>% dplyr::select (dataset,analysis_type,name,mcc,balanced_accuracy_score,precision, recall, AUC,average_precision)  %>% arrange(dataset)
+write_tsv(paper_vi,out_path)
+
+paper_vi
+
 ```
-
-
-
 
 
 
@@ -128,8 +135,9 @@ library(predtools)
 library(MASS)
 library(caret)
 
+error_vs_size
 error_vs_size<- all_models_performance %>% filter (metric_type=='all_data', dataset =='test')
-error_vs_size_plt = error_vs_size %>% mutate(n_MSAs = sample_frac) %>% ggplot(aes(x=n_MSAs, y = AUC))+geom_line()+ expand_limits(y = 0.5)+xlab("Number of MSAs")+ theme(text = element_text(size = 13))+ylab("AUC")+geom_point()
+error_vs_size_plt = error_vs_size %>% mutate(n_MSAs = sample_frac*2007) %>% ggplot(aes(x=n_MSAs, y = mcc))+geom_line()+ expand_limits(y = 0)+xlab("Number of MSAs")+ theme(text = element_text(size = 13))+ylab("MCC")+geom_point()
 
 rocobj <- roc(enriched_test$true_label, enriched_test$prob_predictions)
 auc <- round(auc(enriched_test$true_label, enriched_test$prob_predictions),3)
@@ -167,10 +175,45 @@ ggarrange(seq_scatter,Pypythia_scatter,n_loci_scatter, n_seq_error,Pypythia_erro
 
 
 ```
+
+```{r}
+cor.test( enriched_test$feature_msa_pypythia_msa_difficulty,  enriched_test$prob_predictions)
+cor.test( enriched_test$feature_msa_n_seq, enriched_test$prob_predictions)
+cor.test( enriched_test$feature_msa_n_loci, enriched_test$prob_predictions)
+```
+
+
+
 Validation_data
 ```{r}
-validation_data %>% dplyr::select (boot_run_time, extraction_running_time,nni_ll_eval_running_time)
+raxml_data = read_tsv("/Users/noa/Workspace/simulations_df_raxml.tsv")
 
+```
+
+
+```{r}
+running_time_data<- enriched_test%>% dplyr::select (boot_run_time,extraction_running_time,nni_ll_eval_running_time) %>% mutate (diff1 = boot_run_time/extraction_running_time, diff2 = boot_run_time/(extraction_running_time+nni_ll_eval_running_time
+)) 
+summary(running_time_data %>% pull (diff1))
+summary(running_time_data %>% pull (diff2))
+summary(running_time_data %>% pull (extraction_running_time))
+summary(running_time_data %>% pull (nni_ll_eval_running_time))
+#enriched_test %>% dplyr::select (boot_run_time, extraction_runni
+```
+
+
+
+```{r}
+
+
+running_time_data<- enriched_test%>% dplyr::select (program_boot_run_time,extraction_running_time,nni_ll_eval_running_time) %>% mutate (diff1 = program_boot_run_time/extraction_running_time, diff2 = program_boot_run_time/(extraction_running_time+nni_ll_eval_running_time
+)) 
+summary(running_time_data %>% pull (diff1))
+summary(running_time_data %>% pull (diff2))
+summary(running_time_data %>% pull (extraction_running_time))
+summary(running_time_data %>% pull (nni_ll_eval_running_time))
+summary(running_time_data %>% pull (program_boot_run_time))
+#enriched_test %>% dplyr::select (boot_run_time, extraction_running_time, nni_ll_eval_running_time)
 ```
 
 Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.

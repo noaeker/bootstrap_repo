@@ -132,8 +132,8 @@ def ML_pipeline(program_data, bootstrap_cols, cpus_per_main_job, working_dir, sa
     groups = train["tree_id"]
     logging.info(f"Number of different trees is {len(program_data['tree_id'].unique())}")
     full_features = [col for col in program_data.columns if
-                'feature' in col and 'msa_entropy' not in col and col not in bootstrap_cols]  # +['partition_branch_vs_mean','partition_branch','partition_size','partition_size_ratio','partition_divergence','divergence_ratio']
-
+                'feature' in col and 'msa_entropy' not in col and col not in bootstrap_cols and 'll_diff_norm' not in col and 'column_variance' not in col]  # +['partition_branch_vs_mean','partition_branch','partition_size','partition_size_ratio','partition_divergence','divergence_ratio']
+    logging.info(f"Full features are: {full_features}")
     logging.info(f"Evaluating full standard model- including nni feautres, number of features is {len(full_features)}")
     full_model_working_dir = os.path.join(working_dir,'full_model')
     create_dir_if_not_exists(full_model_working_dir)
@@ -181,7 +181,7 @@ def main():
     parser.add_argument('--RFE', action='store_true', default= False)
     parser.add_argument('--full_grid', action='store_true', default=False)
     parser.add_argument('--cpus_per_main_job', type = int, default=1)
-    parser.add_argument('--sample_fracs', type = str, default='0.5_1')
+    parser.add_argument('--sample_fracs', type = str, default='0.25_0.5_1')
     parser.add_argument('--inc_sample_fracs', action='store_true', default=True)
     parser.add_argument('--main_data_folder',type = str, default = '/Users/noa/Workspace/bootstrap_results/remote_results')
     parser.add_argument('--validation_data_folder', type=str,
