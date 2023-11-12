@@ -35,7 +35,7 @@ fasttree_enriched_test = read_tsv(paste(prefix,"ML_results/fasttree/test_model_s
 fasttree_validation = read_tsv(paste(prefix,"validation_data/simulations_df_fasttree.tsv", sep = ""))
 #####
 iqtree_all_models_performance = read_tsv(paste(prefix,"ML_results/iqtree/all_models_performance.tsv", sep = ""))
-iqtree_final_models_performance = read_tsv(paste(prefix,"/ML_resultsiqtree/final_model_performance.tsv", sep = ""))
+iqtree_final_models_performance = read_tsv(paste(prefix,"ML_results/iqtree/final_model_performance.tsv", sep = ""))
 iqtree_group_performance = read_tsv(paste(prefix,"ML_results/iqtree/groups_performance.tsv", sep = ""))
 iqtree_vi =  read_tsv(paste(prefix,"ML_results/iqtree/model_standard_vi.tsv", sep = ""))
 iqtree_enriched_test = read_tsv(paste(prefix,"ML_results/iqtree/test_model_standard_enriched.tsv", sep = ""))
@@ -50,6 +50,9 @@ raxml_validation = read_tsv(paste(prefix,"validation_data/simulations_df_raxml.t
 
 
 ```
+
+
+
 
 Choose specific program
 ```{r}
@@ -75,7 +78,7 @@ if (program=='fasttree') {
     group_performance = raxml_group_performance
     vi = fasttree_vi
     enriched_test = raxml_enriched_test
-    validation_data = raxml_validation_data
+    validation_data = raxml_validation
 }
 ```
 
@@ -186,7 +189,7 @@ cor.test( enriched_test$feature_msa_n_loci, enriched_test$prob_predictions)
 
 Validation_data
 ```{r}
-raxml_data = read_tsv("/Users/noa/Workspace/simulations_df_raxml.tsv")
+validation_data$
 
 ```
 
@@ -214,6 +217,9 @@ summary(running_time_data %>% pull (extraction_running_time))
 summary(running_time_data %>% pull (nni_ll_eval_running_time))
 summary(running_time_data %>% pull (program_boot_run_time))
 #enriched_test %>% dplyr::select (boot_run_time, extraction_running_time, nni_ll_eval_running_time)
+```
+```{r}
+validation_data$model_mode
 ```
 
 Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
