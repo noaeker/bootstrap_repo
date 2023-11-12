@@ -5,10 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c7df0e90-f129-4c06-bac2-5459d2cc3269" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/ML_pipeline/ML.log" beforeDir="false" afterPath="$PROJECT_DIR$/ML_pipeline/ML.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ML_pipeline/ML_boot_edit.py" beforeDir="false" afterPath="$PROJECT_DIR$/ML_pipeline/ML_boot_edit.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/R_code/paper_analysis.Rmd" beforeDir="false" afterPath="$PROJECT_DIR$/R_code/paper_analysis.Rmd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/R_code/paper_analysis.nb.html" beforeDir="false" afterPath="$PROJECT_DIR$/R_code/paper_analysis.nb.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/simulations_generation/simulations_argparser.py" beforeDir="false" afterPath="$PROJECT_DIR$/simulations_generation/simulations_argparser.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -48,7 +45,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/simulations_generation/simulations.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="167">
@@ -78,11 +75,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/simulations_generation/simulations_argparser.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="287">
-              <caret line="22" column="68" selection-start-line="22" selection-start-column="68" selection-end-line="22" selection-end-column="68" />
+            <state relative-caret-position="329">
+              <caret line="20" column="83" selection-start-line="20" selection-start-column="83" selection-end-line="20" selection-end-column="83" />
             </state>
           </provider>
         </entry>
@@ -147,8 +144,8 @@
       <find>obtain_tree_search_bootstrap_results</find>
       <find>gtr</find>
       <find>for mo</find>
-      <find>obtain_tree_sim_dict</find>
       <find>boots</find>
+      <find>obtain_tree_sim_dict</find>
     </findStrings>
     <replaceStrings>
       <replace>job_data_path</replace>
@@ -191,11 +188,11 @@
         <option value="$PROJECT_DIR$/programs/FastTree.py" />
         <option value="$PROJECT_DIR$/simulation_edit/bootstrap_edit.py" />
         <option value="$PROJECT_DIR$/programs/raxml.py" />
-        <option value="$PROJECT_DIR$/simulations_generation/simulations_argparser.py" />
         <option value="$PROJECT_DIR$/simulations_generation/run_parallel_simulations.py" />
         <option value="$PROJECT_DIR$/programs/raxml_grove.py" />
         <option value="$PROJECT_DIR$/simulations_generation/simulations.py" />
         <option value="$PROJECT_DIR$/ML_pipeline/ML_boot_edit.py" />
+        <option value="$PROJECT_DIR$/simulations_generation/simulations_argparser.py" />
       </list>
     </option>
   </component>
@@ -420,6 +417,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="25" width="1440" height="800" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.15151516" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -789,13 +787,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/simulations_generation/simulations_argparser.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="287">
-          <caret line="22" column="68" selection-start-line="22" selection-start-column="68" selection-end-line="22" selection-end-column="68" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/programs/raxml_grove.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="247">
@@ -861,6 +852,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="167">
           <caret line="187" column="21" selection-start-line="187" selection-start-column="21" selection-end-line="187" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/simulations_generation/simulations_argparser.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="329">
+          <caret line="20" column="83" selection-start-line="20" selection-start-column="83" selection-end-line="20" selection-end-column="83" />
         </state>
       </provider>
     </entry>
