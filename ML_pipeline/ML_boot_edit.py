@@ -180,6 +180,7 @@ def main():
     parser.add_argument('--working_dir', type = str, default = os.getcwd())
     parser.add_argument('--RFE', action='store_true', default= False)
     parser.add_argument('--full_grid', action='store_true', default=False)
+    parser.add_argument('--programs',type = str, default = 'iqtree_raxml_fasttree')
     parser.add_argument('--cpus_per_main_job', type = int, default=1)
     parser.add_argument('--sample_fracs', type = str, default='0.25_0.5_1')
     parser.add_argument('--inc_sample_fracs', action='store_true', default=False)
@@ -189,7 +190,7 @@ def main():
     args = parser.parse_args()
     log_file_path = os.path.join(args.working_dir, "ML.log")
     logging.basicConfig(filename=log_file_path, level=logging.INFO)
-    for program in ['fasttree','iqtree','raxml']: #,'fasttree','raxml'
+    for program in args.programs.split('_'): 
         logging.info(f"Program = {program}")
         program_data = pd.read_csv(os.path.join(args.main_data_folder,f'simulations_df_{program}.tsv'),sep='\t')
         transform_data(program_data)
