@@ -18,6 +18,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.linear_model import SGDClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import make_pipeline
+from sklearn.metrics import confusion_matrix
 
 
 def regression_per_group(df):
@@ -29,7 +30,7 @@ def regression_per_group(df):
 def performance_per_group(df):
     y_pred = list(df.y_pred)
     y = list(df.y)
-    return balanced_accuracy_score(y, y_pred)
+    return matthews_corrcoef(y, y_pred)
 
 
 def AUPRC_per_group(df):
@@ -43,7 +44,7 @@ def score_func(y, y_pred, classification, groups_data):
     for group in groups_data:
         df = pd.DataFrame({'y': y, 'y_pred': y_pred, 'grouping_col': groups_data[group]})
         if classification:
-            df = df.groupby('grouping_col').apply(performance_per_group).reset_index(name='Balanced_Accuracy')
+            df = df.groupby('grouping_col').apply(performance_per_group).reset_index(name='mcc')
         else:
             df = df.groupby('grouping_col').apply(regression_per_group).reset_index(name='R2')
         df["grouping_col_name"] = group
@@ -126,27 +127,27 @@ def calibration_plot(model, test_data, y_test):
     pyplot.show()
 
 def enrich_with_single_feature_metrics(var_impt, train_X, y_train, test_X, y_test):
-    mcc_scores = []
-    bacc_scores = []
-    for feature in var_impt.index:
-            #lg = LogisticRegression(random_state=0).fit(train_X[[feature]], y_train)
-            lg = lightgbm.LGBMClassifier(importance_type='gain').fit(train_X[[feature]], y_train)
-            pred = lg.predict(test_X[[feature]])
-            mcc = matthews_corrcoef(y_test, pred)
-            bacc = balanced_accuracy_score(y_test, pred)
-            mcc_scores.append(mcc)
-            bacc_scores.append(bacc)
-    var_impt["mcc"] = mcc_scores
-    var_impt["balanced_accuracy"] = bacc_scores
+    mcc_thresholds = [0.5,0.9,0.95,0.99]
+    for threshold in mcc_thresholds:
+        curr_mcc_scores = []
+        for feature in var_impt.index:
+                #lg = LogisticRegression(random_state=0).fit(train_X[[feature]], y_train)
+                lg = lightgbm.LGBMClassifier(importance_type='gain').fit(train_X[[feature]], y_train)
+                pred = lg.predict_proba(test_X[[feature]])[:, 1] >= threshold
+                mcc = matthews_corrcoef(y_test, pred)
+                curr_mcc_scores.append(mcc)
+        var_impt[f"mcc_{threshold}"] = curr_mcc_scores
 
 
-def model_evaluation_metrics(y_true, predictions, prob_predictions):
-    metrics = {
-                    'balanced_accuracy_score': balanced_accuracy_score(y_true, predictions),
-                    'accuracy_score': accuracy_score(y_true, predictions),
-                    'precision': precision_score(y_true, predictions), 'recall': recall_score(y_true, predictions),
-                    'mcc': matthews_corrcoef(y_true, predictions)}
-    if prob_predictions is not None:
+def model_evaluation_metrics(y_true, prob_predictions, estimate_auc = True):
+    metrics = {}
+    thresholds = [0.5,0.9,0.95,0.99]
+    for threshold in thresholds:
+        tn, fp, fn, tp = confusion_matrix(y_true=y_true, y_pred=prob_predictions>=threshold, labels=[True, False]).ravel()
+        mcc = matthews_corrcoef(y_true=y_true, y_pred = prob_predictions>=threshold )
+        t_metrics = {f'tn_{threshold}': tn, f'fp_{threshold}': fp,f'fn_{threshold}': fn,f'tp_{threshold}': tp, f'mcc_{threshold}': mcc}
+        metrics.update(t_metrics)
+    if estimate_auc:
         prob_metrics = {'AUC': roc_auc_score(y_true, prob_predictions),
                         'logloss': log_loss(y_true, prob_predictions), 'average_precision': average_precision_score(y_true, prob_predictions), }
         metrics.update(prob_metrics)
@@ -175,14 +176,14 @@ def overall_model_performance_analysis(working_dir,model, data_dict, name,extrac
     all_group_metrics = pd.DataFrame()
     for dataset in data_dict:
         if model:
-            prob_predictions = model['best_model'].predict_proba((model['selector']).transform(data_dict[dataset]["X"]))[:, 1]
-            predictions = model['best_model'].predict((model['selector']).transform(data_dict[dataset]["X"]))
+            prob_predictions =  model['calibrated_model'].predict_proba((model['selector']).transform(data_dict[dataset]["X"]))[:, 1]
+            predictions = model['calibrated_model'].predict((model['selector']).transform(data_dict[dataset]["X"]))
         else:
             raw_bootstrap_values = data_dict[dataset]["X"].drop(['ignore'],axis=1).iloc[:,0]
             prob_predictions = raw_bootstrap_values / 100
             predictions = raw_bootstrap_values > 0.5
         true_label = data_dict[dataset]["y"]
-        evaluation_metrics = model_evaluation_metrics(true_label,predictions, prob_predictions  )
+        evaluation_metrics = model_evaluation_metrics(true_label, prob_predictions)
         evaluation_metrics["dataset"] = dataset
         evaluation_metrics["name"] = name
         evaluation_metrics["metric_type"] = "all_data"
@@ -193,17 +194,18 @@ def overall_model_performance_analysis(working_dir,model, data_dict, name,extrac
         enriched_dataset["true_label"] = true_label
         if extract_predictions and dataset=='test':
             enriched_dataset.to_csv(os.path.join(working_dir,f"{dataset}_{name}_enriched.tsv"),sep= CSV_SEP)
-        per_tree_evaluation_metrics = pd.DataFrame()
-        for tree_ind in enriched_dataset["tree_id"].unique():
-            tree_data = enriched_dataset.loc[enriched_dataset.tree_id==tree_ind]
-            tree_metrics = model_evaluation_metrics(tree_data["true_label"], tree_data["predictions"], prob_predictions= None)
-            per_tree_evaluation_metrics = per_tree_evaluation_metrics.append(tree_metrics, ignore_index = True)
-        averaged_tree_metrics = per_tree_evaluation_metrics.mean().to_dict()
-        averaged_tree_metrics["dataset"] = dataset
-        averaged_tree_metrics["name"] = name
-        averaged_tree_metrics["metric_type"] = "per_tree_average"
-        all_metrics = all_metrics.append(averaged_tree_metrics, ignore_index= True)
-        group_performance = model_groups_anlaysis(data_dict[dataset]["full_data"], data_dict[dataset]["y"], predictions)
+
+        #per_tree_evaluation_metrics = pd.DataFrame()
+        #for tree_ind in enriched_dataset["tree_id"].unique():
+        #    tree_data = enriched_dataset.loc[enriched_dataset.tree_id==tree_ind]
+        #    tree_metrics = model_evaluation_metrics(tree_data["true_label"], prob_predictions=tree_data['prob_predictions'], estimate_auc = False)
+        #    per_tree_evaluation_metrics = per_tree_evaluation_metrics.append(tree_metrics, ignore_index = True)
+        #averaged_tree_metrics = per_tree_evaluation_metrics.mean().to_dict()
+        #averaged_tree_metrics["dataset"] = dataset
+        #averaged_tree_metrics["name"] = name
+        #averaged_tree_metrics["metric_type"] = "per_tree_average"
+        #all_metrics = all_metrics.append(averaged_tree_metrics, ignore_index= True)
+        group_performance = model_groups_anlaysis(data_dict[dataset]["full_data"], data_dict[dataset]["y"], prob_predictions>0.95)
         group_performance["dataset"] = dataset
         group_performance["name"] = name
         all_group_metrics = pd.concat([all_group_metrics,group_performance])

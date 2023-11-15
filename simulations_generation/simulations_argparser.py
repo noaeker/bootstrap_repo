@@ -20,7 +20,7 @@ def main_parser():
     parser.add_argument('--calc_features', action='store_true', default=True)
     parser.add_argument('--pre_chosen_tree_ids',action='store_true', default= False )
     parser.add_argument('--n_k_means_clusters',type=int, default =3)
-    parser.add_argument('--model_modes', type=str, default='standard') #'mispecification
+    parser.add_argument('--model_modes', type=str, default='upgrade') #'mispecification
     return parser
 
 

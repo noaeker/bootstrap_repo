@@ -30,55 +30,53 @@ prefix = "/Users/noa/Workspace/bootstrap_results/remote_results/"
 fasttree_all_models_performance = read_tsv(paste(prefix,"ML_results/fasttree/all_models_performance.tsv", sep = ""))
 fasttree_final_models_performance = read_tsv(paste(prefix,"ML_results/fasttree/final_model_performance.tsv", sep = ""))
 fasttree_group_performance = read_tsv(paste(prefix,"ML_results/fasttree/groups_performance.tsv", sep = ""))
-fasttree_vi =  read_tsv(paste(prefix,"ML_results/fasttree/model_standard_vi.tsv", sep = ""))
-fasttree_enriched_test = read_tsv(paste(prefix,"ML_results/fasttree/test_model_standard_enriched.tsv", sep = ""))
+fasttree_vi =  read_tsv(paste(prefix,"ML_results/fasttree/final_model/full_model/model_standard_vi.tsv", sep = ""))
+fasttree_enriched_test = read_tsv(paste(prefix,"ML_results/fasttree/final_model/full_model/test_model_standard_enriched.tsv", sep = ""))
 fasttree_validation = read_tsv(paste(prefix,"validation_data/simulations_df_fasttree.tsv", sep = ""))
 #####
 iqtree_all_models_performance = read_tsv(paste(prefix,"ML_results/iqtree/all_models_performance.tsv", sep = ""))
 iqtree_final_models_performance = read_tsv(paste(prefix,"ML_results/iqtree/final_model_performance.tsv", sep = ""))
 iqtree_group_performance = read_tsv(paste(prefix,"ML_results/iqtree/groups_performance.tsv", sep = ""))
-iqtree_vi =  read_tsv(paste(prefix,"ML_results/iqtree/model_standard_vi.tsv", sep = ""))
-iqtree_enriched_test = read_tsv(paste(prefix,"ML_results/iqtree/test_model_standard_enriched.tsv", sep = ""))
+iqtree_vi =  read_tsv(paste(prefix,"ML_results/iqtree/final_model/full_model/model_standard_vi.tsv", sep = ""))
+iqtree_enriched_test = read_tsv(paste(prefix,"ML_results/iqtree/final_model/full_model/test_model_standard_enriched.tsv", sep = ""))
 iqtree_validation = read_tsv(paste(prefix,"validation_data/simulations_df_iqtree.tsv", sep = ""))
 #####
 raxml_all_models_performance = read_tsv(paste(prefix,"ML_results/raxml/all_models_performance.tsv", sep = ""))
 raxml_final_models_performance = read_tsv(paste(prefix,"ML_results/raxml/final_model_performance.tsv", sep = ""))
 raxml_group_performance = read_tsv(paste(prefix,"ML_results/raxml/groups_performance.tsv", sep = ""))
-raxml_vi =  read_tsv(paste(prefix,"ML_results/raxml/model_standard_vi.tsv", sep = ""))
-raxml_enriched_test = read_tsv(paste(prefix,"ML_results/raxml/test_model_standard_enriched.tsv", sep = ""))
+raxml_vi =  read_tsv(paste(prefix,"ML_results/raxml/final_model/full_model/model_standard_vi.tsv", sep = ""))
+raxml_enriched_test = read_tsv(paste(prefix,"ML_results/raxml/final_model/full_model/test_model_standard_enriched.tsv", sep = ""))
 raxml_validation = read_tsv(paste(prefix,"validation_data/simulations_df_raxml.tsv", sep = ""))
 
 
 ```
 
 
-
-
 Choose specific program
 ```{r}
-program = 'raxml'
+program = 'fasttree'
 if (program=='fasttree') {
     all_models_performance = fasttree_all_models_performance
     final_models_performance = fasttree_final_models_performance %>% filter(analysis_type!='feature_standard_fasttree_boot_support')
     group_performance = fasttree_group_performance
     vi = fasttree_vi
     enriched_test = fasttree_enriched_test
-    validation_data = fasttree_validation_data
+    #validation_data = fasttree_validation_data
     
 } else if (program=='iqtree') {
     all_models_performance = iqtree_all_models_performance
     final_models_performance = iqtree_final_models_performance
     group_performance = iqtree_group_performance
-    vi = fasttree_vi
+    vi = iqtree_vi
     enriched_test = iqtree_enriched_test
-    validation_data = iqtree_validation_data
+    #validation_data = iqtree_validation_data
 } else if (program=='raxml') {
     all_models_performance = raxml_all_models_performance
     final_models_performance = raxml_final_models_performance
     group_performance = raxml_group_performance
-    vi = fasttree_vi
+    vi = raxml_vi
     enriched_test = raxml_enriched_test
-    validation_data = raxml_validation
+    #validation_data = raxml_validation
 }
 ```
 
@@ -86,21 +84,75 @@ if (program=='fasttree') {
 General performance
 ```{r}
 
-out_path <-paste(prefix,"/",program,"/vi_text",".tsv", sep = "")
+out_path <-paste(prefix,"ML_results/",program,"/performance_text",".tsv", sep = "")
 
-paper_vi<-final_models_performance  %>% filter ((dataset=='test'|dataset=='train') , metric_type=='all_data') %>% dplyr::select (dataset,analysis_type,name,mcc,balanced_accuracy_score,precision, recall, AUC,average_precision)  %>% arrange(dataset)
-write_tsv(paper_vi,out_path)
+paper_performance<-final_models_performance  %>% filter (metric_type=='all_data') %>% dplyr::select (dataset,analysis_type,name,mcc,balanced_accuracy_score,precision, recall, AUC,average_precision)  %>% arrange(dataset) %>% mutate (description = case_when(analysis_type == "full_standard" & name =="model_standard" ~ "all_features", 
+                                analysis_type == "fast_standard" & name =="model_standard" ~ "All features except NNI features",
+                                analysis_type == "bootstrap_support" & name =="raw_only_boot" ~ "Raw bootstrap support",
+                                analysis_type == "bootstrap_support" & name =="only_boot" ~ "Calibrated bootstrap support",
+                                analysis_type == "bootstrap_support" & name =="inc_boot" ~ "All features+ bootstrap support",
+                                    analysis_type == "feature_aLRT_iqtree_support" & name =="raw_only_boot" ~ "Raw aLRT support",
+                                analysis_type == "feature_aLRT_iqtree_support" & name =="only_boot" ~ "Calibrated aLRT support",
+                                analysis_type == "feature_aLRT_iqtree_support" & name =="inc_boot" ~ "All features+ aLRT support",
+                                                                    analysis_type == "feature_aBayes_iqtree_support" & name =="raw_only_boot" ~ "Raw aBayes support",
+                                analysis_type == "feature_aBayes_iqtree_support" & name =="only_boot" ~ "Calibrated aBayes support",
+                                analysis_type == "feature_aBayes_iqtree_support" & name =="inc_boot" ~ "All features+ aBayes support",
+                                )) %>% dplyr::select (dataset, description, mcc, balanced_accuracy_score,precision, recall)  %>% arrange(dataset)
 
-paper_vi
+
+paper_performance
 
 ```
 
 
 
-
 Variable importance 
 ```{r}
-vi %>% arrange (-`Gini-importance`)
+out_path <-paste(prefix,"ML_results/",program,"/vi_text",".tsv", sep = "")
+
+vi_data<- vi %>% arrange (`...1`) %>% mutate (feature_name = case_when(
+  `...1` == "feature_min_ll_diff"~ "Minimum log-likelihood difference between an NNI neighbor near the bipartition and current tree",
+  `...1` =="feature_max_ll_diff"~ "Maximum log-likelihood difference between an NNI neighbor near the split and current tree",
+  
+  `...1` =='feature_mean_parsimony_trees_binary'~"Fraction of parsimoy trees in which the bipartition exists",
+  `...1` =='feature_mean_parsimony_trees_neighbors_binary'~"Fraction of parsimony trees in which the neighbouring bipartitions exist",
+  
+  
+    `...1`=='feature_mean_all_ML_boot_raxml_neighbors_binary'~'Fraction of final ML trees in which the bipartition exists',
+  
+   `...1` =='feature_mean_all_ML_boot_raxml_binary'~"Fraction of parsimony trees in which the neighbouring bipartitions exist",
+
+  
+`...1` =='feature_mean_parsimony_trees'~"Mean transfer distance of the bipartition across parsimoy trees",
+`...1` =='feature_mean_parsimony_trees_neighbors'~"Mean transfer distance of the neighbouring bipartitions across parsimoy trees",
+
+
+`...1` =='feature_mean_all_ML_boot_raxml'~'Mean transfer distance of the bipartition across final ML trees',
+`...1` =='feature_mean_all_ML_boot_raxml_neighbors'~'Mean transfer distance of the neighbouring bipartitions across final ML trees',
+
+`...1` =='feature_partition_branch'~'Branch length at the parititon',
+`...1` =='feature_partition_branch_vs_mean'~'Branch length at the parititon divided by total tree divergence',
+
+
+`...1` =='feature_partition_divergence'~'Total divergence in the smaller subtree defined by the bipartition',
+`...1` =='feature_divergence_ratio'~'Total divergence in the smaller subtree defined by the bipartition divided by total tree divergence',
+`...1` =='feature_partition_size'~'Number of leaves in the smaller subtree defined by the bipartition',
+`...1` =='feature_partition_size_ratio'~'Fraction of leaves in the smaller subtree defined by the bipartition',
+
+`...1` =='feature_min_neighbor_brlen'~'Minimal branch length among the neighbouring branches',
+`...1` =='feature_mean_neighbor_brlen'~'Mean branch length among the neighbouring branches',
+`...1` =='feature_msa_constant_sites_pct'~'Fraction of constant sites among the MSA sites',
+`...1` =='feature_msa_n_loci'~'Number of positions in the MSA',
+`...1` =='feature_msa_n_unique_sites'~'Number of unique positions in the MSA',
+`...1` =='feature_msa_n_seq'~'Number of sequences in the MSA',
+`...1` =='feature_msa_pypythia_msa_difficulty'~'MSA difficulty',
+
+
+
+)) %>% dplyr::select (`...1`,feature_name,`Gini-importance`, mcc ) %>% arrange(feature_name,-`Gini-importance`)
+vi_data
+write_tsv(vi_data,out_path)
+                                
 ```
 
 
@@ -132,14 +184,16 @@ confusion_plot<-ggplotConfusionMatrix(confusionMatrix(data = pred, reference= ob
 ```
 Prediction metrics
 
+```{r}
+all_models_performance
+```
 
 ```{r}
 library(predtools)
 library(MASS)
 library(caret)
 
-error_vs_size
-error_vs_size<- all_models_performance %>% filter (metric_type=='all_data', dataset =='test')
+error_vs_size<- all_models_performance %>% filter (metric_type=='all_data', dataset =='test', analysis_type=='full_standard')
 error_vs_size_plt = error_vs_size %>% mutate(n_MSAs = sample_frac*2007) %>% ggplot(aes(x=n_MSAs, y = mcc))+geom_line()+ expand_limits(y = 0)+xlab("Number of MSAs")+ theme(text = element_text(size = 13))+ylab("MCC")+geom_point()
 
 rocobj <- roc(enriched_test$true_label, enriched_test$prob_predictions)
@@ -154,18 +208,24 @@ global_max_auc_plt<-ggroc(rocobj,colour = 'steelblue', size = 2)+
 ggarrange(global_max_auc_plt,confusion_plot,error_vs_size_plt, labels = c("A","B","C"),align = "h", nrow = 2, ncol = 2 )
 
 ```
+```{r}
+test_group_performance %>% filter (grouping_col_name =='feature_msa_n_loci') 
+```
+
+
+
 Group performance
 
 ```{r}
 test_group_performance<- group_performance %>% filter (dataset=='test')
 
-Pypythia_error<-test_group_performance %>% filter (grouping_col_name =='msa_difficulty_group') %>% ggplot(aes(y=grouping_col, x=Balanced_Accuracy))+geom_col()+ expand_limits(y = c(0.5,1))+ylab('MSA\ndifficulty')+ xlab('Balanced\naccuracy')+theme(text = element_text(size = 11))
+Pypythia_error<-test_group_performance %>% filter (grouping_col_name =='msa_difficulty_group') %>%  mutate(grouping_col = factor(grouping_col, levels = c('(0.00328, 0.303]','(0.303, 0.538]','(0.538, 0.571]','	(0.571, 0.865]'))) %>%
+ggplot(aes(y=grouping_col, x=Balanced_Accuracy))+geom_col()+ expand_limits(y = c(0.5,1))+ylab('MSA\ndifficulty')+ xlab('Balanced\naccuracy')+theme(text = element_text(size = 11))
 
-n_seq_error<-test_group_performance %>% filter (grouping_col_name =='n_seq_group')  %>% ggplot(aes(y=grouping_col, x=Balanced_Accuracy))+geom_col()+ expand_limits(y = c(0.5,1))+ylab('Number\nof sequences')+xlab('Balanced\naccuracy')+theme(text = element_text(size = 11))
+n_seq_error<-test_group_performance %>% filter (grouping_col_name =='n_seq_group')   %>%  mutate(grouping_col = factor(grouping_col, levels = c('(4.999, 69.0]','(69.0, 129.0]','129.0, 236.0]','	(236.0, 827.0]]'))) %>% ggplot(aes(y=grouping_col, x=Balanced_Accuracy))+geom_col()+ expand_limits(y = c(0.5,1))+ylab('Number\nof sequences')+xlab('Balanced\naccuracy')+theme(text = element_text(size = 11))
 
-#>%  mutate(grouping_col = factor(grouping_col, levels = c('(99.999, 219.0]','(219.0, 546.0]','(546.0, 1519.0]','(1519.0, 16115.0]')))
 
-n_loci_error<-test_group_performance %>% filter (grouping_col_name =='feature_msa_n_loci') %>% ggplot(aes(y=grouping_col, x=Balanced_Accuracy))+geom_col()+ expand_limits(y = c(0.5,1))+ylab('Number\nof positions')+xlab('Balanced\naccuracy')+theme(text = element_text(size = 11))
+n_loci_error<-test_group_performance %>% filter (grouping_col_name =='feature_msa_n_loci') %>%  mutate(grouping_col = factor(grouping_col, levels = c('(4.999, 69.0]','(69.0, 129.0]','129.0, 236.0]','	(236.0, 827.0]]')))  %>% ggplot(aes(y=grouping_col, x=Balanced_Accuracy))+geom_col()+ expand_limits(y = c(0.5,1))+ylab('Number\nof positions')+xlab('Balanced\naccuracy')+theme(text = element_text(size = 11))
 
 Pypythia_scatter<-enriched_test %>% dplyr::select (msa_path,prob_predictions,  feature_msa_pypythia_msa_difficulty) %>% group_by(msa_path,feature_msa_pypythia_msa_difficulty) %>% summarise(mean_prob = mean(prob_predictions)) %>% ggplot(aes(x=feature_msa_pypythia_msa_difficulty, y = mean_prob))+geom_point(size = 0.7)+xlab("MSA\ndifficulty")+ylab("Predicted\nprobability")+theme(text = element_text(size = 11))
 
@@ -187,11 +247,7 @@ cor.test( enriched_test$feature_msa_n_loci, enriched_test$prob_predictions)
 
 
 
-Validation_data
-```{r}
-validation_data$
 
-```
 
 
 ```{r}
@@ -219,7 +275,8 @@ summary(running_time_data %>% pull (program_boot_run_time))
 #enriched_test %>% dplyr::select (boot_run_time, extraction_running_time, nni_ll_eval_running_time)
 ```
 ```{r}
-validation_data$model_mode
+summary(validation_data$feature_n_unique_seq)
+summary(enriched_test$feature_msa_n_seq)
 ```
 
 Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
