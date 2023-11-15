@@ -206,7 +206,7 @@ def main():
                                                                 name=f'simulations_df_{program}', n_jobs=1000)
         else:
             logging.info(f"Using existing training data in {training_data_path} ")
-            program_data = pd.read_csv(training_data_path,sep='\t')
+            program_data = pd.read_csv(training_data_path,sep='\t')#.sample(frac = 0.1)
         transform_data(program_data)
         validation_data_path = os.path.join(args.validation_data_folder, f'simulations_df_{program}.tsv')
         if args.reunite_val_data or not os.path.exists(validation_data_path):

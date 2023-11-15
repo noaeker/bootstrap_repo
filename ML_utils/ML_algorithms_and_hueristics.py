@@ -180,8 +180,8 @@ def overall_model_performance_analysis(working_dir,model, data_dict, name,extrac
             predictions = model['calibrated_model'].predict((model['selector']).transform(data_dict[dataset]["X"]))
         else:
             raw_bootstrap_values = data_dict[dataset]["X"].drop(['ignore'],axis=1).iloc[:,0]
-            prob_predictions = raw_bootstrap_values / 100
-            predictions = raw_bootstrap_values > 0.5
+            prob_predictions = raw_bootstrap_values
+            predictions = raw_bootstrap_values >= 0.5
         true_label = data_dict[dataset]["y"]
         evaluation_metrics = model_evaluation_metrics(true_label, prob_predictions)
         evaluation_metrics["dataset"] = dataset

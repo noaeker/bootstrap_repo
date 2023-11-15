@@ -453,3 +453,225 @@ INFO:root:Generating calibrated model for classification model
 INFO:root:Building a final_modelbootstrap_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/fasttree/final_model/bootstrap_support/model_inc_boot
 INFO:root:Number of features after feature selection: 20 out of 20
 INFO:root:Generating calibrated model for classification model
+INFO:root:Program = iqtree
+INFO:root:Using existing training data in /Users/noa/Workspace/bootstrap_results/remote_results/full_data/simulations_df_iqtree.tsv 
+INFO:root:Using existing validation data
+INFO:root:Generating optimized final model
+INFO:root:Original number of trees in full data is 6094
+INFO:root:Partitioning MSAs according to number of sequences
+INFO:root:Number of MSAs in training data is 4683
+INFO:root:Number of MSAs in test data is 2007
+INFO:root:Number of different trees is 6094
+INFO:root:Full features are: ['feature_mean_parsimony_trees', 'feature_mean_parsimony_trees_binary', 'feature_mean_parsimony_trees_neighbors', 'feature_mean_parsimony_trees_neighbors_binary', 'feature_mean_neighbor_brlen', 'feature_min_neighbor_brlen', 'feature_partition_branch', 'feature_partition_branch_vs_mean', 'feature_partition_size', 'feature_partition_size_ratio', 'feature_partition_divergence', 'feature_divergence_ratio', 'feature_min_ll_diff', 'feature_max_ll_diff', 'feature_min_ll_diff_norm', 'feature_max_ll_diff_norm', 'feature_msa_n_seq', 'feature_msa_n_loci', 'feature_msa_constant_sites_pct', 'feature_msa_n_unique_sites', 'feature_msa_pypythia_msa_difficulty']
+INFO:root:Evaluating full standard model- including nni feautres, number of features is 21
+INFO:root:Training ML model
+INFO:root:Building a final_model model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/full_model/model_stadard
+INFO:root:Number of features after feature selection: 21 out of 21
+INFO:root:Generating calibrated model for classification model
+INFO:root:Evaluating model performance
+INFO:root:Evaluating fast standard model- no nni feautres, number of features is 17
+INFO:root:Training ML model
+INFO:root:Building a final_model model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/fast_model/model_stadard
+INFO:root:Number of features after feature selection: 17 out of 17
+INFO:root:Generating calibrated model for classification model
+INFO:root:Evaluating model performance
+INFO:root:Comparing to bootstrap models
+INFO:root:Building a final_modelbootstrap_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/bootstrap_support/model_only_boot
+INFO:root:Number of features after feature selection: 2 out of 2
+INFO:root:Generating calibrated model for classification model
+INFO:root:Building a final_modelbootstrap_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/bootstrap_support/model_inc_boot
+INFO:root:Number of features after feature selection: 22 out of 22
+INFO:root:Generating calibrated model for classification model
+INFO:root:Building a final_modelfeature_aLRT_iqtree_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/feature_aLRT_iqtree_support/model_only_boot
+INFO:root:Number of features after feature selection: 2 out of 2
+INFO:root:Generating calibrated model for classification model
+INFO:root:Building a final_modelfeature_aLRT_iqtree_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/feature_aLRT_iqtree_support/model_inc_boot
+INFO:root:Number of features after feature selection: 22 out of 22
+INFO:root:Generating calibrated model for classification model
+INFO:root:Building a final_modelfeature_aBayes_iqtree_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/feature_aBayes_iqtree_support/model_only_boot
+INFO:root:Number of features after feature selection: 2 out of 2
+INFO:root:Generating calibrated model for classification model
+INFO:root:Building a final_modelfeature_aBayes_iqtree_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/feature_aBayes_iqtree_support/model_inc_boot
+INFO:root:Number of features after feature selection: 22 out of 22
+INFO:root:Generating calibrated model for classification model
+INFO:root:Program = raxml
+INFO:root:Using existing training data in /Users/noa/Workspace/bootstrap_results/remote_results/full_data/simulations_df_raxml.tsv 
+INFO:root:Using existing validation data
+INFO:root:Generating optimized final model
+INFO:root:Original number of trees in full data is 6094
+INFO:root:Partitioning MSAs according to number of sequences
+INFO:root:Number of MSAs in training data is 4683
+INFO:root:Number of MSAs in test data is 2007
+INFO:root:Number of different trees is 6094
+INFO:root:Full features are: ['feature_mean_parsimony_trees', 'feature_mean_parsimony_trees_binary', 'feature_mean_parsimony_trees_neighbors', 'feature_mean_parsimony_trees_neighbors_binary', 'feature_mean_all_ML_boot_raxml', 'feature_mean_all_ML_boot_raxml_binary', 'feature_mean_all_ML_boot_raxml_neighbors', 'feature_mean_all_ML_boot_raxml_neighbors_binary', 'feature_mean_neighbor_brlen', 'feature_min_neighbor_brlen', 'feature_partition_branch', 'feature_partition_branch_vs_mean', 'feature_partition_size', 'feature_partition_size_ratio', 'feature_partition_divergence', 'feature_divergence_ratio', 'feature_min_ll_diff', 'feature_max_ll_diff', 'feature_min_ll_diff_norm', 'feature_max_ll_diff_norm', 'feature_msa_n_seq', 'feature_msa_n_loci', 'feature_msa_constant_sites_pct', 'feature_msa_n_unique_sites', 'feature_msa_pypythia_msa_difficulty']
+INFO:root:Evaluating full standard model- including nni feautres, number of features is 25
+INFO:root:Training ML model
+INFO:root:Building a final_model model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/raxml/final_model/full_model/model_stadard
+INFO:root:Number of features after feature selection: 25 out of 25
+INFO:root:Generating calibrated model for classification model
+INFO:root:Evaluating model performance
+INFO:root:Evaluating fast standard model- no nni feautres, number of features is 21
+INFO:root:Training ML model
+INFO:root:Building a final_model model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/raxml/final_model/fast_model/model_stadard
+INFO:root:Number of features after feature selection: 21 out of 21
+INFO:root:Generating calibrated model for classification model
+INFO:root:Evaluating model performance
+INFO:root:Comparing to bootstrap models
+INFO:root:Building a final_modelbootstrap_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/raxml/final_model/bootstrap_support/model_only_boot
+INFO:root:Number of features after feature selection: 2 out of 2
+INFO:root:Generating calibrated model for classification model
+INFO:root:Building a final_modelbootstrap_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/raxml/final_model/bootstrap_support/model_inc_boot
+INFO:root:Number of features after feature selection: 26 out of 26
+INFO:root:Generating calibrated model for classification model
+INFO:root:Program = iqtree
+INFO:root:Using existing training data in /Users/noa/Workspace/bootstrap_results/remote_results/full_data/simulations_df_iqtree.tsv 
+INFO:root:Program = iqtree
+INFO:root:Using existing training data in /Users/noa/Workspace/bootstrap_results/remote_results/full_data/simulations_df_iqtree.tsv 
+INFO:root:Using existing validation data
+INFO:root:Generating optimized final model
+INFO:root:Original number of trees in full data is 5899
+INFO:root:Partitioning MSAs according to number of sequences
+INFO:root:Number of MSAs in training data is 4522
+INFO:root:Number of MSAs in test data is 1937
+INFO:root:Number of different trees is 5899
+INFO:root:Full features are: ['feature_mean_parsimony_trees', 'feature_mean_parsimony_trees_binary', 'feature_mean_parsimony_trees_neighbors', 'feature_mean_parsimony_trees_neighbors_binary', 'feature_mean_neighbor_brlen', 'feature_min_neighbor_brlen', 'feature_partition_branch', 'feature_partition_branch_vs_mean', 'feature_partition_size', 'feature_partition_size_ratio', 'feature_partition_divergence', 'feature_divergence_ratio', 'feature_min_ll_diff', 'feature_max_ll_diff', 'feature_min_ll_diff_norm', 'feature_max_ll_diff_norm', 'feature_msa_n_seq', 'feature_msa_n_loci', 'feature_msa_constant_sites_pct', 'feature_msa_n_unique_sites', 'feature_msa_pypythia_msa_difficulty']
+INFO:root:Evaluating full standard model- including nni feautres, number of features is 21
+INFO:root:Training ML model
+INFO:root:Building a final_model model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/full_model/model_stadard
+INFO:root:Using existing model in /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/full_model/model_stadard
+INFO:root:Evaluating model performance
+INFO:root:Evaluating fast standard model- no nni feautres, number of features is 17
+INFO:root:Training ML model
+INFO:root:Building a final_model model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/fast_model/model_stadard
+INFO:root:Using existing model in /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/fast_model/model_stadard
+INFO:root:Evaluating model performance
+INFO:root:Program = iqtree
+INFO:root:Using existing training data in /Users/noa/Workspace/bootstrap_results/remote_results/full_data/simulations_df_iqtree.tsv 
+INFO:root:Using existing validation data
+INFO:root:Generating optimized final model
+INFO:root:Original number of trees in full data is 5885
+INFO:root:Partitioning MSAs according to number of sequences
+INFO:root:Number of MSAs in training data is 4512
+INFO:root:Number of MSAs in test data is 1934
+INFO:root:Number of different trees is 5885
+INFO:root:Full features are: ['feature_mean_parsimony_trees', 'feature_mean_parsimony_trees_binary', 'feature_mean_parsimony_trees_neighbors', 'feature_mean_parsimony_trees_neighbors_binary', 'feature_mean_neighbor_brlen', 'feature_min_neighbor_brlen', 'feature_partition_branch', 'feature_partition_branch_vs_mean', 'feature_partition_size', 'feature_partition_size_ratio', 'feature_partition_divergence', 'feature_divergence_ratio', 'feature_min_ll_diff', 'feature_max_ll_diff', 'feature_min_ll_diff_norm', 'feature_max_ll_diff_norm', 'feature_msa_n_seq', 'feature_msa_n_loci', 'feature_msa_constant_sites_pct', 'feature_msa_n_unique_sites', 'feature_msa_pypythia_msa_difficulty']
+INFO:root:Evaluating full standard model- including nni feautres, number of features is 21
+INFO:root:Training ML model
+INFO:root:Building a final_model model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/full_model/model_stadard
+INFO:root:Using existing model in /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/full_model/model_stadard
+INFO:root:Evaluating model performance
+INFO:root:Evaluating fast standard model- no nni feautres, number of features is 17
+INFO:root:Training ML model
+INFO:root:Building a final_model model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/fast_model/model_stadard
+INFO:root:Using existing model in /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/fast_model/model_stadard
+INFO:root:Evaluating model performance
+INFO:root:Comparing to bootstrap models
+INFO:root:Building a final_modelbootstrap_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/bootstrap_support/model_only_boot
+INFO:root:Using existing model in /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/bootstrap_support/model_only_boot
+INFO:root:Building a final_modelbootstrap_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/bootstrap_support/model_inc_boot
+INFO:root:Using existing model in /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/bootstrap_support/model_inc_boot
+INFO:root:Building a final_modelfeature_aLRT_iqtree_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/feature_aLRT_iqtree_support/model_only_boot
+INFO:root:Using existing model in /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/feature_aLRT_iqtree_support/model_only_boot
+INFO:root:Building a final_modelfeature_aLRT_iqtree_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/feature_aLRT_iqtree_support/model_inc_boot
+INFO:root:Using existing model in /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/feature_aLRT_iqtree_support/model_inc_boot
+INFO:root:Program = iqtree
+INFO:root:Using existing training data in /Users/noa/Workspace/bootstrap_results/remote_results/full_data/simulations_df_iqtree.tsv 
+INFO:root:Using existing validation data
+INFO:root:Generating optimized final model
+INFO:root:Original number of trees in full data is 5881
+INFO:root:Partitioning MSAs according to number of sequences
+INFO:root:Number of MSAs in training data is 4518
+INFO:root:Number of MSAs in test data is 1935
+INFO:root:Number of different trees is 5881
+INFO:root:Full features are: ['feature_mean_parsimony_trees', 'feature_mean_parsimony_trees_binary', 'feature_mean_parsimony_trees_neighbors', 'feature_mean_parsimony_trees_neighbors_binary', 'feature_mean_neighbor_brlen', 'feature_min_neighbor_brlen', 'feature_partition_branch', 'feature_partition_branch_vs_mean', 'feature_partition_size', 'feature_partition_size_ratio', 'feature_partition_divergence', 'feature_divergence_ratio', 'feature_min_ll_diff', 'feature_max_ll_diff', 'feature_min_ll_diff_norm', 'feature_max_ll_diff_norm', 'feature_msa_n_seq', 'feature_msa_n_loci', 'feature_msa_constant_sites_pct', 'feature_msa_n_unique_sites', 'feature_msa_pypythia_msa_difficulty']
+INFO:root:Evaluating full standard model- including nni feautres, number of features is 21
+INFO:root:Training ML model
+INFO:root:Building a final_model model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/full_model/model_stadard
+INFO:root:Using existing model in /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/full_model/model_stadard
+INFO:root:Evaluating model performance
+INFO:root:Program = iqtree
+INFO:root:Using existing training data in /Users/noa/Workspace/bootstrap_results/remote_results/full_data/simulations_df_iqtree.tsv 
+INFO:root:Using existing validation data
+INFO:root:Generating optimized final model
+INFO:root:Original number of trees in full data is 5900
+INFO:root:Partitioning MSAs according to number of sequences
+INFO:root:Number of MSAs in training data is 4523
+INFO:root:Number of MSAs in test data is 1939
+INFO:root:Number of different trees is 5900
+INFO:root:Full features are: ['feature_mean_parsimony_trees', 'feature_mean_parsimony_trees_binary', 'feature_mean_parsimony_trees_neighbors', 'feature_mean_parsimony_trees_neighbors_binary', 'feature_mean_neighbor_brlen', 'feature_min_neighbor_brlen', 'feature_partition_branch', 'feature_partition_branch_vs_mean', 'feature_partition_size', 'feature_partition_size_ratio', 'feature_partition_divergence', 'feature_divergence_ratio', 'feature_min_ll_diff', 'feature_max_ll_diff', 'feature_min_ll_diff_norm', 'feature_max_ll_diff_norm', 'feature_msa_n_seq', 'feature_msa_n_loci', 'feature_msa_constant_sites_pct', 'feature_msa_n_unique_sites', 'feature_msa_pypythia_msa_difficulty']
+INFO:root:Evaluating full standard model- including nni feautres, number of features is 21
+INFO:root:Training ML model
+INFO:root:Building a final_model model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/full_model/model_stadard
+INFO:root:Using existing model in /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/full_model/model_stadard
+INFO:root:Evaluating model performance
+INFO:root:Evaluating fast standard model- no nni feautres, number of features is 17
+INFO:root:Training ML model
+INFO:root:Building a final_model model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/fast_model/model_stadard
+INFO:root:Using existing model in /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/fast_model/model_stadard
+INFO:root:Evaluating model performance
+INFO:root:Comparing to bootstrap models
+INFO:root:Building a final_modelbootstrap_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/bootstrap_support/model_only_boot
+INFO:root:Using existing model in /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/bootstrap_support/model_only_boot
+INFO:root:Building a final_modelbootstrap_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/bootstrap_support/model_inc_boot
+INFO:root:Using existing model in /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/bootstrap_support/model_inc_boot
+INFO:root:Building a final_modelfeature_aLRT_iqtree_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/feature_aLRT_iqtree_support/model_only_boot
+INFO:root:Using existing model in /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/feature_aLRT_iqtree_support/model_only_boot
+INFO:root:Building a final_modelfeature_aLRT_iqtree_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/feature_aLRT_iqtree_support/model_inc_boot
+INFO:root:Using existing model in /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/feature_aLRT_iqtree_support/model_inc_boot
+INFO:root:Program = iqtree
+INFO:root:Using existing training data in /Users/noa/Workspace/bootstrap_results/remote_results/full_data/simulations_df_iqtree.tsv 
+INFO:root:Using existing validation data
+INFO:root:Generating optimized final model
+INFO:root:Original number of trees in full data is 5890
+INFO:root:Partitioning MSAs according to number of sequences
+INFO:root:Number of MSAs in training data is 4517
+INFO:root:Number of MSAs in test data is 1937
+INFO:root:Number of different trees is 5890
+INFO:root:Full features are: ['feature_mean_parsimony_trees', 'feature_mean_parsimony_trees_binary', 'feature_mean_parsimony_trees_neighbors', 'feature_mean_parsimony_trees_neighbors_binary', 'feature_mean_neighbor_brlen', 'feature_min_neighbor_brlen', 'feature_partition_branch', 'feature_partition_branch_vs_mean', 'feature_partition_size', 'feature_partition_size_ratio', 'feature_partition_divergence', 'feature_divergence_ratio', 'feature_min_ll_diff', 'feature_max_ll_diff', 'feature_min_ll_diff_norm', 'feature_max_ll_diff_norm', 'feature_msa_n_seq', 'feature_msa_n_loci', 'feature_msa_constant_sites_pct', 'feature_msa_n_unique_sites', 'feature_msa_pypythia_msa_difficulty']
+INFO:root:Evaluating full standard model- including nni feautres, number of features is 21
+INFO:root:Training ML model
+INFO:root:Building a final_model model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/full_model/model_stadard
+INFO:root:Number of features after feature selection: 21 out of 21
+INFO:root:Generating calibrated model for classification model
+INFO:root:Evaluating model performance
+INFO:root:Evaluating fast standard model- no nni feautres, number of features is 17
+INFO:root:Training ML model
+INFO:root:Building a final_model model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/fast_model/model_stadard
+INFO:root:Number of features after feature selection: 17 out of 17
+INFO:root:Generating calibrated model for classification model
+INFO:root:Evaluating model performance
+INFO:root:Comparing to bootstrap models
+INFO:root:Building a final_modelbootstrap_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/bootstrap_support/model_only_boot
+INFO:root:Number of features after feature selection: 2 out of 2
+INFO:root:Generating calibrated model for classification model
+INFO:root:Building a final_modelbootstrap_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/bootstrap_support/model_inc_boot
+INFO:root:Number of features after feature selection: 22 out of 22
+INFO:root:Generating calibrated model for classification model
+INFO:root:Building a final_modelfeature_aLRT_iqtree_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/feature_aLRT_iqtree_support/model_only_boot
+INFO:root:Number of features after feature selection: 2 out of 2
+INFO:root:Generating calibrated model for classification model
+INFO:root:Building a final_modelfeature_aLRT_iqtree_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/feature_aLRT_iqtree_support/model_inc_boot
+INFO:root:Number of features after feature selection: 22 out of 22
+INFO:root:Generating calibrated model for classification model
+INFO:root:Building a final_modelfeature_aBayes_iqtree_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/feature_aBayes_iqtree_support/model_only_boot
+INFO:root:Number of features after feature selection: 2 out of 2
+INFO:root:Generating calibrated model for classification model
+INFO:root:Building a final_modelfeature_aBayes_iqtree_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/feature_aBayes_iqtree_support/model_inc_boot
+INFO:root:Number of features after feature selection: 22 out of 22
+INFO:root:Generating calibrated model for classification model
+INFO:root:Program = raxml
+INFO:root:Using existing training data in /Users/noa/Workspace/bootstrap_results/remote_results/full_data/simulations_df_raxml.tsv 
+INFO:root:Using existing validation data
+INFO:root:Generating optimized final model
+INFO:root:Original number of trees in full data is 5894
+INFO:root:Partitioning MSAs according to number of sequences
+INFO:root:Number of MSAs in training data is 4515
+INFO:root:Number of MSAs in test data is 1935
+INFO:root:Number of different trees is 5894
+INFO:root:Full features are: ['feature_mean_parsimony_trees', 'feature_mean_parsimony_trees_binary', 'feature_mean_parsimony_trees_neighbors', 'feature_mean_parsimony_trees_neighbors_binary', 'feature_mean_all_ML_boot_raxml', 'feature_mean_all_ML_boot_raxml_binary', 'feature_mean_all_ML_boot_raxml_neighbors', 'feature_mean_all_ML_boot_raxml_neighbors_binary', 'feature_mean_neighbor_brlen', 'feature_min_neighbor_brlen', 'feature_partition_branch', 'feature_partition_branch_vs_mean', 'feature_partition_size', 'feature_partition_size_ratio', 'feature_partition_divergence', 'feature_divergence_ratio', 'feature_min_ll_diff', 'feature_max_ll_diff', 'feature_min_ll_diff_norm', 'feature_max_ll_diff_norm', 'feature_msa_n_seq', 'feature_msa_n_loci', 'feature_msa_constant_sites_pct', 'feature_msa_n_unique_sites', 'feature_msa_pypythia_msa_difficulty']
+INFO:root:Evaluating full standard model- including nni feautres, number of features is 25
+INFO:root:Training ML model
+INFO:root:Building a final_model model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/raxml/final_model/full_model/model_stadard
+INFO:root:Number of features after feature selection: 25 out of 25
+INFO:root:Generating calibrated model for classification model
+INFO:root:Evaluating model performance
