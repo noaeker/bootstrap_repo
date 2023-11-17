@@ -6,12 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="c7df0e90-f129-4c06-bac2-5459d2cc3269" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ML_pipeline/ML.log" beforeDir="false" afterPath="$PROJECT_DIR$/ML_pipeline/ML.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ML_pipeline/ML_boot_edit.py" beforeDir="false" afterPath="$PROJECT_DIR$/ML_pipeline/ML_boot_edit.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ML_utils/ML_algorithms_and_hueristics.py" beforeDir="false" afterPath="$PROJECT_DIR$/ML_utils/ML_algorithms_and_hueristics.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/programs/raxml.py" beforeDir="false" afterPath="$PROJECT_DIR$/programs/raxml.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/simulation_edit/bootstrap_edit.py" beforeDir="false" afterPath="$PROJECT_DIR$/simulation_edit/bootstrap_edit.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/simulations_generation/simulations.py" beforeDir="false" afterPath="$PROJECT_DIR$/simulations_generation/simulations.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/simulation_edit/parallel_boot_edit.py" beforeDir="false" afterPath="$PROJECT_DIR$/simulation_edit/parallel_boot_edit.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -30,20 +25,20 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/simulation_edit/parallel_boot_edit.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="138">
-              <caret line="59" column="17" selection-start-line="59" selection-start-column="17" selection-end-line="59" selection-end-column="17" />
+            <state relative-caret-position="359">
+              <caret line="73" column="73" selection-start-line="73" selection-start-column="73" selection-end-line="73" selection-end-column="73" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/simulation_edit/bootstrap_edit.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1412">
-              <caret line="425" column="81" selection-start-line="425" selection-start-column="81" selection-end-line="425" selection-end-column="81" />
+            <state relative-caret-position="290">
+              <caret line="328" column="123" lean-forward="true" selection-start-line="328" selection-start-column="123" selection-end-line="328" selection-end-column="123" />
             </state>
           </provider>
         </entry>
@@ -131,7 +126,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>obtain_tree_sim_dict</find>
       <find>model_pipeline</find>
       <find>bootstrap_model_pipeline</find>
       <find>standard_model_pipeline</find>
@@ -149,7 +143,6 @@
       <find>full_data</find>
       <find>cv</find>
       <find>sample</find>
-      <find>model</find>
       <find>do_RFE</find>
       <find>transform_data</find>
       <find>transform</find>
@@ -161,6 +154,8 @@
       <find>get_nni_statistics</find>
       <find>.samp</find>
       <find>msa_path_edit_analysis</find>
+      <find>tree_search_model</find>
+      <find>model</find>
     </findStrings>
     <replaceStrings>
       <replace>job_data_path</replace>
@@ -181,7 +176,6 @@
         <option value="$PROJECT_DIR$/simulation_edit/simulations_argparser.py" />
         <option value="$PROJECT_DIR$/side_code/config.py" />
         <option value="$PROJECT_DIR$/ML/ML_boot_edit.py" />
-        <option value="$PROJECT_DIR$/simulation_edit/parallel_boot_edit.py" />
         <option value="$PROJECT_DIR$/side_code/combine_current_results.py" />
         <option value="$PROJECT_DIR$/side_code/IQTREE.py" />
         <option value="$PROJECT_DIR$/side_code/spr_prune_and_regraft.py" />
@@ -208,6 +202,7 @@
         <option value="$PROJECT_DIR$/programs/raxml.py" />
         <option value="$PROJECT_DIR$/simulations_generation/simulations.py" />
         <option value="$PROJECT_DIR$/simulation_edit/bootstrap_edit.py" />
+        <option value="$PROJECT_DIR$/simulation_edit/parallel_boot_edit.py" />
       </list>
     </option>
   </component>
@@ -432,6 +427,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="25" width="1440" height="800" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24665257" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -841,17 +837,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/simulation_edit/bootstrap_edit.py">
+    <entry file="file://$PROJECT_DIR$/simulation_edit/parallel_boot_edit.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1412">
-          <caret line="425" column="81" selection-start-line="425" selection-start-column="81" selection-end-line="425" selection-end-column="81" />
+        <state relative-caret-position="359">
+          <caret line="73" column="73" selection-start-line="73" selection-start-column="73" selection-end-line="73" selection-end-column="73" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/simulation_edit/parallel_boot_edit.py">
+    <entry file="file://$PROJECT_DIR$/simulation_edit/bootstrap_edit.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="138">
-          <caret line="59" column="17" selection-start-line="59" selection-start-column="17" selection-end-line="59" selection-end-column="17" />
+        <state relative-caret-position="290">
+          <caret line="328" column="123" lean-forward="true" selection-start-line="328" selection-start-column="123" selection-end-line="328" selection-end-column="123" />
         </state>
       </provider>
     </entry>

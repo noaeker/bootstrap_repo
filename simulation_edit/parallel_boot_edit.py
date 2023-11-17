@@ -70,6 +70,10 @@ def main():
     raw_data_raxml["program"] = 'raxml'
     raw_data_iqtree["program"] = 'iqtree'
     raw_data_fasttree["program"] = 'fasttree'
+    if 'tree_search_model' not in raw_data_raxml.columns:
+        raw_data_raxml['tree_search_model'] = raw_data_raxml['model_short']
+
+
 
 
     raw_data = pd.concat([raw_data_fasttree, raw_data_iqtree, raw_data_raxml])
