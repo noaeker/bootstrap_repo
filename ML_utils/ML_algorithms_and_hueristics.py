@@ -77,7 +77,7 @@ def ML_model(X_train, groups, y_train, n_jobs, path, classifier=False, model='li
         group_splitter = list(GroupKFold(n_splits=n_cv_folds).split(X_train, y_train.ravel(), groups=groups))
         if classifier:
             if model=='lightgbm':
-                model =lightgbm.LGBMClassifier(importance_type='gain')#importance_type='gain'
+                model =lightgbm.LGBMClassifier(importance_type='gain',metric='binary_logloss')#importance_type='gain'
                 param_grid = LIGHTGBM_CLASSIFICATION_PARAM_GRID
                 if large_grid:
                     param_grid.update(GENERAL_PARAM_GRID)

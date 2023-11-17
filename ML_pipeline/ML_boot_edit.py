@@ -86,13 +86,13 @@ def bootstrap_model_pipeline(working_dir,train,test,validation_dict,features,boo
                                path=os.path.join(working_dir, f'model_only_boot'),
                                classifier=True, model='lightgbm', calibrate=True, name=name,
                                large_grid=large_grid, do_RFE=do_RFE,
-                               n_cv_folds=5)
+                               n_cv_folds=3)
     model_inc_boot = ML_model(inc_boot_dict["train"]["X"], groups, inc_boot_dict["train"]["y"], n_jobs=cpus_per_main_job,
                               path=os.path.join(working_dir, f'model_inc_boot'
                               f''),
                               classifier=True, model='lightgbm', calibrate=True, name=name, large_grid=large_grid,
                               do_RFE=do_RFE,
-                              n_cv_folds=5)
+                              n_cv_folds=3)
 
     raw_boot_performance,groups_data_raw_boot = overall_model_performance_analysis(working_dir, None, only_boot_dict,
                                                               name="raw_only_boot",extract_predictions = False)
@@ -136,7 +136,7 @@ def ML_pipeline(program_data, bootstrap_cols, cpus_per_main_job, working_dir, sa
     groups = train["tree_id"]
     logging.info(f"Number of different trees is {len(program_data['tree_id'].unique())}")
     full_features = [col for col in program_data.columns if
-                'feature' in col and 'msa_entropy' not in col and col not in bootstrap_cols and 'column_variance' not in col]  # +['partition_branch_vs_mean','partition_branch','partition_size','partition_size_ratio','partition_divergence','divergence_ratio']
+                'feature' in col and 'msa_entropy' not in col and col not in bootstrap_cols and 'column_variance' not in col]# +['partition_branch_vs_mean','partition_branch','partition_size','partition_size_ratio','partition_divergence','divergence_ratio']
     logging.info(f"Full features are: {full_features}")
     logging.info(f"Evaluating full standard model- including nni feautres, number of features is {len(full_features)}")
     full_model_working_dir = os.path.join(working_dir,'full_model')
@@ -172,11 +172,42 @@ def ML_pipeline(program_data, bootstrap_cols, cpus_per_main_job, working_dir, sa
 
 
 
+def get_n_free_parameters(x):
+    if x=='GTR':
+        n = 8
+    elif x=='K80':
+        n=2
+    elif x=='JC':
+        n = 1
+    elif x=='HKY':
+        n=2
+    elif x=='TVM':
+        n = 7
+    elif x=='SYM':
+        n = 5
+    elif x=='F81':
+        n = 3
+    elif x=='TIM':
+        n = 6
+    elif x=='F84':
+        n = 4
+    elif x=='TPM3':
+        n = 3
+    else:
+        n=-1
+    return n
 
 def transform_data(df):
     df['true_binary_support'] = df['true_support'] == 1
     df['feature_msa_n_seq'] = df['feature_n_unique_seq']
     df.drop(columns = ['feature_n_unique_seq'], inplace= True)
+    df['feature_G'] = df['model_short'].str.contains('+G', regex = False)
+    df['feature_I'] = df['model_short'].str.contains('+I',regex = False)
+    df['feature_F'] = df['model_short'].str.contains('+F',regex = False)
+    df['model_short'] = df['model_short'].apply(lambda x: x.split('+')[0])
+    df['feature_free_parameters'] = df['model_short'].apply(lambda x: get_n_free_parameters(x))
+    #df = pd.get_dummies(df,prefix='feature_model_',columns=['model_short']) #
+    return df
     #+[col for col in df.columns if 'msa_entropy' in col]
 
 def main():
@@ -206,8 +237,8 @@ def main():
                                                                 name=f'simulations_df_{program}', n_jobs=1000)
         else:
             logging.info(f"Using existing training data in {training_data_path} ")
-            program_data = pd.read_csv(training_data_path,sep='\t')#.sample(frac = 0.1)
-        transform_data(program_data)
+            program_data = pd.read_csv(training_data_path,sep='\t')
+        program_data=transform_data(program_data)
         validation_data_path = os.path.join(args.validation_data_folder, f'simulations_df_{program}.tsv')
         if args.reunite_val_data or not os.path.exists(validation_data_path):
             logging.info(f"Re-uniting validation data and saving to {validation_data_path}")
@@ -218,8 +249,9 @@ def main():
             program_validation_data = pd.read_csv(validation_data_path, sep='\t')
         if args.sample_val:
             program_validation_data = program_validation_data[program_validation_data['true_tree_path'].str.contains("iqtree_msa_0")]
+            program_validation_data['model_short']= program_validation_data["tree_search_model"]
 
-        transform_data(program_validation_data)
+        program_validation_data = transform_data(program_validation_data)
         working_dir = os.path.join(args.working_dir, program)
         create_dir_if_not_exists(working_dir)
         bootstrap_cols = get_bootstrap_col(program)

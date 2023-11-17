@@ -15,7 +15,7 @@ from programs.IQTREE import iqtree_pipeline
 from simulations_generation.simulations_argparser import  job_parser
 from simulations_generation.msa_features import get_msa_stats
 from side_code.MSA_manipulation import get_MSA_seq_names
-from simulation_edit.bootstrap_edit import msa_path_bootstrap_analysis
+from simulation_edit.bootstrap_edit import msa_path_edit_analysis
 from side_code.file_handling import create_dir_if_not_exists, create_or_clean_dir
 from programs.raxml_grove import RAxML_grove_tree_simulation
 import pandas as pd
@@ -66,28 +66,22 @@ def obtain_tree_search_bootstrap_results(msa_path, tree_sim_dict, curr_run_dir, 
 
 
 def add_features_to_data(msa_path,msa_dir,boot_tree_raxml_metrics,boot_tree_iqtree_metrics,boot_tree_fasttree_metrics,tree_sim_dict):
-        curr_boot_tree_raxml_df, raxml_feature_running_time, raxml_ll_eval_running_time = msa_path_bootstrap_analysis(msa_path,msa_dir, mle_path=
+        curr_boot_tree_raxml_df = msa_path_edit_analysis(msa_path, msa_dir, mle_path=
         boot_tree_raxml_metrics['final_tree_topology_path'], true_tree_path=tree_sim_dict['true_tree_path'],
-                                                                                          program='raxml',
-                                                                                          bootstrap_tree_details_dict=boot_tree_raxml_metrics,
-                                                                                          n_pars=100)
-        curr_boot_tree_raxml_df["extraction_running_time"] = raxml_feature_running_time
-        curr_boot_tree_raxml_df["nni_ll_eval_running_time"] = raxml_ll_eval_running_time
+                                                                                                                 program='raxml',
+                                                                                                                 bootstrap_tree_details_dict=boot_tree_raxml_metrics,
+                                                                                                                 n_pars=100)
 
-        curr_boot_tree_iqtree_df, iqtree_feature_running_time,iqtree_ll_eval_running_time = msa_path_bootstrap_analysis(msa_path,msa_dir, mle_path=
+        curr_boot_tree_iqtree_df = msa_path_edit_analysis(msa_path, msa_dir, mle_path=
         boot_tree_iqtree_metrics['final_tree_ultrafast'], true_tree_path=tree_sim_dict['true_tree_path'],
-                                                                                            program='iqtree',
-                                                                                            bootstrap_tree_details_dict=boot_tree_iqtree_metrics,
-                                                                                            n_pars=100)
-        curr_boot_tree_iqtree_df["extraction_running_time"] = iqtree_feature_running_time
-        curr_boot_tree_iqtree_df["nni_ll_eval_running_time"] = iqtree_ll_eval_running_time
-        curr_boot_tree_fasttree_df, fasttree_feature_running_time,fasttree_ll_eval_running_time = msa_path_bootstrap_analysis(msa_path,msa_dir, mle_path=
+                                                                                                                   program='iqtree',
+                                                                                                                   bootstrap_tree_details_dict=boot_tree_iqtree_metrics,
+                                                                                                                   n_pars=100)
+        curr_boot_tree_fasttree_df = msa_path_edit_analysis(msa_path, msa_dir, mle_path=
         boot_tree_fasttree_metrics['sh_bootstrap'], true_tree_path=tree_sim_dict['true_tree_path'],
-                                                                                                program='fasttree',
-                                                                                                bootstrap_tree_details_dict=boot_tree_fasttree_metrics,
-                                                                                                n_pars=100)
-        curr_boot_tree_fasttree_df["extraction_running_time"] = fasttree_feature_running_time
-        curr_boot_tree_fasttree_df["nni_ll_eval_running_time"] = fasttree_ll_eval_running_time
+                                                                                                                         program='fasttree',
+                                                                                                                         bootstrap_tree_details_dict=boot_tree_fasttree_metrics,
+                                                                                                                         n_pars=100)
         return curr_boot_tree_raxml_df, curr_boot_tree_iqtree_df, curr_boot_tree_fasttree_df
 
 

@@ -318,7 +318,7 @@ def standard_raxml_search(curr_run_directory, msa_path, prefix,model,n_pars, n_r
 
 
 def raxml_optimize_trees_for_given_msa(full_data_path, ll_on_data_prefix, tree_file,
-                                       curr_run_directory, model, opt_model_and_brlen=True,n_cpus = 1, n_workers = 'auto'
+                                       curr_run_directory, model, opt_model_and_brlen=True,n_cpus = 1, n_workers = 'auto', return_opt_tree = False
                                        ):
     curr_run_directory = os.path.join(curr_run_directory, ll_on_data_prefix)
     if os.path.exists(curr_run_directory):
@@ -332,13 +332,16 @@ def raxml_optimize_trees_for_given_msa(full_data_path, ll_on_data_prefix, tree_f
         raxml_exe_path=RAXML_NG_EXE, msa_path=full_data_path, tree_file=tree_file, seed=SEED,
         prefix=prefix, brlen_command=brlen_command, model=model, n_cpus = n_cpus, n_workers = n_workers)
     #optimized_trees_path = prefix + ".raxml.mlTrees"
-    #best_tree_path = prefix + ".raxml.bestTree"
+    best_tree_path = prefix + ".raxml.bestTree"
     raxml_log_file = prefix + ".raxml.log"
     execute_command_and_write_to_log(compute_ll_run_command)
     trees_ll_on_data = extract_param_from_raxmlNG_log(raxml_log_file, "ll")
     #tree_alpha = extract_param_from_raxmlNG_log(raxml_log_file, "alpha")
     #optimized_trees_final_path = optimized_trees_path if os.path.exists(optimized_trees_path) else best_tree_path
-    return trees_ll_on_data#, tree_alpha, optimized_trees_final_path
+    if return_opt_tree:
+        return trees_ll_on_data,best_tree_path
+    else:
+        return trees_ll_on_data#, tree_alpha, optimized_trees_final_path
 
 def raxml_extract_sitelh(sitelh_file):
     logging.debug("Extracting sitelh from sitelh_file in {}".format(sitelh_file))

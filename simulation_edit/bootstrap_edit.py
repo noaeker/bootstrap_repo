@@ -14,9 +14,9 @@ from side_code.basic_trees_manipulation import *
 from side_code.MSA_manipulation import bootstrap_MSA,get_MSA_seq_names, add_unique_seq
 from side_code.spr_prune_and_regraft import *
 from side_code.file_handling import *
-from programs.raxml import raxml_compute_tree_per_site_ll, generate_n_tree_topologies,remove_redundant_sequences
+from programs.raxml import raxml_compute_tree_per_site_ll, generate_n_tree_topologies,remove_redundant_sequences,raxml_optimize_trees_for_given_msa
 from side_code.code_submission import execute_command_and_write_to_log
-
+from math import exp
 
 
 
@@ -156,6 +156,7 @@ def generate_partition_statistics(node, mle_tree_obj, extra_tree_groups, extra_b
         node_cp = mle_tree_ete_cp & node.name
         removed_node = node_cp.detach()
         mean_bl = np.mean(get_branch_lengths(mle_tree_obj))
+        var_bl = np.var(get_branch_lengths(mle_tree_obj))
         remaining_tree = mle_tree_ete_cp
         min_partition_divergence = min(get_tree_divergence(removed_node), get_tree_divergence(remaining_tree))
         divergence_ratio = min_partition_divergence/total_tree_divergence
@@ -164,7 +165,7 @@ def generate_partition_statistics(node, mle_tree_obj, extra_tree_groups, extra_b
         neighboring_nodes= get_neighboring_nodes(mle_tree_obj, node.name)
         childs_brlen = [c_node.dist for c_node in neighboring_nodes]
 
-        statistics.update({'feature_mean_neighbor_brlen': np.mean(childs_brlen),'feature_min_neighbor_brlen': np.min(childs_brlen),'feature_partition_branch': node.dist,'feature_partition_branch_vs_mean': node.dist/mean_bl,'bootstrap_support': node.support, 'true_support': true_support, 'true_binary_support': true_binary_support, 'feature_partition_size': min_partition_size,'feature_partition_size_ratio': partition_size_ratio,
+        statistics.update({'feature_mean_bl': mean_bl,'feature_var_bl': var_bl,'feature_mean_neighbor_brlen': np.mean(childs_brlen),'feature_min_neighbor_brlen': np.min(childs_brlen),'feature_partition_branch': node.dist,'feature_partition_branch_vs_mean': node.dist/mean_bl,'bootstrap_support': node.support, 'true_support': true_support, 'true_binary_support': true_binary_support, 'feature_partition_size': min_partition_size,'feature_partition_size_ratio': partition_size_ratio,
                     'feature_partition_divergence': min_partition_divergence, 'feature_divergence_ratio': divergence_ratio})
         for b_method in extra_boot_ete:
             statistics.update({f'feature_{b_method}_support':(extra_boot_ete[b_method]&node.name).support})
@@ -283,14 +284,56 @@ def get_pruned_tree_and_msa(curr_run_dir, msa_path, model,mle_tree_ete):
 #model=bootstrap_tree_details_dict["model_short"]
 
 
-def msa_path_bootstrap_analysis(msa_path,curr_run_dir, mle_path, true_tree_path, program, bootstrap_tree_details_dict, n_pars):
+
+
+def get_nni_statistics(orig_tree_ll, orig_tree_mean_bl,nni_neighbors,neighbors_tmp_path,curr_run_dir, msa_path,bootstrap_tree_details_dict,garbage_dir, opt  = False, simple_model = False):
+    st_ll = time.time()
+    all_neig_ll = []
+    mean_branch_lengths = []
+    for neighbor in nni_neighbors:
+        neighbor.write(format=1, outfile=neighbors_tmp_path)
+        neighbor = Tree(neighbors_tmp_path, format=1)
+        if simple_model:
+            model = 'JC'
+        else:
+            model = bootstrap_tree_details_dict["tree_search_model"]
+        curr_pruned_tree_path, curr_pruned_msa_path = get_pruned_tree_and_msa(curr_run_dir, msa_path,
+                                                                              bootstrap_tree_details_dict[
+                                                                                  "tree_search_model"], neighbor)
+        neighbor_ll, optimized_tree = raxml_optimize_trees_for_given_msa(curr_pruned_msa_path,  ll_on_data_prefix="nni_neighbors", tree_file=curr_pruned_tree_path,
+                                       curr_run_directory = garbage_dir, model = model, opt_model_and_brlen=opt,n_cpus = 1, n_workers = 'auto', return_opt_tree = True
+                                       )
+
+        all_neig_ll.append(neighbor_ll)
+        if opt:
+            mle_tree_ete = Tree(optimized_tree, format=1)
+            mean_branch_length = np.mean(get_branch_lengths( mle_tree_ete))
+            mean_branch_lengths.append(mean_branch_length )
+
+    end_ll = time.time()
+    neig_ll_evaluation_time = end_ll - st_ll
+    min_ll_diff = orig_tree_ll - np.max(all_neig_ll)
+    max_ll_diff = orig_tree_ll - np.min(all_neig_ll)
+
+    abayes_metric = (orig_tree_ll) / (((orig_tree_ll) + (all_neig_ll[0]) + (all_neig_ll[1])) / 3)
+    name = f"opt={opt}_model_{simple_model}"
+    nni_statistics = {f'total_time_{name}': neig_ll_evaluation_time,
+        f'feaure_abayes_{name}': abayes_metric, f'orig_tree_ll_{name}': orig_tree_ll, f'feature_min_ll_diff_{name}': min_ll_diff, f'feature_max_ll_diff_{name}': max_ll_diff,
+}
+    if opt:
+        nni_statistics.update({f'feature_min_mean_branch_length_{name}': orig_tree_mean_bl-np.min(mean_branch_lengths), f'feature_max_mean_branch_length_{name}': orig_tree_mean_bl-np.max(mean_branch_lengths)})
+
+    return nni_statistics, neig_ll_evaluation_time
+
+
+def msa_path_edit_analysis(msa_path, curr_run_dir, mle_path, true_tree_path, program, bootstrap_tree_details_dict, n_pars):
 
     msa_splits = pd.DataFrame()
     mle_tree_ete = Tree(mle_path, format=0)
     add_internal_names(mle_tree_ete)
     mle_with_internal_path = os.path.join(curr_run_dir, "mle_with_internal.nw")
     mle_tree_ete.write(outfile=mle_with_internal_path, format=1)
-
+    mean_branch_length_orig = np.mean(get_branch_lengths(mle_tree_ete))
 
     garbage_dir = os.path.join(curr_run_dir, 'garbage')
     create_dir_if_not_exists(garbage_dir)
@@ -309,11 +352,21 @@ def msa_path_bootstrap_analysis(msa_path,curr_run_dir, mle_path, true_tree_path,
 
     curr_pruned_tree_path, curr_pruned_msa_path = get_pruned_tree_and_msa(curr_run_dir, msa_path, bootstrap_tree_details_dict["tree_search_model"],mle_tree_ete)
 
-    neig_ll_evaluation_time = 0
-    per_site_original_tree_ll = np.array(
-        raxml_compute_tree_per_site_ll(garbage_dir, curr_pruned_msa_path, curr_pruned_tree_path, ll_on_data_prefix="orig_tree_ll",
-                                       model=bootstrap_tree_details_dict["tree_search_model"], opt=True))
 
+    orig_tree_ll = raxml_optimize_trees_for_given_msa(curr_pruned_msa_path,  ll_on_data_prefix="orig_tree_ll", tree_file=curr_pruned_tree_path,
+                                       curr_run_directory = garbage_dir, model = bootstrap_tree_details_dict["tree_search_model"], opt_model_and_brlen=True,n_cpus = 1, n_workers = 'auto', return_opt_tree = False
+                                       )
+    orig_tree_ll_JC = raxml_optimize_trees_for_given_msa(curr_pruned_msa_path, ll_on_data_prefix="orig_tree_ll",
+                                                      tree_file=curr_pruned_tree_path,
+                                                      curr_run_directory=garbage_dir,
+                                                      model="JC",
+                                                      opt_model_and_brlen=True, n_cpus=1, n_workers='auto',
+                                                      return_opt_tree=False
+                                                      )
+
+    total_neig_ll_evaluation_time_no_opt = 0
+    total_neig_ll_evaluation_time_opt = 0
+    total_neig_ll_evaluation_time_opt_JC = 0
     for node in mle_tree_ete.iter_descendants():
 
         if not node.is_leaf():
@@ -322,39 +375,28 @@ def msa_path_bootstrap_analysis(msa_path,curr_run_dir, mle_path, true_tree_path,
                                                        )
             statistics["feature_n_unique_seq"] = len(get_MSA_seq_names(curr_pruned_msa_path))
             nni_neighbors = get_nni_neighbors(mle_with_internal_path, node.name)
-            neighbors_per_site_ll = []
-            st_ll = time.time()
-            for neighbor in nni_neighbors:
-                neighbor.write(format=1, outfile=neighbors_tmp_path)
-                neighbor = Tree(neighbors_tmp_path, format=1)
-                curr_pruned_tree_path, curr_pruned_msa_path = get_pruned_tree_and_msa(curr_run_dir, msa_path,
-                                                                                      bootstrap_tree_details_dict[
-                                                                                          "tree_search_model"], neighbor)
-
-                neighbor_ll = raxml_compute_tree_per_site_ll(garbage_dir, curr_pruned_msa_path, curr_pruned_tree_path, ll_on_data_prefix = "nni_neighbors", model = bootstrap_tree_details_dict["tree_search_model"], opt = True)
-
-                neighbors_per_site_ll.append(np.array(neighbor_ll))
-
-            end_ll = time.time()
-            statistics["partition_ll_eval_time_test"] = end_ll-st_ll
-            neig_ll_evaluation_time += end_ll - st_ll
-            orig_tree_ll = np.sum(per_site_original_tree_ll)
-            nei1_ll = np.sum(neighbors_per_site_ll[0])
-            nei2_ll = np.sum(neighbors_per_site_ll[1])
-            min_ll_diff = orig_tree_ll-max(nei1_ll,nei2_ll)
-            max_ll_diff = orig_tree_ll-min(nei1_ll,nei2_ll)
-            column_variance = np.mean([np.var(neighbors_per_site_ll[0]-per_site_original_tree_ll),np.var(neighbors_per_site_ll[1]-per_site_original_tree_ll)])
-
-            nni_statistics = {'feature_min_ll_diff': min_ll_diff, 'feature_max_ll_diff': max_ll_diff, 'feature_column_variance': column_variance,
-                              'feature_min_ll_diff_norm': min_ll_diff/orig_tree_ll,'feature_max_ll_diff_norm': min_ll_diff/orig_tree_ll,'feature_column_variance_norm': column_variance/np.mean(per_site_original_tree_ll)
-                              }
-            statistics.update(nni_statistics)
+            nni_statistics_no_opt,neig_ll_evaluation_time_no_opt = get_nni_statistics(orig_tree_ll,mean_branch_length_orig,nni_neighbors,neighbors_tmp_path,curr_run_dir, msa_path,bootstrap_tree_details_dict,garbage_dir, opt  = False)
+            total_neig_ll_evaluation_time_no_opt+=neig_ll_evaluation_time_no_opt
+            nni_statistics_opt,neig_ll_evaluation_time_opt = get_nni_statistics(orig_tree_ll,mean_branch_length_orig,nni_neighbors, neighbors_tmp_path, curr_run_dir,
+                                                       msa_path, bootstrap_tree_details_dict, garbage_dir, opt=True)
+            total_neig_ll_evaluation_time_opt+=neig_ll_evaluation_time_opt
+            nni_statistics_JC,neig_ll_evaluation_time_jc = get_nni_statistics(orig_tree_ll_JC, mean_branch_length_orig, nni_neighbors,
+                                                    neighbors_tmp_path, curr_run_dir,
+                                                    msa_path, bootstrap_tree_details_dict, garbage_dir, opt=True, simple_model= True)
+            total_neig_ll_evaluation_time_opt_JC += neig_ll_evaluation_time_jc
+            statistics.update(nni_statistics_no_opt)
+            statistics.update(nni_statistics_opt)
+            statistics.update(nni_statistics_JC)
             statistics.update(bootstrap_tree_details_dict)
             msa_splits = msa_splits.append(statistics, ignore_index=True)
             create_or_clean_dir(garbage_dir)
 
-    logging.info(f"Feature extraction time = {feature_extraction_time} total neig evaluation time = {neig_ll_evaluation_time}")
-    return msa_splits, feature_extraction_time, neig_ll_evaluation_time
+    logging.info(f"Feature extraction time = {feature_extraction_time} ")
+    running_time_dict = {'extraction_of_features_time':feature_extraction_time,'total_neig_ll_evaluation_time_no_opt':total_neig_ll_evaluation_time_no_opt,'total_neig_ll_evaluation_time_opt':total_neig_ll_evaluation_time_opt,'total_neig_ll_evaluation_time_opt_JC':total_neig_ll_evaluation_time_opt_JC}
+    for col in running_time_dict:
+        msa_splits[col] = running_time_dict[col]
+
+    return msa_splits
 
 
 def main():
@@ -373,12 +415,17 @@ def main():
                 bootstrap_tree_details = tree_program_data.loc[tree_program_data.msa_path == msa_path].head(1).squeeze()
 
                 mle_path =  bootstrap_tree_details[get_program_default_ML_tree(program)]
-                msa_splits,feature_extraction_time,neig_ll_evaluation_time = msa_path_bootstrap_analysis(msa_path,args.job_work_path,mle_path,true_tree_path,program,bootstrap_tree_details.to_dict(), args.n_pars)
+                msa_splits = msa_path_edit_analysis(msa_path, args.job_work_path, mle_path, true_tree_path, program, bootstrap_tree_details.to_dict(), args.n_pars)
                 all_splits = pd.concat([all_splits, msa_splits])
                 all_splits.to_csv(args.job_final_output_path, sep='\t')
+        raxml_data = all_splits.loc[all_splits.program=='raxml']
+        raxml_data.to_csv(os.path.join(args.job_work_path,'simulations_df_raxml.tsv'), sep='\t')
+        iqtree_data = all_splits.loc[all_splits.program == 'iqtree']
+        iqtree_data.to_csv(os.path.join(args.job_work_path,'simulations_df_iqree.tsv'), sep='\t')
+        fasttree_data = all_splits.loc[all_splits.program == 'fasttree']
+        fasttree_data.to_csv(os.path.join(args.job_work_path,'simulations_df_fasttree.tsv'), sep='\t')
 
-            # sns.scatterplot(data=total_data, x='parsimony_support', y='Support',  s=30, alpha=0.6)
-            # plt.show()
+
 
 
 if __name__ == "__main__":
