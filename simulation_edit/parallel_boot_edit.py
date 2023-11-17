@@ -72,6 +72,8 @@ def main():
     raw_data_fasttree["program"] = 'fasttree'
     if 'tree_search_model' not in raw_data_raxml.columns:
         raw_data_raxml['tree_search_model'] = raw_data_raxml['model_short']
+        raw_data_iqtree['tree_search_model'] = raw_data_iqtree['model_short']
+        raw_data_fasttree['tree_search_model'] = raw_data_fasttree['model_short']
 
 
 
