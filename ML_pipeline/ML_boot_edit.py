@@ -204,6 +204,8 @@ def transform_data(df):
     df['feature_G'] = df['model_short'].str.contains('+G', regex = False)
     df['feature_I'] = df['model_short'].str.contains('+I',regex = False)
     df['feature_F'] = df['model_short'].str.contains('+F',regex = False)
+    if 'model_short' not in df.columns:
+        df['model_short'] = df['tree_search_model']
     df['model_short'] = df['model_short'].apply(lambda x: x.split('+')[0])
     df['feature_free_parameters'] = df['model_short'].apply(lambda x: get_n_free_parameters(x))
     #df = pd.get_dummies(df,prefix='feature_model_',columns=['model_short']) #
@@ -229,6 +231,7 @@ def main():
     args = parser.parse_args()
     log_file_path = os.path.join(args.working_dir, "ML.log")
     logging.basicConfig(filename=log_file_path, level=logging.INFO)
+    create_or_clean_dir(args.working_dir)
     for program in args.programs.split('_'):
         logging.info(f"Program = {program}")
         training_data_path= os.path.join(args.main_data_folder,f'simulations_df_{program}.tsv')
@@ -240,19 +243,19 @@ def main():
             logging.info(f"Using existing training data in {training_data_path} ")
             program_data = pd.read_csv(training_data_path,sep='\t')
         program_data=transform_data(program_data)
+        validation_dict = {}
         validation_data_path = os.path.join(args.validation_data_folder, f'simulations_df_{program}.tsv')
-        if args.use_val_data and (args.reunite_val_data or not os.path.exists(validation_data_path)):
-            logging.info(f"Re-uniting validation data and saving to {validation_data_path}")
-            program_validation_data = unify_results_across_jobs(args.validation_data_folder, name =f'simulations_df_{program}' , n_jobs = 1000)
-        else:
-
-            logging.info("Using existing validation data")
-            program_validation_data = pd.read_csv(validation_data_path, sep='\t')
-        if args.sample_val:
-            program_validation_data = program_validation_data[program_validation_data['true_tree_path'].str.contains("iqtree_msa_0")]
-            program_validation_data['model_short']= program_validation_data["tree_search_model"]
-
-        program_validation_data = transform_data(program_validation_data)
+        if args.use_val_data:
+            logging.info("Using validation data")
+            if (args.reunite_val_data or not os.path.exists(validation_data_path)):
+                logging.info(f"Re-uniting validation data and saving to {validation_data_path}")
+                program_validation_data = unify_results_across_jobs(args.validation_data_folder, name =f'simulations_df_{program}' , n_jobs = 1000)
+            else:
+                logging.info("Using existing validation data")
+                program_validation_data = pd.read_csv(validation_data_path, sep='\t')
+            program_validation_data = transform_data(program_validation_data)
+            for model_mode in np.unique(program_validation_data["model_mode"]):
+                validation_dict[f'val_{model_mode}'] = program_validation_data.loc[program_validation_data.model_mode==model_mode].copy()
         working_dir = os.path.join(args.working_dir, program)
         create_dir_if_not_exists(working_dir)
         bootstrap_cols = get_bootstrap_col(program)
@@ -260,10 +263,6 @@ def main():
         program_data = program_data.dropna(axis=0)
         sample_fracs = [float(frac) for frac in (args.sample_fracs).split('_')]
         all_model_merics = pd.DataFrame()
-        validation_dict = {}
-        if args.use_val_data:
-            for model_mode in np.unique(program_validation_data["model_mode"]):
-                validation_dict[f'val_{model_mode}'] = program_validation_data.loc[program_validation_data.model_mode==model_mode].copy()
         if args.inc_sample_fracs:
             for sample_frac in sample_fracs:
                 logging.info(f"\n#Sample frac = {sample_frac}")
