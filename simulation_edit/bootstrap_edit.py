@@ -210,12 +210,12 @@ def get_bootstrap_and_tree_groups(program, bootstrap_tree_details,mle_path,garba
         parsimony_trees = trees_path.read().split("\n")[:-1]
     all_pars_ete = generate_booster_trees(mle_path, parsimony_trees, garbage_dir, tree_tmp_path)
     extra_tree_groups = {'parsimony_trees': all_pars_ete}
+    extra_boot = {}
     if program == 'raxml':
         all_mle_path = bootstrap_tree_details['all_final_tree_topologies_path']
         all_ML_nw = get_file_rows(all_mle_path)
         all_ML_ete = generate_booster_trees(mle_path, all_ML_nw, garbage_dir, tree_tmp_path)
         extra_tree_groups.update( {'all_ML_boot_raxml': all_ML_ete})
-        extra_boot = {}
     elif program == 'iqtree':
         final_tree_aLRT = bootstrap_tree_details['final_tree_aLRT']
         aLRT_ete = Tree(newick=final_tree_aLRT, format=0)
@@ -225,11 +225,12 @@ def get_bootstrap_and_tree_groups(program, bootstrap_tree_details,mle_path,garba
         add_internal_names(aBayes_ete)
         extra_boot = {'aLRT_iqtree': aLRT_ete, 'aBayes_iqtree': aBayes_ete}
     elif program == 'fasttree':
-            standard_bootstrap = bootstrap_tree_details['standard_bootstrap']
-            if os.path.exists(standard_bootstrap):
-                standard_ete = Tree(newick=standard_bootstrap, format=0)
-                add_internal_names(standard_ete)
-                extra_boot = {'standard_fasttree_boot': standard_ete}
+        standard_bootstrap = bootstrap_tree_details['standard_bootstrap']
+        if os.path.exists(standard_bootstrap):
+            standard_ete = Tree(newick=standard_bootstrap, format=0)
+            add_internal_names(standard_ete)
+            extra_boot = {'standard_fasttree_boot': standard_ete}
+
     return extra_boot, extra_tree_groups
 
 
