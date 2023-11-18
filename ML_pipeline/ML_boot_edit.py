@@ -241,7 +241,7 @@ def main():
             program_data = pd.read_csv(training_data_path,sep='\t')
         program_data=transform_data(program_data)
         validation_data_path = os.path.join(args.validation_data_folder, f'simulations_df_{program}.tsv')
-        if args.reunite_val_data or not os.path.exists(validation_data_path):
+        if args.use_val_data and (args.reunite_val_data or not os.path.exists(validation_data_path)):
             logging.info(f"Re-uniting validation data and saving to {validation_data_path}")
             program_validation_data = unify_results_across_jobs(args.validation_data_folder, name =f'simulations_df_{program}' , n_jobs = 1000)
         else:
