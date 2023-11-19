@@ -113,3 +113,91 @@ INFO:root:Building a final_model model and saving to /Users/noa/Workspace/bootst
 INFO:root:Number of features after feature selection: 25 out of 25
 INFO:root:Generating calibrated model for classification model
 INFO:root:Evaluating model performance
+INFO:root:Program = iqtree
+INFO:root:Using existing training data in /Users/noa/Workspace/bootstrap_results/remote_results/full_data/simulations_df_iqtree.tsv 
+INFO:root:Generating optimized final model
+INFO:root:Original number of trees in full data is 6094
+INFO:root:Partitioning MSAs according to number of sequences
+INFO:root:Number of MSAs in training data is 4683
+INFO:root:Number of MSAs in test data is 2007
+INFO:root:Number of different trees is 6094
+INFO:root:Full features are: ['feature_mean_parsimony_trees', 'feature_mean_parsimony_trees_binary', 'feature_mean_parsimony_trees_neighbors', 'feature_mean_parsimony_trees_neighbors_binary', 'feature_mean_neighbor_brlen', 'feature_min_neighbor_brlen', 'feature_partition_branch', 'feature_partition_branch_vs_mean', 'feature_partition_size', 'feature_partition_size_ratio', 'feature_partition_divergence', 'feature_divergence_ratio', 'feature_min_ll_diff', 'feature_max_ll_diff', 'feature_min_ll_diff_norm', 'feature_max_ll_diff_norm', 'feature_msa_n_seq', 'feature_msa_n_loci', 'feature_msa_constant_sites_pct', 'feature_msa_n_unique_sites', 'feature_msa_pypythia_msa_difficulty', 'feature_G', 'feature_I', 'feature_F', 'feature_free_parameters']
+INFO:root:Evaluating full standard model- including nni feautres, number of features is 25
+INFO:root:Training ML model
+INFO:root:Building a final_model model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/full_model/model_stadard
+INFO:root:Number of features after feature selection: 25 out of 25
+INFO:root:Generating calibrated model for classification model
+INFO:root:Evaluating model performance
+INFO:root:Model evaluation metrics {'tn_0.5': 134595, 'fp_0.5': 7327, 'fn_0.5': 5712, 'tp_0.5': 23722, 'mcc_0.5': 0.73864694309446, 'tn_0.95': 116364, 'fp_0.95': 25558, 'fn_0.95': 561, 'tp_0.95': 28873, 'mcc_0.95': 0.6488239322808764, 'AUC': 0.9681150974399366, 'logloss': 0.16892635269762096, 'average_precision': 0.9933526365778704, 'dataset': 'test', 'name': 'model_standard', 'metric_type': 'all_data'}
+INFO:root:Model evaluation metrics {'tn_0.5': 315960, 'fp_0.5': 16500, 'fn_0.5': 12713, 'tp_0.5': 55945, 'mcc_0.5': 0.7492164727512102, 'tn_0.95': 273147, 'fp_0.95': 59313, 'fn_0.95': 477, 'tp_0.95': 68181, 'mcc_0.95': 0.65896490868045, 'AUC': 0.9728656886250402, 'logloss': 0.15648194716411495, 'average_precision': 0.9945537413296814, 'dataset': 'train', 'name': 'model_standard', 'metric_type': 'all_data'}
+INFO:root:Evaluating fast standard model- no nni feautres, number of features is 25
+INFO:root:Training ML model
+INFO:root:Building a final_model model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/fast_model/model_stadard
+INFO:root:Number of features after feature selection: 25 out of 25
+INFO:root:Generating calibrated model for classification model
+INFO:root:Evaluating model performance
+INFO:root:Model evaluation metrics {'tn_0.5': 134595, 'fp_0.5': 7327, 'fn_0.5': 5712, 'tp_0.5': 23722, 'mcc_0.5': 0.73864694309446, 'tn_0.95': 116364, 'fp_0.95': 25558, 'fn_0.95': 561, 'tp_0.95': 28873, 'mcc_0.95': 0.6488239322808764, 'AUC': 0.9681150974399366, 'logloss': 0.168926352697621, 'average_precision': 0.9933526365778704, 'dataset': 'test', 'name': 'model_standard', 'metric_type': 'all_data'}
+INFO:root:Model evaluation metrics {'tn_0.5': 315960, 'fp_0.5': 16500, 'fn_0.5': 12713, 'tp_0.5': 55945, 'mcc_0.5': 0.7492164727512102, 'tn_0.95': 273147, 'fp_0.95': 59313, 'fn_0.95': 477, 'tp_0.95': 68181, 'mcc_0.95': 0.65896490868045, 'AUC': 0.9728656886250402, 'logloss': 0.15648194716411495, 'average_precision': 0.9945537413296814, 'dataset': 'train', 'name': 'model_standard', 'metric_type': 'all_data'}
+INFO:root:Comparing to bootstrap models
+INFO:root:Bootstrap col bootstrap_support
+INFO:root:Building a final_modelbootstrap_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/bootstrap_support/model_only_boot
+INFO:root:Number of features after feature selection: 2 out of 2
+INFO:root:Generating calibrated model for classification model
+INFO:root:Building a final_modelbootstrap_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/bootstrap_support/model_inc_boot
+INFO:root:Number of features after feature selection: 26 out of 26
+INFO:root:Generating calibrated model for classification model
+INFO:root:Model evaluation metrics {'tn_0.5': 141921, 'fp_0.5': 1, 'fn_0.5': 29216, 'tp_0.5': 218, 'mcc_0.5': 0.07811767916265619, 'tn_0.95': 141921, 'fp_0.95': 1, 'fn_0.95': 29216, 'tp_0.95': 218, 'mcc_0.95': 0.07811767916265619, 'AUC': 0.9330217849365996, 'logloss': 5.889159358111919, 'average_precision': 0.9802857495185502, 'dataset': 'test', 'name': 'raw_only_boot', 'metric_type': 'all_data'}
+INFO:root:Model evaluation metrics {'tn_0.5': 332458, 'fp_0.5': 2, 'fn_0.5': 68127, 'tp_0.5': 531, 'mcc_0.5': 0.07990422810782345, 'tn_0.95': 332458, 'fp_0.95': 2, 'fn_0.95': 68127, 'tp_0.95': 531, 'mcc_0.95': 0.07990422810782345, 'AUC': 0.9337417602238112, 'logloss': 5.866470143905277, 'average_precision': 0.9804913008982211, 'dataset': 'train', 'name': 'raw_only_boot', 'metric_type': 'all_data'}
+INFO:root:Model evaluation metrics {'tn_0.5': 135675, 'fp_0.5': 6247, 'fn_0.5': 9443, 'tp_0.5': 19991, 'mcc_0.5': 0.6652868896228797, 'tn_0.95': 101191, 'fp_0.95': 40731, 'fn_0.95': 1562, 'tp_0.95': 27872, 'mcc_0.95': 0.5080223374290229, 'AUC': 0.9329541494242702, 'logloss': 0.22638812832531655, 'average_precision': 0.9802428621226617, 'dataset': 'test', 'name': 'only_boot', 'metric_type': 'all_data'}
+INFO:root:Model evaluation metrics {'tn_0.5': 318039, 'fp_0.5': 14421, 'fn_0.5': 21597, 'tp_0.5': 47061, 'mcc_0.5': 0.6712942091787137, 'tn_0.95': 237474, 'fp_0.95': 94986, 'fn_0.95': 3680, 'tp_0.95': 64978, 'mcc_0.95': 0.5082268097289823, 'AUC': 0.9337686153872756, 'logloss': 0.22399146328164196, 'average_precision': 0.980465293609326, 'dataset': 'train', 'name': 'only_boot', 'metric_type': 'all_data'}
+INFO:root:Model evaluation metrics {'tn_0.5': 134498, 'fp_0.5': 7424, 'fn_0.5': 5432, 'tp_0.5': 24002, 'mcc_0.5': 0.7437969182310742, 'tn_0.95': 116546, 'fp_0.95': 25376, 'fn_0.95': 497, 'tp_0.95': 28937, 'mcc_0.95': 0.6520030227426281, 'AUC': 0.9691304537366656, 'logloss': 0.1661516198214501, 'average_precision': 0.9935923982895418, 'dataset': 'test', 'name': 'inc_boot', 'metric_type': 'all_data'}
+INFO:root:Model evaluation metrics {'tn_0.5': 315796, 'fp_0.5': 16664, 'fn_0.5': 12143, 'tp_0.5': 56515, 'mcc_0.5': 0.7538990097887883, 'tn_0.95': 273692, 'fp_0.95': 58768, 'fn_0.95': 451, 'tp_0.95': 68207, 'mcc_0.95': 0.6613190560701411, 'AUC': 0.9735668754461254, 'logloss': 0.15431504025047202, 'average_precision': 0.9946880793355648, 'dataset': 'train', 'name': 'inc_boot', 'metric_type': 'all_data'}
+INFO:root:Bootstrap col feature_aLRT_iqtree_support
+INFO:root:Building a final_modelfeature_aLRT_iqtree_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/feature_aLRT_iqtree_support/model_only_boot
+INFO:root:Number of features after feature selection: 2 out of 2
+INFO:root:Generating calibrated model for classification model
+INFO:root:Building a final_modelfeature_aLRT_iqtree_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/feature_aLRT_iqtree_support/model_inc_boot
+INFO:root:Number of features after feature selection: 26 out of 26
+INFO:root:Generating calibrated model for classification model
+INFO:root:Model evaluation metrics {'tn_0.5': 134747, 'fp_0.5': 7175, 'fn_0.5': 6861, 'tp_0.5': 22573, 'mcc_0.5': 0.7133451860353393, 'tn_0.95': 125852, 'fp_0.95': 16070, 'fn_0.95': 2629, 'tp_0.95': 26805, 'mcc_0.95': 0.6944350240494798, 'AUC': 0.9468836665032172, 'logloss': 0.4015620967262793, 'average_precision': 0.9848476018810183, 'dataset': 'test', 'name': 'raw_only_boot', 'metric_type': 'all_data'}
+INFO:root:Model evaluation metrics {'tn_0.5': 315724, 'fp_0.5': 16736, 'fn_0.5': 15775, 'tp_0.5': 52883, 'mcc_0.5': 0.7159477036505506, 'tn_0.95': 294889, 'fp_0.95': 37571, 'fn_0.95': 5799, 'tp_0.95': 62859, 'mcc_0.95': 0.6977279513086468, 'AUC': 0.9494607067317912, 'logloss': 0.37792485757452987, 'average_precision': 0.9859093595236232, 'dataset': 'train', 'name': 'raw_only_boot', 'metric_type': 'all_data'}
+INFO:root:Model evaluation metrics {'tn_0.5': 134975, 'fp_0.5': 6947, 'fn_0.5': 7114, 'tp_0.5': 22320, 'mcc_0.5': 0.7109600736762907, 'tn_0.95': 114272, 'fp_0.95': 27650, 'fn_0.95': 1196, 'tp_0.95': 28238, 'mcc_0.95': 0.6151207837411873, 'AUC': 0.94735305352597, 'logloss': 0.2012936658789981, 'average_precision': 0.9847290776847284, 'dataset': 'test', 'name': 'only_boot', 'metric_type': 'all_data'}
+INFO:root:Model evaluation metrics {'tn_0.5': 316347, 'fp_0.5': 16113, 'fn_0.5': 16198, 'tp_0.5': 52460, 'mcc_0.5': 0.7159629015811126, 'tn_0.95': 267686, 'fp_0.95': 64774, 'fn_0.95': 2487, 'tp_0.95': 66171, 'mcc_0.95': 0.6176534169397593, 'AUC': 0.950247542579736, 'logloss': 0.19659703754113206, 'average_precision': 0.9858745994201579, 'dataset': 'train', 'name': 'only_boot', 'metric_type': 'all_data'}
+INFO:root:Model evaluation metrics {'tn_0.5': 134604, 'fp_0.5': 7318, 'fn_0.5': 5701, 'tp_0.5': 23733, 'mcc_0.5': 0.739056462821212, 'tn_0.95': 116150, 'fp_0.95': 25772, 'fn_0.95': 532, 'tp_0.95': 28902, 'mcc_0.95': 0.6476313289965822, 'AUC': 0.9681888173379696, 'logloss': 0.16871833395852878, 'average_precision': 0.9933828762637447, 'dataset': 'test', 'name': 'inc_boot', 'metric_type': 'all_data'}
+INFO:root:Model evaluation metrics {'tn_0.5': 315954, 'fp_0.5': 16506, 'fn_0.5': 12696, 'tp_0.5': 55962, 'mcc_0.5': 0.7493485135680906, 'tn_0.95': 272757, 'fp_0.95': 59703, 'fn_0.95': 469, 'tp_0.95': 68189, 'mcc_0.95': 0.6575638515276857, 'AUC': 0.972907304737819, 'logloss': 0.15633382294829481, 'average_precision': 0.9945619355893209, 'dataset': 'train', 'name': 'inc_boot', 'metric_type': 'all_data'}
+INFO:root:Bootstrap col feature_aBayes_iqtree_support
+INFO:root:Building a final_modelfeature_aBayes_iqtree_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/feature_aBayes_iqtree_support/model_only_boot
+INFO:root:Number of features after feature selection: 2 out of 2
+INFO:root:Generating calibrated model for classification model
+INFO:root:Building a final_modelfeature_aBayes_iqtree_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/iqtree/final_model/feature_aBayes_iqtree_support/model_inc_boot
+INFO:root:Number of features after feature selection: 26 out of 26
+INFO:root:Generating calibrated model for classification model
+INFO:root:Model evaluation metrics {'tn_0.5': 133591, 'fp_0.5': 8331, 'fn_0.5': 5937, 'tp_0.5': 23497, 'mcc_0.5': 0.7173103091682481, 'tn_0.95': 119799, 'fp_0.95': 22123, 'fn_0.95': 1632, 'tp_0.95': 27802, 'mcc_0.95': 0.6546699232601114, 'AUC': 0.9466305264696899, 'logloss': 0.33543675351780333, 'average_precision': 0.9842064009158841, 'dataset': 'test', 'name': 'raw_only_boot', 'metric_type': 'all_data'}
+INFO:root:Model evaluation metrics {'tn_0.5': 312941, 'fp_0.5': 19519, 'fn_0.5': 13608, 'tp_0.5': 55050, 'mcc_0.5': 0.7194539559226876, 'tn_0.95': 280673, 'fp_0.95': 51787, 'fn_0.95': 3555, 'tp_0.95': 65103, 'mcc_0.95': 0.6568503084783186, 'AUC': 0.948936982941273, 'logloss': 0.3166169252453231, 'average_precision': 0.9851595090273626, 'dataset': 'train', 'name': 'raw_only_boot', 'metric_type': 'all_data'}
+INFO:root:Model evaluation metrics {'tn_0.5': 135035, 'fp_0.5': 6887, 'fn_0.5': 7273, 'tp_0.5': 22161, 'mcc_0.5': 0.708080449206778, 'tn_0.95': 112768, 'fp_0.95': 29154, 'fn_0.95': 1104, 'tp_0.95': 28330, 'mcc_0.95': 0.6047882998557575, 'AUC': 0.9465212145969868, 'logloss': 0.20273258734358163, 'average_precision': 0.9841398744968903, 'dataset': 'test', 'name': 'only_boot', 'metric_type': 'all_data'}
+INFO:root:Model evaluation metrics {'tn_0.5': 316429, 'fp_0.5': 16031, 'fn_0.5': 16506, 'tp_0.5': 52152, 'mcc_0.5': 0.713335877745869, 'tn_0.95': 264115, 'fp_0.95': 68345, 'fn_0.95': 2275, 'tp_0.95': 66383, 'mcc_0.95': 0.6071250658354199, 'AUC': 0.9491109449263405, 'logloss': 0.1982456989151873, 'average_precision': 0.98515268854034, 'dataset': 'train', 'name': 'only_boot', 'metric_type': 'all_data'}
+INFO:root:Model evaluation metrics {'tn_0.5': 134621, 'fp_0.5': 7301, 'fn_0.5': 5730, 'tp_0.5': 23704, 'mcc_0.5': 0.7386353249325739, 'tn_0.95': 116327, 'fp_0.95': 25595, 'fn_0.95': 549, 'tp_0.95': 28885, 'mcc_0.95': 0.6487870734117909, 'AUC': 0.9681432076059086, 'logloss': 0.16898948268305397, 'average_precision': 0.9933517292962463, 'dataset': 'test', 'name': 'inc_boot', 'metric_type': 'all_data'}
+INFO:root:Model evaluation metrics {'tn_0.5': 316016, 'fp_0.5': 16444, 'fn_0.5': 12780, 'tp_0.5': 55878, 'mcc_0.5': 0.7489219755844269, 'tn_0.95': 273374, 'fp_0.95': 59086, 'fn_0.95': 463, 'tp_0.95': 68195, 'mcc_0.95': 0.6599770758044046, 'AUC': 0.9728924829588522, 'logloss': 0.15643139070142753, 'average_precision': 0.9945585411452564, 'dataset': 'train', 'name': 'inc_boot', 'metric_type': 'all_data'}
+INFO:root:Program = raxml
+INFO:root:Using existing training data in /Users/noa/Workspace/bootstrap_results/remote_results/full_data/simulations_df_raxml.tsv 
+INFO:root:Generating optimized final model
+INFO:root:Original number of trees in full data is 6094
+INFO:root:Partitioning MSAs according to number of sequences
+INFO:root:Number of MSAs in training data is 4683
+INFO:root:Number of MSAs in test data is 2007
+INFO:root:Number of different trees is 6094
+INFO:root:Full features are: ['feature_mean_parsimony_trees', 'feature_mean_parsimony_trees_binary', 'feature_mean_parsimony_trees_neighbors', 'feature_mean_parsimony_trees_neighbors_binary', 'feature_mean_all_ML_boot_raxml', 'feature_mean_all_ML_boot_raxml_binary', 'feature_mean_all_ML_boot_raxml_neighbors', 'feature_mean_all_ML_boot_raxml_neighbors_binary', 'feature_mean_neighbor_brlen', 'feature_min_neighbor_brlen', 'feature_partition_branch', 'feature_partition_branch_vs_mean', 'feature_partition_size', 'feature_partition_size_ratio', 'feature_partition_divergence', 'feature_divergence_ratio', 'feature_min_ll_diff', 'feature_max_ll_diff', 'feature_min_ll_diff_norm', 'feature_max_ll_diff_norm', 'feature_msa_n_seq', 'feature_msa_n_loci', 'feature_msa_constant_sites_pct', 'feature_msa_n_unique_sites', 'feature_msa_pypythia_msa_difficulty', 'feature_G', 'feature_I', 'feature_F', 'feature_free_parameters']
+INFO:root:Evaluating full standard model- including nni feautres, number of features is 29
+INFO:root:Training ML model
+INFO:root:Building a final_model model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/raxml/final_model/full_model/model_stadard
+INFO:root:Number of features after feature selection: 29 out of 29
+INFO:root:Generating calibrated model for classification model
+INFO:root:Evaluating model performance
+INFO:root:Model evaluation metrics {'tn_0.5': 134709, 'fp_0.5': 7294, 'fn_0.5': 5561, 'tp_0.5': 23792, 'mcc_0.5': 0.7422604092800047, 'tn_0.95': 117011, 'fp_0.95': 24992, 'fn_0.95': 465, 'tp_0.95': 28888, 'mcc_0.95': 0.6558206691315138, 'AUC': 0.9695873793414505, 'logloss': 0.1650846466921569, 'average_precision': 0.9937897482210926, 'dataset': 'test', 'name': 'model_standard', 'metric_type': 'all_data'}
+INFO:root:Model evaluation metrics {'tn_0.5': 316233, 'fp_0.5': 16484, 'fn_0.5': 12514, 'tp_0.5': 55887, 'mcc_0.5': 0.7506495540336915, 'tn_0.95': 275214, 'fp_0.95': 57503, 'fn_0.95': 495, 'tp_0.95': 67906, 'mcc_0.95': 0.665209075323472, 'AUC': 0.973264573865093, 'logloss': 0.15464416254585228, 'average_precision': 0.9946690678985373, 'dataset': 'train', 'name': 'model_standard', 'metric_type': 'all_data'}
+INFO:root:Evaluating fast standard model- no nni feautres, number of features is 29
+INFO:root:Training ML model
+INFO:root:Building a final_model model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/raxml/final_model/fast_model/model_stadard
+INFO:root:Number of features after feature selection: 29 out of 29
+INFO:root:Generating calibrated model for classification model
+INFO:root:Evaluating model performance
