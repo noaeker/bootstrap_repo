@@ -127,7 +127,7 @@ def calibration_plot(model, test_data, y_test):
     pyplot.show()
 
 def enrich_with_single_feature_metrics(var_impt, train_X, y_train, test_X, y_test):
-    mcc_thresholds = [0.5,0.9,0.95,0.99]
+    mcc_thresholds = [0.5,0.95]
     for threshold in mcc_thresholds:
         curr_mcc_scores = []
         for feature in var_impt.index:
@@ -141,7 +141,7 @@ def enrich_with_single_feature_metrics(var_impt, train_X, y_train, test_X, y_tes
 
 def model_evaluation_metrics(y_true, prob_predictions, estimate_auc = True):
     metrics = {}
-    thresholds = [0.5,0.9,0.95,0.99]
+    thresholds = [0.5,0.95]
     for threshold in thresholds:
         tn, fp, fn, tp = confusion_matrix(y_true=y_true, y_pred=prob_predictions>=threshold, labels=[True, False]).ravel()
         mcc = matthews_corrcoef(y_true=y_true, y_pred = prob_predictions>=threshold )
@@ -206,7 +206,7 @@ def overall_model_performance_analysis(working_dir,model, data_dict, name,extrac
         #averaged_tree_metrics["name"] = name
         #averaged_tree_metrics["metric_type"] = "per_tree_average"
         #all_metrics = all_metrics.append(averaged_tree_metrics, ignore_index= True)
-        group_performance = model_groups_anlaysis(data_dict[dataset]["full_data"], data_dict[dataset]["y"], prob_predictions>0.95)
+        group_performance = model_groups_anlaysis(data_dict[dataset]["full_data"], data_dict[dataset]["y"], prob_predictions>0.5)
         group_performance["dataset"] = dataset
         group_performance["name"] = name
         all_group_metrics = pd.concat([all_group_metrics,group_performance])

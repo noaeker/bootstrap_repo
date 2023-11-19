@@ -161,6 +161,7 @@ def ML_pipeline(program_data, bootstrap_cols, cpus_per_main_job, working_dir, sa
     if compare_to_bootstrap_models:
         logging.info("Comparing to bootstrap models")
         for bootstrap_col in bootstrap_cols:
+            logging.info(f"Bootstrap col {bootstrap_col}")
             bootstrap_working_dir = os.path.join(working_dir,bootstrap_col)
             create_dir_if_not_exists(bootstrap_working_dir)
             bootstrap_models_performance = bootstrap_model_pipeline(bootstrap_working_dir,train,test,validation_dict,full_features,bootstrap_col,groups,cpus_per_main_job,sample_frac,do_RFE , large_grid, name = name+bootstrap_col)
