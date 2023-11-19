@@ -193,8 +193,8 @@ def overall_model_performance_analysis(working_dir,model, data_dict, name,extrac
         enriched_dataset["prob_predictions"] = prob_predictions
         enriched_dataset["predictions"] = predictions
         enriched_dataset["true_label"] = true_label
-        if extract_predictions and dataset=='test':
-            enriched_dataset.to_csv(os.path.join(working_dir,f"{dataset}_{name}_enriched.tsv"),sep= CSV_SEP)
+        #if extract_predictions and dataset=='test':
+        #    enriched_dataset.to_csv(os.path.join(working_dir,f"{dataset}_{name}_enriched.tsv"),sep= CSV_SEP)
 
         #per_tree_evaluation_metrics = pd.DataFrame()
         #for tree_ind in enriched_dataset["tree_id"].unique():
@@ -210,7 +210,7 @@ def overall_model_performance_analysis(working_dir,model, data_dict, name,extrac
         group_performance["dataset"] = dataset
         group_performance["name"] = name
         all_group_metrics = pd.concat([all_group_metrics,group_performance])
-    return all_metrics,all_group_metrics
+    return all_metrics,all_group_metrics,prob_predictions
 
 
 

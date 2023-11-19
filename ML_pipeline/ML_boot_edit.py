@@ -88,21 +88,23 @@ def bootstrap_model_pipeline(working_dir, train, test, validation_dict, features
                               do_RFE=do_RFE,
                               n_cv_folds=3)
 
-    raw_boot_performance, groups_data_raw_boot = overall_model_performance_analysis(working_dir, None, only_boot_dict,
+    raw_boot_performance, groups_data_raw_boot,test_predictions_raw_boot = overall_model_performance_analysis(working_dir, None, only_boot_dict,
                                                                                     name="raw_only_boot",
                                                                                     extract_predictions=False)
 
-    only_boot_performance, groups_data_only_boot = overall_model_performance_analysis(working_dir, model_only_boot,
+    only_boot_performance, groups_data_only_boot,test_predictions_only_boot = overall_model_performance_analysis(working_dir, model_only_boot,
                                                                                       only_boot_dict,
                                                                                       name="only_boot",
                                                                                       extract_predictions=False)
-    inc_boot_performance, groups_data_inc_boot = overall_model_performance_analysis(working_dir, model_inc_boot,
+    inc_boot_performance, groups_data_inc_boot,test_predictions_inc_boot = overall_model_performance_analysis(working_dir, model_inc_boot,
                                                                                     inc_boot_dict,
                                                                                     name="inc_boot",
                                                                                     extract_predictions=False)
     bootstrap_models_performance = pd.concat([raw_boot_performance, only_boot_performance, inc_boot_performance])
     bootstrap_models_performance["analysis_type"] = bootstrap_col
-    return bootstrap_models_performance
+
+    test_performance_dict = {f'{bootstrap_col}_only_boot' : test_predictions_only_boot,f'{bootstrap_col}_raw_boot' : test_predictions_raw_boot,f'{bootstrap_col}_inc_boot' : test_predictions_inc_boot}
+    return bootstrap_models_performance,test_performance_dict
 
 
 def standard_model_pipeline(train, test, validation_dict, groups, features, cpus_per_main_job, working_dir, do_RFE,
@@ -119,16 +121,17 @@ def standard_model_pipeline(train, test, validation_dict, groups, features, cpus
                      n_cv_folds=3)
 
     logging.info("Evaluating model performance")
-    model_performance, group_performance = overall_model_performance_analysis(working_dir, model, datasets_dict,
+    model_performance, group_performance, test_predictions = overall_model_performance_analysis(working_dir, model, datasets_dict,
                                                                               name=f"model_standard",
                                                                               extract_predictions=extract_predictions)
     model_performance["analysis_type"] = name
-    return model_performance, group_performance
+    return model_performance, group_performance, test_predictions
 
 
 def ML_pipeline(program_data, bootstrap_cols, cpus_per_main_job, working_dir, sample_frac, subsample_train, do_RFE,
                 large_grid, name, validation_dict, compare_to_bootstrap_models=False, extract_predictions=False):
     all_models_performance = pd.DataFrame()
+    all_test_perdictions = {}
     program_data = program_data.dropna(axis=1, how='all')
     program_data = program_data.dropna(axis=0)
     train, test = train_test_validation_splits(program_data, test_pct=0.3,
@@ -141,10 +144,11 @@ def ML_pipeline(program_data, bootstrap_cols, cpus_per_main_job, working_dir, sa
     logging.info(f"Evaluating full standard model- including nni feautres, number of features is {len(full_features)}")
     full_model_working_dir = os.path.join(working_dir, 'full_model')
     create_dir_if_not_exists(full_model_working_dir)
-    model_performance_full, group_performance_full = standard_model_pipeline(train, test, validation_dict, groups,
+    model_performance_full, group_performance_full, test_predictions_full = standard_model_pipeline(train, test, validation_dict, groups,
                                                                              full_features, cpus_per_main_job,
                                                                              full_model_working_dir, do_RFE, large_grid,
                                                                              name, extract_predictions)
+    all_test_perdictions["full_standard"] = test_predictions_full
     model_performance_full["analysis_type"] = "full_standard"
     all_models_performance = pd.concat([all_models_performance, model_performance_full])
     nni_cols = ['feature_min_ll_diff_opt=True_model_False', 'feature_max_ll_diff_opt=True_model_False']
@@ -155,10 +159,11 @@ def ML_pipeline(program_data, bootstrap_cols, cpus_per_main_job, working_dir, sa
     logging.info(f"Evaluating fast standard model- no nni feautres, number of features is {len(fast_features)}")
     fast_model_working_dir = os.path.join(working_dir, 'fast_model')
     create_dir_if_not_exists(fast_model_working_dir)
-    model_performance_fast, group_performance_fast = standard_model_pipeline(train, test, validation_dict, groups,
+    model_performance_fast, group_performance_fast,test_predictions_fast = standard_model_pipeline(train, test, validation_dict, groups,
                                                                              fast_features, cpus_per_main_job,
                                                                              fast_model_working_dir, do_RFE, large_grid,
                                                                              name, extract_predictions)
+    all_test_perdictions["fast_standard"] = test_predictions_full
     model_performance_fast["analysis_type"] = "fast_standard"
     all_models_performance = pd.concat([all_models_performance, model_performance_fast])
 
@@ -168,15 +173,20 @@ def ML_pipeline(program_data, bootstrap_cols, cpus_per_main_job, working_dir, sa
             logging.info(f"Bootstrap col {bootstrap_col}")
             bootstrap_working_dir = os.path.join(working_dir, bootstrap_col)
             create_dir_if_not_exists(bootstrap_working_dir)
-            bootstrap_models_performance = bootstrap_model_pipeline(bootstrap_working_dir, train, test, validation_dict,
+            bootstrap_models_performance, test_performance_dict = bootstrap_model_pipeline(bootstrap_working_dir, train, test, validation_dict,
                                                                     full_features, bootstrap_col, groups,
                                                                     cpus_per_main_job, sample_frac, do_RFE, large_grid,
                                                                     name=name + bootstrap_col)
+            all_test_perdictions.update(test_performance_dict)
             all_models_performance = pd.concat([all_models_performance, bootstrap_models_performance])
 
     all_models_performance["sample_frac"] = sample_frac
     group_performance_full["sample_frac"] = sample_frac
-    return all_models_performance, group_performance_full
+    if sample_frac==-1:
+        enriched_test = test.copy()
+        test_performance_df = pd.DataFrame(test_performance_dict)
+        test_with_predictions = pd.concat([enriched_test,test_performance_df],axis=1)
+    return all_models_performance, group_performance_full,test_with_predictions
 
 
 def get_n_free_parameters(x):
@@ -250,7 +260,7 @@ def main():
         if args.reunite_training_data or not os.path.exists(training_data_path):
             logging.info(f"Re-uniting training data and saving to {training_data_path}")
             program_data = unify_results_across_jobs(args.main_data_folder,
-                                                     name=f'simulations_df_{program}', n_jobs=1000)
+                                                     name=f'simulations_df_{program}', n_jobs=1000).sample(n=300)
         else:
             logging.info(f"Using existing training data in {training_data_path} ")
             program_data = pd.read_csv(training_data_path, sep='\t')
@@ -293,7 +303,7 @@ def main():
         logging.info(f"Generating optimized final model")
         final_model_working_dir = os.path.join(working_dir, f"final_model")
         create_dir_if_not_exists(final_model_working_dir)
-        final_model_metrics, groups_analysis = ML_pipeline(program_data, bootstrap_cols, args.cpus_per_main_job,
+        final_model_metrics, groups_analysis,test_with_predictions = ML_pipeline(program_data, bootstrap_cols, args.cpus_per_main_job,
                                                            final_model_working_dir, sample_frac=-1,
                                                            subsample_train=False, do_RFE=args.RFE,
                                                            large_grid=args.full_grid, name=f"final_model",
@@ -301,6 +311,7 @@ def main():
                                                            compare_to_bootstrap_models=True, extract_predictions=True)
         final_model_metrics.to_csv(os.path.join(working_dir, 'final_model_performance.tsv'), sep=CSV_SEP)
         groups_analysis.to_csv(os.path.join(working_dir, 'groups_performance.tsv'), sep=CSV_SEP)
+        test_with_predictions.to_csv(os.path.join(working_dir, 'test_with_predictions.tsv'), sep=CSV_SEP)
 
     #     print(test_metrics)
 
