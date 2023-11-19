@@ -210,6 +210,7 @@ def transform_data(df):
         df['model_short'] = df['tree_search_model']
     df['model_short'] = df['model_short'].apply(lambda x: x.split('+')[0])
     df['feature_free_parameters'] = df['model_short'].apply(lambda x: get_n_free_parameters(x))
+    features_to_exclude = ['msa_entropy' ]
     #df = pd.get_dummies(df,prefix='feature_model_',columns=['model_short']) #
     return df
     #+[col for col in df.columns if 'msa_entropy' in col]
