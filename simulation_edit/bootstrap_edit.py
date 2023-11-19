@@ -320,7 +320,7 @@ def get_nni_statistics(orig_tree_ll, orig_tree_mean_bl,nni_neighbors,neighbors_t
     abayes_metric = (orig_tree_ll) / (((orig_tree_ll) + (all_neig_ll[0]) + (all_neig_ll[1])) / 3)
     name = f"opt={opt}_model_{simple_model}"
     nni_statistics = {f'total_time_{name}': neig_ll_evaluation_time,
-        f'feaure_abayes_{name}': abayes_metric, f'orig_tree_ll_{name}': orig_tree_ll, f'feature_min_ll_diff_{name}': min_ll_diff, f'feature_max_ll_diff_{name}': max_ll_diff,
+        f'feature_abayes_{name}': abayes_metric, f'orig_tree_ll_{name}': orig_tree_ll, f'feature_min_ll_diff_{name}': min_ll_diff, f'feature_max_ll_diff_{name}': max_ll_diff,
 }
     if opt:
         nni_statistics.update({f'feature_min_mean_branch_length_{name}': orig_tree_mean_bl-np.min(mean_branch_lengths), f'feature_max_mean_branch_length_{name}': orig_tree_mean_bl-np.max(mean_branch_lengths)})
