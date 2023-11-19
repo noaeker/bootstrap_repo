@@ -70,11 +70,11 @@ def main():
                          'true_tree_path_orig','tree_folder'
                          ]
     raw_data_raxml = unify_results_across_jobs(raw_results_folder, name = 'simulations_df_raxml')
-    raw_data_raxml = raw_data_raxml[[col for col in raw_data_raxml.columns if col in remaining_columns or 'feature' in col]].drop_duplicates()
+    raw_data_raxml = raw_data_raxml[[col for col in raw_data_raxml.columns if col in remaining_columns or 'feature_msa' in col]].drop_duplicates()
     raw_data_iqtree = unify_results_across_jobs(raw_results_folder, name='simulations_df_iqtree')
-    raw_data_iqtree = raw_data_iqtree[[col for col in raw_data_iqtree.columns if col in remaining_columns or 'feature' in col]].drop_duplicates()
+    raw_data_iqtree = raw_data_iqtree[[col for col in raw_data_iqtree.columns if col in remaining_columns or 'feature_msa' in col]].drop_duplicates()
     raw_data_fasttree = unify_results_across_jobs(raw_results_folder, name='simulations_df_fasttree')
-    raw_data_fasttree = raw_data_fasttree[[col for col in raw_data_fasttree.columns if col in remaining_columns or 'feature' in col]].drop_duplicates()
+    raw_data_fasttree = raw_data_fasttree[[col for col in raw_data_fasttree.columns if col in remaining_columns or 'feature_msa' in col]].drop_duplicates()
     raw_data_raxml["program"] = 'raxml'
     raw_data_iqtree["program"] = 'iqtree'
     raw_data_fasttree["program"] = 'fasttree'
