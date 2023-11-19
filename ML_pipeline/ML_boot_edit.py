@@ -207,17 +207,17 @@ def get_n_free_parameters(x):
 
 def transform_data(df):
     df['true_binary_support'] = df['true_support'] == 1
-    df['feature_msa_n_seq'] = df['feature_n_unique_seq']
+    #df['feature_msa_n_seq'] = df['feature_n_unique_seq']
     df.drop(columns=['feature_n_unique_seq'], inplace=True)
-    df['feature_G'] = df['model_short'].str.contains('+G', regex=False)
-    df['feature_I'] = df['model_short'].str.contains('+I', regex=False)
-    df['feature_F'] = df['model_short'].str.contains('+F', regex=False)
+    #df['feature_G'] = df['model_short'].str.contains('+G', regex=False)
+    #df['feature_I'] = df['model_short'].str.contains('+I', regex=False)
+    #df['feature_F'] = df['model_short'].str.contains('+F', regex=False)
     if 'model_short' not in df.columns:
         df['model_short'] = df['tree_search_model']
-    df['model_short'] = df['model_short'].apply(lambda x: x.split('+')[0])
-    df['feature_free_parameters'] = df['model_short'].apply(lambda x: get_n_free_parameters(x))
+    #df['model_short'] = df['model_short'].apply(lambda x: x.split('+')[0])
+    #df['feature_free_parameters'] = df['model_short'].apply(lambda x: get_n_free_parameters(x))
     df = df[[col for col in df.columns if
-             'msa_entropy' not in col and 'extraction_of_features_time' not in col and 'feature_abayes_opt' not in col and 'column_variance' not in col]]
+             'msa_entropy' not in col and 'extraction_of_features_time' not in col and 'feature_abayes_opt' not in col and 'column_variance' not in col and 'feature_min_mean_branch_length' not in col and 'feature_max_mean_branch_length' and 'll_diff_norm' not in col ]]
     # df = pd.get_dummies(df,prefix='feature_model_',columns=['model_short']) #
     return df
     # +[col for col in df.columns if 'msa_entropy' in col]
