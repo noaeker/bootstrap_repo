@@ -187,6 +187,7 @@ def overall_model_performance_analysis(working_dir,model, data_dict, name,extrac
         evaluation_metrics["dataset"] = dataset
         evaluation_metrics["name"] = name
         evaluation_metrics["metric_type"] = "all_data"
+        logging.info(f"Model evaluation metrics {evaluation_metrics}")
         all_metrics = all_metrics.append(evaluation_metrics, ignore_index= True)
         enriched_dataset = data_dict[dataset]["full_data"]
         enriched_dataset["prob_predictions"] = prob_predictions
