@@ -358,17 +358,16 @@ def msa_path_edit_analysis(msa_path, curr_run_dir, mle_path, true_tree_path, pro
     orig_tree_ll = raxml_optimize_trees_for_given_msa(curr_pruned_msa_path,  ll_on_data_prefix="orig_tree_ll", tree_file=curr_pruned_tree_path,
                                        curr_run_directory = garbage_dir, model = bootstrap_tree_details_dict["tree_search_model"], opt_model_and_brlen=True,n_cpus = 1, n_workers = 'auto', return_opt_tree = False
                                        )
-    orig_tree_ll_JC = raxml_optimize_trees_for_given_msa(curr_pruned_msa_path, ll_on_data_prefix="orig_tree_ll",
-                                                      tree_file=curr_pruned_tree_path,
-                                                      curr_run_directory=garbage_dir,
-                                                      model="JC",
-                                                      opt_model_and_brlen=True, n_cpus=1, n_workers='auto',
-                                                      return_opt_tree=False
-                                                      )
+    #orig_tree_ll_JC = raxml_optimize_trees_for_given_msa(curr_pruned_msa_path, ll_on_data_prefix="orig_tree_ll",
+    #                                                  tree_file=curr_pruned_tree_path,
+    #                                                  curr_run_directory=garbage_dir,
+    #                                                  model="JC",
+    #                                                  opt_model_and_brlen=True, n_cpus=1, n_workers='auto',
+    #                                                  return_opt_tree=False
+    #                                                  )
 
     total_neig_ll_evaluation_time_no_opt = 0
     total_neig_ll_evaluation_time_opt = 0
-    total_neig_ll_evaluation_time_opt_JC = 0
     for node in mle_tree_ete.iter_descendants():
 
         if not node.is_leaf():
@@ -382,19 +381,19 @@ def msa_path_edit_analysis(msa_path, curr_run_dir, mle_path, true_tree_path, pro
             nni_statistics_opt,neig_ll_evaluation_time_opt = get_nni_statistics(orig_tree_ll,mean_branch_length_orig,nni_neighbors, neighbors_tmp_path, curr_run_dir,
                                                        msa_path, bootstrap_tree_details_dict, garbage_dir, opt=True)
             total_neig_ll_evaluation_time_opt+=neig_ll_evaluation_time_opt
-            nni_statistics_JC,neig_ll_evaluation_time_jc = get_nni_statistics(orig_tree_ll_JC, mean_branch_length_orig, nni_neighbors,
-                                                    neighbors_tmp_path, curr_run_dir,
-                                                    msa_path, bootstrap_tree_details_dict, garbage_dir, opt=True, simple_model= True)
-            total_neig_ll_evaluation_time_opt_JC += neig_ll_evaluation_time_jc
+            #nni_statistics_JC,neig_ll_evaluation_time_jc = get_nni_statistics(orig_tree_ll_JC, mean_branch_length_orig, nni_neighbors,
+            #                                        neighbors_tmp_path, curr_run_dir,
+            #                                        msa_path, bootstrap_tree_details_dict, garbage_dir, opt=True, simple_model= True)
+            #total_neig_ll_evaluation_time_opt_JC += neig_ll_evaluation_time_jc
             statistics.update(nni_statistics_no_opt)
             statistics.update(nni_statistics_opt)
-            statistics.update(nni_statistics_JC)
+            #statistics.update(nni_statistics_JC)
             statistics.update(bootstrap_tree_details_dict)
             msa_splits = msa_splits.append(statistics, ignore_index=True)
             create_or_clean_dir(garbage_dir)
 
     logging.info(f"Feature extraction time = {feature_extraction_time} ")
-    running_time_dict = {'extraction_of_features_time':feature_extraction_time,'total_neig_ll_evaluation_time_no_opt':total_neig_ll_evaluation_time_no_opt,'total_neig_ll_evaluation_time_opt':total_neig_ll_evaluation_time_opt,'total_neig_ll_evaluation_time_opt_JC':total_neig_ll_evaluation_time_opt_JC}
+    running_time_dict = {'extraction_of_features_time':feature_extraction_time,'total_neig_ll_evaluation_time_no_opt':total_neig_ll_evaluation_time_no_opt,'total_neig_ll_evaluation_time_opt':total_neig_ll_evaluation_time_opt}
     for col in running_time_dict:
         msa_splits[col] = running_time_dict[col]
 
