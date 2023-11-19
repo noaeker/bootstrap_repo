@@ -64,7 +64,7 @@ def main():
     log_file_path = os.path.join(feature_pipeline_dir, "general_features.log")
     logging.basicConfig(filename=log_file_path, level=logging.DEBUG)
     raw_results_folder = args.raw_results_folder
-    remaining_columns = ['all_final_tree_topologies_path','tree_search_model',
+    remaining_columns = ['all_final_tree_topologies_path','tree_search_model','model_short','model'
                          'final_tree_aLRT', 'final_tree_aBayes', 'final_tree_ultrafast','final_tree_topology_path',
                          'boot_run_time','sh_bootstrap','standard_bootstrap','true_tree_path','msa_path','tree_id',
                          'true_tree_path_orig','tree_folder'
