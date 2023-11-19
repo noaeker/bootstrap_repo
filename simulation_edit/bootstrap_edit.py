@@ -422,7 +422,7 @@ def main():
         raxml_data = all_splits.loc[all_splits.program=='raxml']
         raxml_data.to_csv(os.path.join(args.job_work_path,'simulations_df_raxml.tsv'), sep='\t')
         iqtree_data = all_splits.loc[all_splits.program == 'iqtree']
-        iqtree_data.to_csv(os.path.join(args.job_work_path,'simulations_df_iqree.tsv'), sep='\t')
+        iqtree_data.to_csv(os.path.join(args.job_work_path,'simulations_df_iqtree.tsv'), sep='\t')
         fasttree_data = all_splits.loc[all_splits.program == 'fasttree']
         fasttree_data.to_csv(os.path.join(args.job_work_path,'simulations_df_fasttree.tsv'), sep='\t')
 
