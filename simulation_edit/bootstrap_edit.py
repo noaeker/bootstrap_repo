@@ -412,6 +412,7 @@ def main():
         logging.info(f"Tree {i} out of {len(data['true_tree_path'].unique())}")
         tree_data = data.loc[data.true_tree_path == true_tree_path]
         for program in tree_data['program'].unique():
+            logging.info(f"Program = {program}")
             tree_program_data = tree_data.loc[tree_data.program==program]
             for j,msa_path in enumerate(tree_data['msa_path'].unique()):
                 logging.info(f"MSA {j} out of {len(tree_data['msa_path'].unique())}")
