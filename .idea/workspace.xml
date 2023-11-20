@@ -36,8 +36,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/simulation_edit/bootstrap_edit.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="201">
-              <caret line="424" column="44" selection-start-line="424" selection-start-column="44" selection-end-line="424" selection-end-column="44" />
+            <state relative-caret-position="309">
+              <caret line="170" column="25" lean-forward="true" selection-start-line="170" selection-start-column="25" selection-end-line="170" selection-end-column="25" />
             </state>
           </provider>
         </entry>
@@ -119,7 +119,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>model_evaluation_metrics</find>
       <find>best_model</find>
       <find>'best_model'</find>
       <find>variable_importance</find>
@@ -149,6 +148,7 @@
       <find>fast</find>
       <find>0.5</find>
       <find>0.95</find>
+      <find>generate_partition_statistics</find>
     </findStrings>
     <replaceStrings>
       <replace>job_data_path</replace>
@@ -417,12 +417,12 @@
     <frame x="0" y="25" width="1440" height="800" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25299507" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.090204366" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49550563" weight="0.28196347" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.67159975" visible="true" weight="0.33190882" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.67159975" visible="true" weight="0.28062677" />
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.47145876" weight="0.16239317" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -490,12 +490,12 @@
         </line-breakpoint>
         <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/simulation_edit/bootstrap_edit.py</url>
-          <line>348</line>
+          <line>347</line>
           <option name="timeStamp" value="123" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/simulation_edit/bootstrap_edit.py</url>
-          <line>227</line>
+          <line>226</line>
           <option name="timeStamp" value="174" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -525,7 +525,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/simulation_edit/bootstrap_edit.py</url>
-          <line>310</line>
+          <line>309</line>
           <option name="timeStamp" value="222" />
         </line-breakpoint>
       </breakpoints>
@@ -809,8 +809,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/simulation_edit/bootstrap_edit.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="201">
-          <caret line="424" column="44" selection-start-line="424" selection-start-column="44" selection-end-line="424" selection-end-column="44" />
+        <state relative-caret-position="309">
+          <caret line="170" column="25" lean-forward="true" selection-start-line="170" selection-start-column="25" selection-end-line="170" selection-end-column="25" />
         </state>
       </provider>
     </entry>

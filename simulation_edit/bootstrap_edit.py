@@ -155,8 +155,7 @@ def generate_partition_statistics(node, mle_tree_obj, extra_tree_groups, extra_b
         mle_tree_ete_cp = mle_tree_obj.copy()
         node_cp = mle_tree_ete_cp & node.name
         removed_node = node_cp.detach()
-        mean_bl = np.mean(get_branch_lengths(mle_tree_obj))
-        var_bl = np.var(get_branch_lengths(mle_tree_obj))
+        branch_lengths = get_branch_lengths(mle_tree_obj)
         remaining_tree = mle_tree_ete_cp
         min_partition_divergence = min(get_tree_divergence(removed_node), get_tree_divergence(remaining_tree))
         divergence_ratio = min_partition_divergence/total_tree_divergence
@@ -165,7 +164,7 @@ def generate_partition_statistics(node, mle_tree_obj, extra_tree_groups, extra_b
         neighboring_nodes= get_neighboring_nodes(mle_tree_obj, node.name)
         childs_brlen = [c_node.dist for c_node in neighboring_nodes]
 
-        statistics.update({'feature_mean_bl': mean_bl,'feature_var_bl': var_bl,'feature_mean_neighbor_brlen': np.mean(childs_brlen),'feature_min_neighbor_brlen': np.min(childs_brlen),'feature_partition_branch': node.dist,'feature_partition_branch_vs_mean': node.dist/mean_bl,'bootstrap_support': node.support, 'true_support': true_support, 'true_binary_support': true_binary_support, 'feature_partition_size': min_partition_size,'feature_partition_size_ratio': partition_size_ratio,
+        statistics.update({'feaure_25_pct_bl':np.percentile(branch_lengths,25),'feaure_75_pct_bl':np.percentile(branch_lengths,25), 'feature_mean_bl': np.mean(branch_lengths),'feature_var_bl': np.var(branch_lengths),'feature_mean_neighbor_brlen': np.mean(childs_brlen),'feature_min_neighbor_brlen': np.min(childs_brlen),'feature_partition_branch': node.dist,'feature_partition_branch_vs_mean': node.dist/np.mean(branch_lengths),'bootstrap_support': node.support, 'true_support': true_support, 'true_binary_support': true_binary_support, 'feature_partition_size': min_partition_size,'feature_partition_size_ratio': partition_size_ratio,
                     'feature_partition_divergence': min_partition_divergence, 'feature_divergence_ratio': divergence_ratio})
         for b_method in extra_boot_ete:
             statistics.update({f'feature_{b_method}_support':(extra_boot_ete[b_method]&node.name).support})
