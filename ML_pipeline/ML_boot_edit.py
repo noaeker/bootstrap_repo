@@ -50,7 +50,7 @@ def get_bootstrap_col(program):
     elif program == 'iqtree':
         bootstrap_cols = ['bootstrap_support', 'feature_aLRT_iqtree_support', 'feature_aBayes_iqtree_support']
     elif program == 'fasttree':
-        bootstrap_cols = ['feature_standard_fasttree_boot_support', 'bootstrap_support']
+        bootstrap_cols = ['bootstrap_support']
     return bootstrap_cols
 
 
