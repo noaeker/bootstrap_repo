@@ -164,7 +164,7 @@ def generate_partition_statistics(node, mle_tree_obj, extra_tree_groups, extra_b
         neighboring_nodes= get_neighboring_nodes(mle_tree_obj, node.name)
         childs_brlen = [c_node.dist for c_node in neighboring_nodes]
 
-        statistics.update({'feaure_25_pct_bl':np.percentile(branch_lengths,25),'feaure_75_pct_bl':np.percentile(branch_lengths,25), 'feature_mean_bl': np.mean(branch_lengths),'feature_var_bl': np.var(branch_lengths),'feature_mean_neighbor_brlen': np.mean(childs_brlen),'feature_min_neighbor_brlen': np.min(childs_brlen),'feature_partition_branch': node.dist,'feature_partition_branch_vs_mean': node.dist/np.mean(branch_lengths),'bootstrap_support': node.support, 'true_support': true_support, 'true_binary_support': true_binary_support, 'feature_partition_size': min_partition_size,'feature_partition_size_ratio': partition_size_ratio,
+        statistics.update({'feature_25_pct_bl':np.percentile(branch_lengths,25),'feature_75_pct_bl':np.percentile(branch_lengths,25), 'feature_mean_bl': np.mean(branch_lengths),'feature_var_bl': np.var(branch_lengths),'feature_mean_neighbor_brlen': np.mean(childs_brlen),'feature_min_neighbor_brlen': np.min(childs_brlen),'feature_partition_branch': node.dist,'feature_partition_branch_vs_mean': node.dist/np.mean(branch_lengths),'bootstrap_support': node.support, 'true_support': true_support, 'true_binary_support': true_binary_support, 'feature_partition_size': min_partition_size,'feature_partition_size_ratio': partition_size_ratio,
                     'feature_partition_divergence': min_partition_divergence, 'feature_divergence_ratio': divergence_ratio})
         for b_method in extra_boot_ete:
             statistics.update({f'feature_{b_method}_support':(extra_boot_ete[b_method]&node.name).support})
@@ -413,7 +413,7 @@ def main():
         tree_data = data.loc[data.true_tree_path == true_tree_path]
         for program in tree_data['program'].unique():
             tree_program_data = tree_data.loc[tree_data.program==program]
-            for j,msa_path in tree_data['msa_path'].unique():
+            for j,msa_path in enumerate(tree_data['msa_path'].unique()):
                 logging.info(f"MSA {j} out of {len(tree_data['msa_path'].unique())}")
                 bootstrap_tree_details = tree_program_data.loc[tree_program_data.msa_path == msa_path].head(1).squeeze()
 
@@ -421,14 +421,13 @@ def main():
                 msa_splits = msa_path_edit_analysis(msa_path, args.job_work_path, mle_path, true_tree_path, program, bootstrap_tree_details.to_dict(), args.n_pars)
                 all_splits = pd.concat([all_splits, msa_splits])
                 all_splits.to_csv(args.job_final_output_path, sep='\t')
-        logging.info("Done with all trees!")
         raxml_data = all_splits.loc[all_splits.program=='raxml']
         raxml_data.to_csv(os.path.join(args.job_work_path,'simulations_df_raxml.tsv'), sep='\t')
         iqtree_data = all_splits.loc[all_splits.program == 'iqtree']
         iqtree_data.to_csv(os.path.join(args.job_work_path,'simulations_df_iqtree.tsv'), sep='\t')
         fasttree_data = all_splits.loc[all_splits.program == 'fasttree']
         fasttree_data.to_csv(os.path.join(args.job_work_path,'simulations_df_fasttree.tsv'), sep='\t')
-
+    logging.info("Done with all trees!")
 
 
 

@@ -36,8 +36,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/simulation_edit/bootstrap_edit.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="309">
-              <caret line="170" column="25" lean-forward="true" selection-start-line="170" selection-start-column="25" selection-end-line="170" selection-end-column="25" />
+            <state relative-caret-position="433">
+              <caret line="429" column="40" selection-start-line="429" selection-start-column="40" selection-end-line="429" selection-end-column="40" />
             </state>
           </provider>
         </entry>
@@ -284,7 +284,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.ML_boot_edit (1)">
+  <component name="RunManager" selected="Python.parallel_boot_edit">
     <configuration name="ML_algorithms_and_hueristics" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="bootstrap_repo" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -392,8 +392,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.ML_boot_edit (1)" />
         <item itemvalue="Python.parallel_boot_edit" />
+        <item itemvalue="Python.ML_boot_edit (1)" />
         <item itemvalue="Python.ML_boot_edit" />
         <item itemvalue="Python.run_parallel_simulations" />
         <item itemvalue="Python.ML_algorithms_and_hueristics" />
@@ -809,8 +809,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/simulation_edit/bootstrap_edit.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="309">
-          <caret line="170" column="25" lean-forward="true" selection-start-line="170" selection-start-column="25" selection-end-line="170" selection-end-column="25" />
+        <state relative-caret-position="433">
+          <caret line="429" column="40" selection-start-line="429" selection-start-column="40" selection-end-line="429" selection-end-column="40" />
         </state>
       </provider>
     </entry>
