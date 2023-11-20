@@ -103,7 +103,7 @@ def bootstrap_model_pipeline(working_dir, train, test, validation_dict, features
     bootstrap_models_performance = pd.concat([raw_boot_performance, only_boot_performance, inc_boot_performance])
     bootstrap_models_performance["analysis_type"] = bootstrap_col
 
-    test_performance_dict = {f'{bootstrap_col}_only_boot' : test_predictions_only_boot,f'{bootstrap_col}_raw_boot' : test_predictions_raw_boot,f'{bootstrap_col}_inc_boot' : test_predictions_inc_boot}
+    test_performance_dict = {f'predictions_{bootstrap_col}_only_boot' : test_predictions_only_boot,f'predictions_{bootstrap_col}_raw_boot' : test_predictions_raw_boot,f'predictions_{bootstrap_col}_inc_boot' : test_predictions_inc_boot}
     return bootstrap_models_performance,test_performance_dict
 
 
@@ -184,7 +184,7 @@ def ML_pipeline(program_data, bootstrap_cols, cpus_per_main_job, working_dir, sa
     group_performance_full["sample_frac"] = sample_frac
     if sample_frac==-1:
         enriched_test = test.copy().reset_index()
-        test_performance_df = pd.DataFrame(test_performance_dict).reset_index()
+        test_performance_df = pd.DataFrame(all_test_perdictions).reset_index()
         test_with_predictions = pd.concat([enriched_test,test_performance_df],axis=1)
     return all_models_performance, group_performance_full,test_with_predictions
 

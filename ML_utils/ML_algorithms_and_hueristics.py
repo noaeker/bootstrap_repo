@@ -174,6 +174,7 @@ def overall_model_performance_analysis(working_dir,model, data_dict, name,extrac
         var_impt.to_csv(vi_path, sep=CSV_SEP)
     all_metrics = pd.DataFrame()
     all_group_metrics = pd.DataFrame()
+    prob_predictions_per_dataset = {}
     for dataset in data_dict:
         if model:
             prob_predictions =  model['calibrated_model'].predict_proba((model['selector']).transform(data_dict[dataset]["X"]))[:, 1]
@@ -210,7 +211,8 @@ def overall_model_performance_analysis(working_dir,model, data_dict, name,extrac
         group_performance["dataset"] = dataset
         group_performance["name"] = name
         all_group_metrics = pd.concat([all_group_metrics,group_performance])
-    return all_metrics,all_group_metrics,prob_predictions
+        prob_predictions_per_dataset[dataset] = prob_predictions
+    return all_metrics,all_group_metrics, prob_predictions_per_dataset["test"]
 
 
 
