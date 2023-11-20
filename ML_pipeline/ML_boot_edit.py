@@ -183,8 +183,8 @@ def ML_pipeline(program_data, bootstrap_cols, cpus_per_main_job, working_dir, sa
     all_models_performance["sample_frac"] = sample_frac
     group_performance_full["sample_frac"] = sample_frac
     if sample_frac==-1:
-        enriched_test = test.copy()
-        test_performance_df = pd.DataFrame(test_performance_dict)
+        enriched_test = test.copy().reset_index()
+        test_performance_df = pd.DataFrame(test_performance_dict).reset_index()
         test_with_predictions = pd.concat([enriched_test,test_performance_df],axis=1)
     return all_models_performance, group_performance_full,test_with_predictions
 

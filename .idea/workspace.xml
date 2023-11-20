@@ -5,6 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c7df0e90-f129-4c06-bac2-5459d2cc3269" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ML_pipeline/ML_boot_edit.py" beforeDir="false" afterPath="$PROJECT_DIR$/ML_pipeline/ML_boot_edit.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -45,8 +46,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ML_pipeline/ML_boot_edit.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="262" column="99" selection-start-line="262" selection-start-column="99" selection-end-line="262" selection-end-column="99" />
+            <state relative-caret-position="196">
+              <caret line="185" column="49" selection-start-line="185" selection-start-column="49" selection-end-line="185" selection-end-column="49" />
             </state>
           </provider>
         </entry>
@@ -284,7 +285,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.parallel_boot_edit">
+  <component name="RunManager" selected="Python.ML_boot_edit (1)">
     <configuration name="ML_algorithms_and_hueristics" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="bootstrap_repo" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -392,9 +393,9 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.parallel_boot_edit" />
         <item itemvalue="Python.ML_boot_edit (1)" />
         <item itemvalue="Python.ML_boot_edit" />
+        <item itemvalue="Python.parallel_boot_edit" />
         <item itemvalue="Python.run_parallel_simulations" />
         <item itemvalue="Python.ML_algorithms_and_hueristics" />
       </list>
@@ -417,12 +418,12 @@
     <frame x="0" y="25" width="1440" height="800" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.090204366" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.23114869" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49550563" weight="0.28196347" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.67159975" visible="true" weight="0.28062677" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.67159975" visible="true" weight="0.28062677" />
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.47145876" weight="0.16239317" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -809,8 +810,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ML_pipeline/ML_boot_edit.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="262" column="99" selection-start-line="262" selection-start-column="99" selection-end-line="262" selection-end-column="99" />
+        <state relative-caret-position="196">
+          <caret line="185" column="49" selection-start-line="185" selection-start-column="49" selection-end-line="185" selection-end-column="49" />
         </state>
       </provider>
     </entry>
