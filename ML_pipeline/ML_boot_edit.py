@@ -260,7 +260,7 @@ def main():
         if args.reunite_training_data or not os.path.exists(training_data_path):
             logging.info(f"Re-uniting training data and saving to {training_data_path}")
             program_data = unify_results_across_jobs(args.main_data_folder,
-                                                     name=f'simulations_df_{program}', n_jobs=1000).sample(n=300)
+                                                     name=f'simulations_df_{program}', n_jobs=1000)
         else:
             logging.info(f"Using existing training data in {training_data_path} ")
             program_data = pd.read_csv(training_data_path, sep='\t')
