@@ -407,18 +407,22 @@ def main():
     data = pd.read_csv(args.job_data_path, sep='\t')
     all_splits = pd.DataFrame()
     log_file_path = os.path.join(args.job_work_path, "general_features.log")
-    logging.basicConfig(filename=log_file_path, level=logging.DEBUG)
-    for true_tree_path in data['true_tree_path'].unique():
+    logging.basicConfig(filename=log_file_path, level=logging.INFO)
+    logging.info(f"Number of different trees is {len(data['true_tree_path'].unique())}")
+    for i,true_tree_path in enumerate(data['true_tree_path'].unique()):
+        logging.info(f"Tree {i} out of {len(data['true_tree_path'].unique())}")
         tree_data = data.loc[data.true_tree_path == true_tree_path]
         for program in tree_data['program'].unique():
             tree_program_data = tree_data.loc[tree_data.program==program]
-            for msa_path in tree_data['msa_path'].unique():
+            for j,msa_path in tree_data['msa_path'].unique():
+                logging.info(f"MSA {j} out of {len(tree_data['msa_path'].unique())}")
                 bootstrap_tree_details = tree_program_data.loc[tree_program_data.msa_path == msa_path].head(1).squeeze()
 
                 mle_path =  bootstrap_tree_details[get_program_default_ML_tree(program)]
                 msa_splits = msa_path_edit_analysis(msa_path, args.job_work_path, mle_path, true_tree_path, program, bootstrap_tree_details.to_dict(), args.n_pars)
                 all_splits = pd.concat([all_splits, msa_splits])
                 all_splits.to_csv(args.job_final_output_path, sep='\t')
+        logging.info("Done with all trees!")
         raxml_data = all_splits.loc[all_splits.program=='raxml']
         raxml_data.to_csv(os.path.join(args.job_work_path,'simulations_df_raxml.tsv'), sep='\t')
         iqtree_data = all_splits.loc[all_splits.program == 'iqtree']
