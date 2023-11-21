@@ -67,7 +67,7 @@ def main():
     remaining_columns = ['all_final_tree_topologies_path','tree_search_model','model_short','model',
                          'final_tree_aLRT', 'final_tree_aBayes', 'final_tree_ultrafast','final_tree_topology_path',
                          'boot_run_time','sh_bootstrap','standard_bootstrap','true_tree_path','msa_path','tree_id',
-                         'true_tree_path_orig','tree_folder'
+                         'true_tree_path_orig','tree_folder','model_mode'
                          ]
     raw_data_raxml = unify_results_across_jobs(raw_results_folder, name = 'simulations_df_raxml')
     raw_data_raxml = raw_data_raxml[[col for col in raw_data_raxml.columns if col in remaining_columns or 'feature_msa' in col]].drop_duplicates()
