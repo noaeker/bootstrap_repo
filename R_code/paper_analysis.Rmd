@@ -23,6 +23,7 @@ iqtree_validation_data = read_tsv(paste(validation_data_prefix,"/simulations_df_
 
 
 
+
 ```{r}
 prefix = "/Users/noa/Workspace/bootstrap_results/remote_results/"
 
@@ -31,30 +32,32 @@ fasttree_all_models_performance = read_tsv(paste(prefix,"ML_results/fasttree/all
 fasttree_final_models_performance = read_tsv(paste(prefix,"ML_results/fasttree/final_model_performance.tsv", sep = ""))
 fasttree_group_performance = read_tsv(paste(prefix,"ML_results/fasttree/groups_performance.tsv", sep = ""))
 fasttree_vi =  read_tsv(paste(prefix,"ML_results/fasttree/final_model/full_model/model_standard_vi.tsv", sep = ""))
-fasttree_enriched_test = read_tsv(paste(prefix,"ML_results/fasttree/final_model/full_model/test_model_standard_enriched.tsv", sep = ""))
+fasttree_enriched_test = read_tsv(paste(prefix,"ML_results/fasttree/test_with_predictions.tsv", sep = ""))
 fasttree_validation = read_tsv(paste(prefix,"validation_data/simulations_df_fasttree.tsv", sep = ""))
 #####
 iqtree_all_models_performance = read_tsv(paste(prefix,"ML_results/iqtree/all_models_performance.tsv", sep = ""))
 iqtree_final_models_performance = read_tsv(paste(prefix,"ML_results/iqtree/final_model_performance.tsv", sep = ""))
 iqtree_group_performance = read_tsv(paste(prefix,"ML_results/iqtree/groups_performance.tsv", sep = ""))
 iqtree_vi =  read_tsv(paste(prefix,"ML_results/iqtree/final_model/full_model/model_standard_vi.tsv", sep = ""))
-iqtree_enriched_test = read_tsv(paste(prefix,"ML_results/iqtree/final_model/full_model/test_model_standard_enriched.tsv", sep = ""))
+iqtree_enriched_test = read_tsv(paste(prefix,"ML_results/iqtree/test_with_predictions.tsv", sep = ""))
 iqtree_validation = read_tsv(paste(prefix,"validation_data/simulations_df_iqtree.tsv", sep = ""))
 #####
 raxml_all_models_performance = read_tsv(paste(prefix,"ML_results/raxml/all_models_performance.tsv", sep = ""))
 raxml_final_models_performance = read_tsv(paste(prefix,"ML_results/raxml/final_model_performance.tsv", sep = ""))
 raxml_group_performance = read_tsv(paste(prefix,"ML_results/raxml/groups_performance.tsv", sep = ""))
 raxml_vi =  read_tsv(paste(prefix,"ML_results/raxml/final_model/full_model/model_standard_vi.tsv", sep = ""))
-raxml_enriched_test = read_tsv(paste(prefix,"ML_results/raxml/final_model/full_model/test_model_standard_enriched.tsv", sep = ""))
+raxml_enriched_test = read_tsv(paste(prefix,"ML_results/raxml//test_with_predictions.tsv", sep = ""))
 raxml_validation = read_tsv(paste(prefix,"validation_data/simulations_df_raxml.tsv", sep = ""))
 
 
 ```
 
 
+
+
 Choose specific program
 ```{r}
-program = 'fasttree'
+program = 'iqtree'
 if (program=='fasttree') {
     all_models_performance = fasttree_all_models_performance
     final_models_performance = fasttree_final_models_performance %>% filter(analysis_type!='feature_standard_fasttree_boot_support')
@@ -81,12 +84,36 @@ if (program=='fasttree') {
 ```
 
 
+
+
+```{r}
+
+summm<- enriched_test %>% group_by(tree_id) %>% summarise(mean_true = mean(true_binary_support), mean_pred = mean(prob_predictions), mean_bayes = mean(feature_aBayes_iqtree_support), mean_bayes_cal = mean(predictions_feature_aBayes_iqtree_support_only_boot),
+                                                mean_alrt = mean(feature_aLRT_iqtree_support), mean_alrt_cal = mean(predictions_feature_aLRT_iqtree_support_only_boot)
+                                                
+                                                )  
+
+summm%>% ggplot(aes(x=mean_true,y=mean_bayes))+geom_point()+geom_abline(slope=1, intercept = 0)
+summm%>% ggplot(aes(x=mean_true,y=mean_alrt))+geom_point()+geom_abline(slope=1, intercept = 0)
+
+summm %>% ggplot(aes(x=mean_true,y=mean_bayes_cal))+geom_point()+geom_abline(slope=1, intercept = 0)
+summm %>% ggplot(aes(x=mean_true,y=mean_alrt_cal))+geom_point()+geom_abline(slope=1, intercept = 0)
+
+summm  %>% ggplot(aes(x=mean_true,y=mean_pred))+geom_point()+geom_abline(slope=1, intercept = 0)
+
+
+pivoted<- summ %>% pivot_longer()
+```
+
+
+
+
 General performance
 ```{r}
 
 out_path <-paste(prefix,"ML_results/",program,"/performance_text",".tsv", sep = "")
 
-paper_performance<-final_models_performance  %>% filter (metric_type=='all_data') %>% dplyr::select (dataset,analysis_type,name,mcc,balanced_accuracy_score,precision, recall, AUC,average_precision)  %>% arrange(dataset) %>% mutate (description = case_when(analysis_type == "full_standard" & name =="model_standard" ~ "all_features", 
+paper_performance<-final_models_performance  %>% filter (metric_type=='all_data') %>% dplyr::select (dataset,analysis_type,name,mcc_0.5,logloss, AUC,average_precision, tp_0.5, tn_0.5, fp_0.5, fn_0.5)  %>% arrange(dataset) %>% mutate (description = case_when(analysis_type == "full_standard" & name =="model_standard" ~ "all features", 
                                 analysis_type == "fast_standard" & name =="model_standard" ~ "All features except NNI features",
                                 analysis_type == "bootstrap_support" & name =="raw_only_boot" ~ "Raw bootstrap support",
                                 analysis_type == "bootstrap_support" & name =="only_boot" ~ "Calibrated bootstrap support",
@@ -97,10 +124,11 @@ paper_performance<-final_models_performance  %>% filter (metric_type=='all_data'
                                                                     analysis_type == "feature_aBayes_iqtree_support" & name =="raw_only_boot" ~ "Raw aBayes support",
                                 analysis_type == "feature_aBayes_iqtree_support" & name =="only_boot" ~ "Calibrated aBayes support",
                                 analysis_type == "feature_aBayes_iqtree_support" & name =="inc_boot" ~ "All features+ aBayes support",
-                                )) %>% dplyr::select (dataset, description, mcc, balanced_accuracy_score,precision, recall)  %>% arrange(dataset)
-
+                                )) %>% mutate(TPR =`tp_0.5`/(`tp_0.5`+`fn_0.5`),TNR =`tn_0.5`/(`tn_0.5`+`fp_0.5`),FPR =`fp_0.5`/(`tn_0.5`+`fp_0.5`),FNR =`fn_0.5`/(`tp_0.5`+`fn_0.5`)) %>% dplyr::select (dataset, description,logloss, mcc_0.5,FPR,FNR, AUC,average_precision)  %>% arrange(dataset)
 
 paper_performance
+write_tsv(paper_performance,out_path)
+
 
 ```
 
@@ -184,9 +212,7 @@ confusion_plot<-ggplotConfusionMatrix(confusionMatrix(data = pred, reference= ob
 ```
 Prediction metrics
 
-```{r}
-all_models_performance
-```
+
 
 ```{r}
 library(predtools)
@@ -225,7 +251,7 @@ ggplot(aes(y=grouping_col, x=Balanced_Accuracy))+geom_col()+ expand_limits(y = c
 n_seq_error<-test_group_performance %>% filter (grouping_col_name =='n_seq_group')   %>%  mutate(grouping_col = factor(grouping_col, levels = c('(4.999, 69.0]','(69.0, 129.0]','129.0, 236.0]','	(236.0, 827.0]]'))) %>% ggplot(aes(y=grouping_col, x=Balanced_Accuracy))+geom_col()+ expand_limits(y = c(0.5,1))+ylab('Number\nof sequences')+xlab('Balanced\naccuracy')+theme(text = element_text(size = 11))
 
 
-n_loci_error<-test_group_performance %>% filter (grouping_col_name =='feature_msa_n_loci') %>%  mutate(grouping_col = factor(grouping_col, levels = c('(4.999, 69.0]','(69.0, 129.0]','129.0, 236.0]','	(236.0, 827.0]]')))  %>% ggplot(aes(y=grouping_col, x=Balanced_Accuracy))+geom_col()+ expand_limits(y = c(0.5,1))+ylab('Number\nof positions')+xlab('Balanced\naccuracy')+theme(text = element_text(size = 11))
+n_loci_error<-test_group_performance %>% filter (grouping_col_name =='feature_msa_n_loci') %>%  mutate(grouping_col = factor(grouping_col, levels = c('(61.999, 727.0]','(69.0, 129.0]','129.0, 236.0]','	(236.0, 827.0]]')))  %>% ggplot(aes(y=grouping_col, x=Balanced_Accuracy))+geom_col()+ expand_limits(y = c(0.5,1))+ylab('Number\nof positions')+xlab('Balanced\naccuracy')+theme(text = element_text(size = 11))
 
 Pypythia_scatter<-enriched_test %>% dplyr::select (msa_path,prob_predictions,  feature_msa_pypythia_msa_difficulty) %>% group_by(msa_path,feature_msa_pypythia_msa_difficulty) %>% summarise(mean_prob = mean(prob_predictions)) %>% ggplot(aes(x=feature_msa_pypythia_msa_difficulty, y = mean_prob))+geom_point(size = 0.7)+xlab("MSA\ndifficulty")+ylab("Predicted\nprobability")+theme(text = element_text(size = 11))
 
@@ -276,7 +302,7 @@ summary(running_time_data %>% pull (program_boot_run_time))
 ```
 ```{r}
 summary(validation_data$feature_n_unique_seq)
-summary(enriched_test$feature_msa_n_seq)
+raxml_validation_data$
 ```
 
 Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.

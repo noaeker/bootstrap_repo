@@ -182,10 +182,9 @@ def ML_pipeline(program_data, bootstrap_cols, cpus_per_main_job, working_dir, sa
 
     all_models_performance["sample_frac"] = sample_frac
     group_performance_full["sample_frac"] = sample_frac
-    if sample_frac==-1:
-        enriched_test = test.copy().reset_index()
-        test_performance_df = pd.DataFrame(all_test_perdictions).reset_index()
-        test_with_predictions = pd.concat([enriched_test,test_performance_df],axis=1)
+    enriched_test = test.copy().reset_index()
+    test_performance_df = pd.DataFrame(all_test_perdictions).reset_index()
+    test_with_predictions = pd.concat([enriched_test,test_performance_df],axis=1)
     return all_models_performance, group_performance_full,test_with_predictions
 
 
@@ -231,6 +230,7 @@ def transform_data(df):
     # df = pd.get_dummies(df,prefix='feature_model_',columns=['model_short']) #
     return df
     # +[col for col in df.columns if 'msa_entropy' in col]
+
 
 
 def main():
@@ -292,7 +292,7 @@ def main():
                 logging.info(f"\n#Sample frac = {sample_frac}")
                 sample_frac_working_dir = os.path.join(working_dir, f"frac_{sample_frac}")
                 create_dir_if_not_exists(sample_frac_working_dir)
-                curr_model_metrics, groups_analysis = ML_pipeline(program_data, bootstrap_cols, args.cpus_per_main_job,
+                curr_model_metrics, groups_analysis, curr_test_with_predictions = ML_pipeline(program_data, bootstrap_cols, args.cpus_per_main_job,
                                                                   sample_frac_working_dir, sample_frac,
                                                                   compare_to_bootstrap_models=False,
                                                                   subsample_train=True, do_RFE=args.RFE,
