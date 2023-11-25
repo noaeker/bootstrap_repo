@@ -5,7 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c7df0e90-f129-4c06-bac2-5459d2cc3269" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ML_pipeline/ML_boot_edit.py" beforeDir="false" afterPath="$PROJECT_DIR$/ML_pipeline/ML_boot_edit.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ML_utils/ML_algorithms_and_hueristics.py" beforeDir="false" afterPath="$PROJECT_DIR$/ML_utils/ML_algorithms_and_hueristics.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/R_code/paper_analysis.Rmd" beforeDir="false" afterPath="$PROJECT_DIR$/R_code/paper_analysis.Rmd" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/R_code/paper_analysis.nb.html" beforeDir="false" afterPath="$PROJECT_DIR$/R_code/paper_analysis.nb.html" afterDir="false" />
     </list>
@@ -47,7 +49,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/simulation_edit/bootstrap_edit.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="260">
+            <state relative-caret-position="398">
               <caret line="413" column="53" selection-start-line="413" selection-start-column="53" selection-end-line="413" selection-end-column="53" />
             </state>
           </provider>
@@ -56,20 +58,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ML_pipeline/ML_boot_edit.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="215">
-              <caret line="186" column="4" selection-start-line="186" selection-start-column="4" selection-end-line="186" selection-end-column="4" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/programs/IQTREE.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="258">
-              <caret line="42" column="37" selection-start-line="42" selection-start-column="37" selection-end-line="42" selection-end-column="37" />
-              <folding>
-                <element signature="e#0#30#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="268">
+              <caret line="253" column="13" selection-start-line="253" selection-start-column="13" selection-end-line="253" selection-end-column="13" />
             </state>
           </provider>
         </entry>
@@ -77,41 +67,11 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ML_utils/ML_algorithms_and_hueristics.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="212">
-              <caret line="214" column="76" selection-start-line="214" selection-start-column="76" selection-end-line="214" selection-end-column="76" />
+            <state relative-caret-position="83">
+              <caret line="167" column="38" selection-start-line="167" selection-start-column="4" selection-end-line="167" selection-end-column="38" />
               <folding>
                 <element signature="e#0#30#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/programs/raxml_grove.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="299">
-              <caret line="51" column="4" selection-start-line="51" selection-start-column="4" selection-end-line="51" selection-end-column="4" />
-              <folding>
-                <element signature="e#0#30#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/simulations_generation/simulations_argparser.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="528">
-              <caret line="24" selection-start-line="24" selection-end-line="24" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/simulations_generation/simulations.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
-              <caret line="96" column="56" selection-start-line="96" selection-start-column="56" selection-end-line="96" selection-end-column="56" />
             </state>
           </provider>
         </entry>
@@ -127,19 +87,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>full_data</find>
-      <find>cv</find>
-      <find>sample</find>
-      <find>do_RFE</find>
-      <find>transform_data</find>
-      <find>transform</find>
-      <find>auc</find>
-      <find>5</find>
-      <find>print</find>
-      <find>GTR</find>
-      <find>raxml_optimize_trees_for_given_msa</find>
-      <find>get_nni_statistics</find>
-      <find>.samp</find>
       <find>msa_path_edit_analysis</find>
       <find>tree_search_model</find>
       <find>model</find>
@@ -154,9 +101,22 @@
       <find>node.dist</find>
       <find>0.95</find>
       <find>generate_data_dict_from_column_subset</find>
-      <find>bootstrap_model_pipeline</find>
       <find>treef_path</find>
       <find>300</find>
+      <find>return all_models_performance, group_performance_full,test_with_predictions</find>
+      <find>standard_model_pipeline</find>
+      <find>overall_model_performance_analysis</find>
+      <find>ML_pipeline</find>
+      <find>bootstrap_cols</find>
+      <find>'bootstrap_support'</find>
+      <find>test</find>
+      <find>log_loss</find>
+      <find>prob_pred</find>
+      <find>trans</find>
+      <find>transform_data</find>
+      <find>&quot;prediction</find>
+      <find>bootstrap_model_pipeline</find>
+      <find>n_val_samp</find>
     </findStrings>
     <replaceStrings>
       <replace>job_data_path</replace>
@@ -201,17 +161,17 @@
         <option value="$PROJECT_DIR$/programs/raxml.py" />
         <option value="$PROJECT_DIR$/simulations_generation/simulations.py" />
         <option value="$PROJECT_DIR$/ML_pipeline/ML_boot_edit" />
-        <option value="$PROJECT_DIR$/ML_utils/ML_algorithms_and_hueristics.py" />
         <option value="$PROJECT_DIR$/simulation_edit/bootstrap_edit.py" />
         <option value="$PROJECT_DIR$/simulation_edit/parallel_boot_edit.py" />
+        <option value="$PROJECT_DIR$/ML_utils/ML_algorithms_and_hueristics.py" />
         <option value="$PROJECT_DIR$/ML_pipeline/ML_boot_edit.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-295" />
-    <option name="y" value="25" />
-    <option name="width" value="1735" />
+    <option name="x" value="145" />
+    <option name="y" value="91" />
+    <option name="width" value="1440" />
     <option name="height" value="800" />
   </component>
   <component name="ProjectView">
@@ -407,10 +367,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.ML_boot_edit (1)" />
+        <item itemvalue="Python.ML_algorithms_and_hueristics" />
         <item itemvalue="Python.ML_boot_edit" />
         <item itemvalue="Python.parallel_boot_edit" />
         <item itemvalue="Python.run_parallel_simulations" />
-        <item itemvalue="Python.ML_algorithms_and_hueristics" />
       </list>
     </recent_temporary>
   </component>
@@ -431,13 +391,13 @@
     <frame x="0" y="25" width="1440" height="800" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.13248767" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24312897" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49550563" weight="0.28196347" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.67159975" weight="0.28062677" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.47145876" visible="true" weight="0.22792023" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.67159975" visible="true" weight="0.17236467" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.47145876" weight="0.23076923" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -534,8 +494,28 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/ML_pipeline/ML_boot_edit.py</url>
+          <line>91</line>
+          <option name="timeStamp" value="226" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ML_pipeline/ML_boot_edit.py</url>
           <line>184</line>
-          <option name="timeStamp" value="225" />
+          <option name="timeStamp" value="229" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ML_pipeline/ML_boot_edit.py</url>
+          <line>72</line>
+          <option name="timeStamp" value="231" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ML_utils/ML_algorithms_and_hueristics.py</url>
+          <line>180</line>
+          <option name="timeStamp" value="232" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/ML_pipeline/ML_boot_edit.py</url>
+          <line>250</line>
+          <option name="timeStamp" value="233" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -570,57 +550,53 @@
     </expressions>
     <expressions id="evaluateExpression">
       <expression>
-        <expression-string>enriched_test.index</expression-string>
+        <expression-string>df['feature_aBayes_iqtree_support']</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>test_performance_df.index</expression-string>
+        <expression-string>df['feature_aBayes_iqtree_support'] = np.minimum(df['feature_aBayes_iqtree_support'],1)</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>enriched_test</expression-string>
+        <expression-string>df['feature_aLRT_iqtree_support']</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>all_test_perdictions</expression-string>
+        <expression-string>(prob_predictions&gt;1).mean()</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>test_performance_df</expression-string>
+        <expression-string>prob_predictions&gt;1</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>program_data[&quot;feature_min_ll_diff&quot;]</expression-string>
+        <expression-string>prob_predictions.mean()</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>Tree(optimized_tree, format=1)</expression-string>
+        <expression-string>prob_predictions.max()</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>Tree(optimized_tree, format=0)</expression-string>
+        <expression-string>prob_predictions</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>exp(orig_tree_ll)</expression-string>
+        <expression-string>evaluation_metrics = model_evaluation_metrics(true_label, prob_predictions)</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/ML_pipeline/fasttree/inc_boot_vi.tsv" />
-    <entry file="file://$PROJECT_DIR$/ML_pipeline/fasttree/test_features_model_enriched.tsv" />
-    <entry file="file://$PROJECT_DIR$/ML_pipeline/fasttree/test_inc_boot_enriched.tsv" />
-    <entry file="file://$PROJECT_DIR$/ML_pipeline/fasttree/test_only_boot_enriched.tsv" />
     <entry file="file://$PROJECT_DIR$/ML_pipeline/fasttree/train_features_model_enriched.tsv" />
     <entry file="file://$PROJECT_DIR$/ML_pipeline/fasttree/val_features_model_enriched.tsv" />
     <entry file="file://$PROJECT_DIR$/ML_pipeline/fasttree/model_performance.tsv" />
@@ -744,27 +720,6 @@
         <state relative-caret-position="-412" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ML_pipeline/ML.log">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="22">
-          <caret line="17" column="25" selection-start-line="17" selection-start-column="21" selection-end-line="17" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/simulation_edit/simulations_edit_argparser.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-95">
-          <caret line="2" column="4" selection-start-line="2" selection-start-column="4" selection-end-line="2" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/programs/raxml.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="453">
-          <caret line="351" column="28" selection-start-line="351" selection-start-column="28" selection-end-line="351" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/programs/raxml_grove.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="299">
@@ -772,30 +727,6 @@
           <folding>
             <element signature="e#0#30#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ML_utils/ML_algorithms_and_hueristics.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="212">
-          <caret line="214" column="76" selection-start-line="214" selection-start-column="76" selection-end-line="214" selection-end-column="76" />
-          <folding>
-            <element signature="e#0#30#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/simulation_edit/parallel_boot_edit.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="10">
-          <caret line="74" column="111" selection-start-line="74" selection-start-column="111" selection-end-line="74" selection-end-column="111" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/simulation_edit/bootstrap_edit.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="260">
-          <caret line="413" column="53" selection-start-line="413" selection-start-column="53" selection-end-line="413" selection-end-column="53" />
         </state>
       </provider>
     </entry>
@@ -816,10 +747,67 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/ML_pipeline/ML.log">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="110">
+          <caret line="5" selection-start-line="5" selection-end-line="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/simulation_edit/simulations_edit_argparser.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-95">
+          <caret line="2" column="4" selection-start-line="2" selection-start-column="4" selection-end-line="2" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/simulation_edit/parallel_boot_edit.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="10">
+          <caret line="74" column="111" selection-start-line="74" selection-start-column="111" selection-end-line="74" selection-end-column="111" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/programs/raxml.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="453">
+          <caret line="351" column="28" selection-start-line="351" selection-start-column="28" selection-end-line="351" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/simulation_edit/bootstrap_edit.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="398">
+          <caret line="413" column="53" selection-start-line="413" selection-start-column="53" selection-end-line="413" selection-end-column="53" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ML_utils/ML_algorithms_and_hueristics.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="83">
+          <caret line="167" column="38" selection-start-line="167" selection-start-column="4" selection-end-line="167" selection-end-column="38" />
+          <folding>
+            <element signature="e#0#30#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ML_pipeline/iqtree/final_model/groups_performance.tsv">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ML_pipeline/iqtree/final_model/final_model_performance.tsv">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ML_pipeline/iqtree/final_model/test.tsv">
+      <provider selected="true" editor-type-id="LargeFileEditor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ML_pipeline/iqtree/final_model/train.tsv">
+      <provider selected="true" editor-type-id="LargeFileEditor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/ML_pipeline/ML_boot_edit.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="215">
-          <caret line="186" column="4" selection-start-line="186" selection-start-column="4" selection-end-line="186" selection-end-column="4" />
+        <state relative-caret-position="268">
+          <caret line="253" column="13" selection-start-line="253" selection-start-column="13" selection-end-line="253" selection-end-column="13" />
         </state>
       </provider>
     </entry>

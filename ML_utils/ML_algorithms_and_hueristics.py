@@ -4,8 +4,7 @@ import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 import pickle
 from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
-from sklearn.metrics import matthews_corrcoef, balanced_accuracy_score, log_loss, roc_auc_score, average_precision_score, accuracy_score, precision_score, \
-    recall_score
+from sklearn.metrics import matthews_corrcoef, log_loss, brier_score_loss, roc_auc_score, average_precision_score
 import numpy as np
 import os
 from sklearn.metrics import balanced_accuracy_score
@@ -148,7 +147,7 @@ def model_evaluation_metrics(y_true, prob_predictions, estimate_auc = True):
         t_metrics = {f'tn_{threshold}': tn, f'fp_{threshold}': fp,f'fn_{threshold}': fn,f'tp_{threshold}': tp, f'mcc_{threshold}': mcc}
         metrics.update(t_metrics)
     if estimate_auc:
-        prob_metrics = {'AUC': roc_auc_score(y_true, prob_predictions),
+        prob_metrics = {'AUC': roc_auc_score(y_true, prob_predictions),'brier_loss': brier_score_loss(y_true, prob_predictions),
                         'logloss': log_loss(y_true, prob_predictions), 'average_precision': average_precision_score(y_true, prob_predictions), }
         metrics.update(prob_metrics)
     return metrics
@@ -166,7 +165,7 @@ def model_groups_anlaysis(X,y_true, predictions):
     return performance_per_group
 
 
-def overall_model_performance_analysis(working_dir,model, data_dict, name,extract_predictions = False):
+def overall_model_performance_analysis(working_dir, model, data_dict, name):
     if model:
         var_impt = variable_importance((data_dict["train"]["X"]).columns[model['selector'].get_support(indices=True)], model['best_model'])
         enrich_with_single_feature_metrics(var_impt, data_dict["train"]["X"], data_dict["train"]["y"], data_dict["test"]["X"], data_dict["test"]["y"])
@@ -178,11 +177,9 @@ def overall_model_performance_analysis(working_dir,model, data_dict, name,extrac
     for dataset in data_dict:
         if model:
             prob_predictions =  model['calibrated_model'].predict_proba((model['selector']).transform(data_dict[dataset]["X"]))[:, 1]
-            predictions = model['calibrated_model'].predict((model['selector']).transform(data_dict[dataset]["X"]))
         else:
             raw_bootstrap_values = data_dict[dataset]["X"].drop(['ignore'],axis=1).iloc[:,0]
             prob_predictions = raw_bootstrap_values
-            predictions = raw_bootstrap_values >= 0.5
         true_label = data_dict[dataset]["y"]
         evaluation_metrics = model_evaluation_metrics(true_label, prob_predictions)
         evaluation_metrics["dataset"] = dataset
@@ -190,29 +187,12 @@ def overall_model_performance_analysis(working_dir,model, data_dict, name,extrac
         evaluation_metrics["metric_type"] = "all_data"
         logging.info(f"Model evaluation metrics {evaluation_metrics}")
         all_metrics = all_metrics.append(evaluation_metrics, ignore_index= True)
-        enriched_dataset = data_dict[dataset]["full_data"]
-        enriched_dataset["prob_predictions"] = prob_predictions
-        enriched_dataset["predictions"] = predictions
-        enriched_dataset["true_label"] = true_label
-        #if extract_predictions and dataset=='test':
-        #    enriched_dataset.to_csv(os.path.join(working_dir,f"{dataset}_{name}_enriched.tsv"),sep= CSV_SEP)
-
-        #per_tree_evaluation_metrics = pd.DataFrame()
-        #for tree_ind in enriched_dataset["tree_id"].unique():
-        #    tree_data = enriched_dataset.loc[enriched_dataset.tree_id==tree_ind]
-        #    tree_metrics = model_evaluation_metrics(tree_data["true_label"], prob_predictions=tree_data['prob_predictions'], estimate_auc = False)
-        #    per_tree_evaluation_metrics = per_tree_evaluation_metrics.append(tree_metrics, ignore_index = True)
-        #averaged_tree_metrics = per_tree_evaluation_metrics.mean().to_dict()
-        #averaged_tree_metrics["dataset"] = dataset
-        #averaged_tree_metrics["name"] = name
-        #averaged_tree_metrics["metric_type"] = "per_tree_average"
-        #all_metrics = all_metrics.append(averaged_tree_metrics, ignore_index= True)
         group_performance = model_groups_anlaysis(data_dict[dataset]["full_data"], data_dict[dataset]["y"], prob_predictions>0.5)
         group_performance["dataset"] = dataset
         group_performance["name"] = name
         all_group_metrics = pd.concat([all_group_metrics,group_performance])
         prob_predictions_per_dataset[dataset] = prob_predictions
-    return all_metrics,all_group_metrics, prob_predictions_per_dataset["test"]
+    return all_metrics,all_group_metrics, prob_predictions_per_dataset
 
 
 

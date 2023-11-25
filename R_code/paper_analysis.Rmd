@@ -13,6 +13,9 @@ library(tidyverse)
 library(caret)
 library(ggpubr)
 library(pROC)
+library(predtools)
+library(MASS)
+library(caret)
 ```
 ```{r}
 validation_data_prefix = "/Users/noa/Workspace/bootstrap_results/validation_data"
@@ -57,7 +60,7 @@ raxml_validation = read_tsv(paste(prefix,"validation_data/simulations_df_raxml.t
 
 Choose specific program
 ```{r}
-program = 'iqtree'
+program = 'fasttree'
 if (program=='fasttree') {
     all_models_performance = fasttree_all_models_performance
     final_models_performance = fasttree_final_models_performance %>% filter(analysis_type!='feature_standard_fasttree_boot_support')
@@ -85,35 +88,119 @@ if (program=='fasttree') {
 
 
 
-
+IQTREE
 ```{r}
 
-summm<- enriched_test %>% group_by(tree_id) %>% summarise(mean_true = mean(true_binary_support), mean_pred = mean(prob_predictions), mean_bayes = mean(feature_aBayes_iqtree_support), mean_bayes_cal = mean(predictions_feature_aBayes_iqtree_support_only_boot),
-                                                mean_alrt = mean(feature_aLRT_iqtree_support), mean_alrt_cal = mean(predictions_feature_aLRT_iqtree_support_only_boot)
+summm_iqtree<- iqtree_enriched_test %>% group_by(tree_id) %>% summarise(mean_true = mean(true_binary_support), mean_pred = mean(prob_predictions), mean_bayes = mean(feature_aBayes_iqtree_support), mean_ultrafast = mean(bootstrap_support), mean_bayes_cal = mean(predictions_feature_aBayes_iqtree_support_only_boot),
+                                                mean_alrt = mean(feature_aLRT_iqtree_support), mean_alrt_cal = mean(predictions_feature_aLRT_iqtree_support_only_boot))
                                                 
-                                                )  
 
-summm%>% ggplot(aes(x=mean_true,y=mean_bayes))+geom_point()+geom_abline(slope=1, intercept = 0)
-summm%>% ggplot(aes(x=mean_true,y=mean_alrt))+geom_point()+geom_abline(slope=1, intercept = 0)
+bayes<-summm_iqtree%>% ggplot(aes(y=mean_true,x=mean_bayes))+geom_point(alpha = 1/3)+geom_abline(slope=1, intercept = 0,color = "green")+ylab("True fraction")+xlab("aBayes test")+theme(text = element_text(size = 11))+ coord_flip()
 
-summm %>% ggplot(aes(x=mean_true,y=mean_bayes_cal))+geom_point()+geom_abline(slope=1, intercept = 0)
-summm %>% ggplot(aes(x=mean_true,y=mean_alrt_cal))+geom_point()+geom_abline(slope=1, intercept = 0)
+alrt<-summm_iqtree %>% ggplot(aes(y=mean_true,x=mean_alrt))+geom_point(alpha = 1/3)+geom_abline(slope=1, intercept = 0,color = "green")+ylab("True fraction")+xlab("aLRT test ")+theme(text = element_text(size = 11))+ coord_flip()
 
-summm  %>% ggplot(aes(x=mean_true,y=mean_pred))+geom_point()+geom_abline(slope=1, intercept = 0)
+ultrafast<-summm_iqtree %>% ggplot(aes(y=mean_true,x=mean_ultrafast/100))+geom_point(alpha = 1/3)+geom_abline(slope=1, intercept = 0,color = "green")+ylab("True fraction")+xlab("Ultrafast\nbootstrap")+theme(text = element_text(size = 11))+ coord_flip()
 
 
-pivoted<- summ %>% pivot_longer()
+pred_iqtree<-summm_iqtree  %>% ggplot(aes(y=mean_true,x=mean_pred))+geom_point(alpha = 1/3)+geom_abline(slope=1, intercept = 0,color = "green")+ylab("True fraction")+xlab("IQTREE\nmodel")+theme(text = element_text(size = 11))+ coord_flip()
+
+
+
+iqtree_plot<-ggarrange(pred_iqtree,ultrafast,bayes,alrt, labels = c("A","B","C"),align = "h", nrow = 2, ncol = 2 )
+iqtree_plot
+```
+FASTTREE
+
+```{r}
+summm_fasttree<- fasttree_enriched_test %>% group_by(tree_id) %>% summarise(mean_true = mean(true_binary_support), mean_pred = mean(prob_predictions), mean_sh = mean(bootstrap_support))
+                                                
+
+pred_fasttree<-summm_fasttree  %>% ggplot(aes(y=mean_true,x=mean_pred))+geom_point(alpha = 1/3)+geom_abline(slope=1, intercept = 0,color = "green")+ylab("True fraction")+xlab("Fasttree\nmodel")+theme(text = element_text(size = 11))+ coord_flip()
+
+sh<-summm_fasttree  %>% ggplot(aes(y=mean_true,x=mean_sh))+geom_point(alpha = 1/3)+geom_abline(slope=1, intercept = 0,color = "green")+ylab("True fraction")+xlab("SH test")+theme(text = element_text(size = 11))+ coord_flip()
+
+
+fasttree_plot<-ggarrange(pred_fasttree,sh, labels = c("A","B"),align = "h", nrow = 1, ncol = 2 )
+fasttree_plot
+```
+
+
+RAXML
+```{r}
+summm_raxml<- raxml_enriched_test %>% group_by(tree_id) %>% summarise(mean_true = mean(true_binary_support), mean_pred = mean(prob_predictions), mean_sh = mean(bootstrap_support))
+                                                
+
+pred_raxml<-summm_raxml  %>% ggplot(aes(y=mean_true,x=mean_pred))+geom_point(alpha = 1/3)+geom_abline(slope=1, intercept = 0, color = "green")+ylab("True fraction")+xlab("RAxML-NG\nmodel")+theme(text = element_text(size = 11))+ coord_flip()
+
+rapid<-summm_fasttree  %>% ggplot(aes(y=mean_true,x=mean_sh))+geom_point(alpha = 1/3)+geom_abline(slope=1, intercept = 0,color = "green")+ylab("True fraction")+xlab("Bootstrap\nsupport")+theme(text = element_text(size = 11))+ coord_flip()
+
+
+raxml_plot<-ggarrange(pred_raxml,rapid, labels = c("A","B"),align = "h", nrow = 1, ncol = 2 )
+raxml_plot
+```
+
+```{r}
+ggarrange(pred_iqtree,alrt, bayes, ultrafast,pred_raxml,rapid,"","",pred_fasttree,sh,align = "h", nrow = 3, ncol = 4 )
+
 ```
 
 
 
-
 General performance
+IQTREE
 ```{r}
 
-out_path <-paste(prefix,"ML_results/",program,"/performance_text",".tsv", sep = "")
+out_path <-paste(prefix,"ML_results/","iqtree","/performance_text",".tsv", sep = "")
 
-paper_performance<-final_models_performance  %>% filter (metric_type=='all_data') %>% dplyr::select (dataset,analysis_type,name,mcc_0.5,logloss, AUC,average_precision, tp_0.5, tn_0.5, fp_0.5, fn_0.5)  %>% arrange(dataset) %>% mutate (description = case_when(analysis_type == "full_standard" & name =="model_standard" ~ "all features", 
+paper_performance_iqtree<-iqtree_final_models_performance  %>% filter (metric_type=='all_data') %>% dplyr::select (dataset,analysis_type,name,mcc_0.5,logloss, AUC,average_precision, tp_0.5, tn_0.5, fp_0.5, fn_0.5)  %>% arrange(dataset) %>% mutate (description = case_when(analysis_type == "full_standard" & name =="model_standard" ~ "all features", 
+                                analysis_type == "fast_standard" & name =="model_standard" ~ "All features except NNI features",
+                                analysis_type == "bootstrap_support" & name =="raw_only_boot" ~ "Raw ultrafast bootstrap support",
+                                analysis_type == "bootstrap_support" & name =="only_boot" ~ "Calibrated ultrafast bootstrap support",
+                                analysis_type == "bootstrap_support" & name =="inc_boot" ~ "All features+ ultrafast bootstrap support",
+                                    analysis_type == "feature_aLRT_iqtree_support" & name =="raw_only_boot" ~ "Raw aLRT support",
+                                analysis_type == "feature_aLRT_iqtree_support" & name =="only_boot" ~ "Calibrated aLRT support",
+                                analysis_type == "feature_aLRT_iqtree_support" & name =="inc_boot" ~ "All features+ aLRT support",
+                                                                    analysis_type == "feature_aBayes_iqtree_support" & name =="raw_only_boot" ~ "Raw aBayes support",
+                                analysis_type == "feature_aBayes_iqtree_support" & name =="only_boot" ~ "Calibrated aBayes support",
+                                analysis_type == "feature_aBayes_iqtree_support" & name =="inc_boot" ~ "All features+ aBayes support",
+                                )) %>% mutate(TPR =`tp_0.5`/(`tp_0.5`+`fn_0.5`),TNR =`tn_0.5`/(`tn_0.5`+`fp_0.5`),FPR =`fp_0.5`/(`tn_0.5`+`fp_0.5`),FNR =`fn_0.5`/(`tp_0.5`+`fn_0.5`)) %>% dplyr::select (dataset, description,logloss, mcc_0.5,FPR,FNR, AUC,average_precision)  %>% arrange(dataset)
+
+paper_performance_iqtree
+write_tsv(paper_performance_iqtree,out_path)
+
+paper_performance_iqtree %>% arrange(description)
+
+```
+FASTTREE
+```{r}
+
+out_path <-paste(prefix,"ML_results/","fasttree","/performance_text",".tsv", sep = "")
+
+paper_performance_fasttree<-fasttree_final_models_performance  %>% filter (metric_type=='all_data') %>% dplyr::select (dataset,analysis_type,name,mcc_0.5,logloss, AUC,average_precision, tp_0.5, tn_0.5, fp_0.5, fn_0.5)  %>% arrange(dataset) %>% mutate (description = case_when(analysis_type == "full_standard" & name =="model_standard" ~ "all features", 
+                                analysis_type == "fast_standard" & name =="model_standard" ~ "All features except NNI features",
+                                analysis_type == "bootstrap_support" & name =="raw_only_boot" ~ "Raw SH support",
+                                analysis_type == "bootstrap_support" & name =="only_boot" ~ "Calibrated SH support",
+                                analysis_type == "bootstrap_support" & name =="inc_boot" ~ "All features+ SH support",
+                                    analysis_type == "feature_aLRT_iqtree_support" & name =="raw_only_boot" ~ "Raw aLRT support",
+                                analysis_type == "feature_aLRT_iqtree_support" & name =="only_boot" ~ "Calibrated aLRT support",
+                                analysis_type == "feature_aLRT_iqtree_support" & name =="inc_boot" ~ "All features+ aLRT support",
+                                                                    analysis_type == "feature_aBayes_iqtree_support" & name =="raw_only_boot" ~ "Raw aBayes support",
+                                analysis_type == "feature_aBayes_iqtree_support" & name =="only_boot" ~ "Calibrated aBayes support",
+                                analysis_type == "feature_aBayes_iqtree_support" & name =="inc_boot" ~ "All features+ aBayes support",
+                                )) %>% mutate(TPR =`tp_0.5`/(`tp_0.5`+`fn_0.5`),TNR =`tn_0.5`/(`tn_0.5`+`fp_0.5`),FPR =`fp_0.5`/(`tn_0.5`+`fp_0.5`),FNR =`fn_0.5`/(`tp_0.5`+`fn_0.5`)) %>% dplyr::select (dataset, description,logloss, mcc_0.5,FPR,FNR, AUC,average_precision)  %>% arrange(dataset)
+
+paper_performance_fasttree
+write_tsv(paper_performance_fasttree,out_path)
+paper_performance_fasttree %>% arrange(description)
+
+
+```
+RAXML
+```{r}
+
+out_path <-paste(prefix,"ML_results/","raxml","/performance_text",".tsv", sep = "")
+
+paper_performance_raxml<-raxml_final_models_performance  %>% filter (metric_type=='all_data') %>% dplyr::select (dataset,analysis_type,name,mcc_0.5,logloss, AUC,average_precision, tp_0.5, tn_0.5, fp_0.5, fn_0.5)  %>% arrange(dataset) %>% mutate (description = case_when(analysis_type == "full_standard" & name =="model_standard" ~ "all features", 
                                 analysis_type == "fast_standard" & name =="model_standard" ~ "All features except NNI features",
                                 analysis_type == "bootstrap_support" & name =="raw_only_boot" ~ "Raw bootstrap support",
                                 analysis_type == "bootstrap_support" & name =="only_boot" ~ "Calibrated bootstrap support",
@@ -126,21 +213,43 @@ paper_performance<-final_models_performance  %>% filter (metric_type=='all_data'
                                 analysis_type == "feature_aBayes_iqtree_support" & name =="inc_boot" ~ "All features+ aBayes support",
                                 )) %>% mutate(TPR =`tp_0.5`/(`tp_0.5`+`fn_0.5`),TNR =`tn_0.5`/(`tn_0.5`+`fp_0.5`),FPR =`fp_0.5`/(`tn_0.5`+`fp_0.5`),FNR =`fn_0.5`/(`tp_0.5`+`fn_0.5`)) %>% dplyr::select (dataset, description,logloss, mcc_0.5,FPR,FNR, AUC,average_precision)  %>% arrange(dataset)
 
-paper_performance
-write_tsv(paper_performance,out_path)
+paper_performance_raxml
+write_tsv(paper_performance_raxml,out_path)
+paper_performance_raxml %>% arrange(description)
+
+```
+
+Results on test data
+```{r}
+total_model_performance = rbind(paper_performance_iqtree %>% mutate(program='IQTREE'), paper_performance_fasttree %>% mutate(program='FastTree'), paper_performance_raxml %>% mutate(program='RAxML-NG')) %>% filter (dataset %in% c("test"), description %in% c("all features","Raw SH support","Raw aLRT support","Raw aBayes support","Raw bootstrap support","Raw ultrafast bootstrap support")) %>% mutate(Support = description) %>% rename(MCC = mcc_0.5)
 
 
+
+mcc_plot<-total_model_performance %>% ggplot(aes(y=MCC, x = program, fill = Support))+geom_col(position = "dodge")
+logloss_plot<-total_model_performance %>% ggplot(aes(y=logloss, x = program, fill = Support))+geom_col(position = "dodge")
+#total_model_performance %>% ggplot(aes)
+
+ggarrange(mcc_plot,logloss_plot, labels = c("A","B"),align = "h", nrow = 2, ncol = 1, common.legend = TRUE )
 ```
 
 
 
-Variable importance 
-```{r}
-out_path <-paste(prefix,"ML_results/",program,"/vi_text",".tsv", sep = "")
 
-vi_data<- vi %>% arrange (`...1`) %>% mutate (feature_name = case_when(
-  `...1` == "feature_min_ll_diff"~ "Minimum log-likelihood difference between an NNI neighbor near the bipartition and current tree",
-  `...1` =="feature_max_ll_diff"~ "Maximum log-likelihood difference between an NNI neighbor near the split and current tree",
+
+
+Variable importance 
+IQTREE
+
+
+```{r}
+out_path <-paste(prefix,"ML_results/","iqtree","/vi_text",".tsv", sep = "")
+
+vi_data<- iqtree_vi %>% arrange (`...1`) %>% mutate (feature_name = case_when(
+  `...1` == "feature_min_ll_diff_opt=True_model_False"~ "Minimum log-likelihood difference between an NNI neighbor near the bipartition and current tree",
+  `...1` =="feature_max_ll_diff_opt=True_model_False"~ "Maximum log-likelihood difference between an NNI neighbor near the split and current tree",
+  
+    `...1` == "feature_min_ll_diff_opt=False_model_False"~ "Minimum log-likelihood difference between an NNI neighbor near the bipartition and current tree",
+  `...1` =="feature_max_ll_diff_opt=False_model_False"~ "Maximum log-likelihood difference between an NNI neighbor near the split and current tree",
   
   `...1` =='feature_mean_parsimony_trees_binary'~"Fraction of parsimoy trees in which the bipartition exists",
   `...1` =='feature_mean_parsimony_trees_neighbors_binary'~"Fraction of parsimony trees in which the neighbouring bipartitions exist",
@@ -160,6 +269,10 @@ vi_data<- vi %>% arrange (`...1`) %>% mutate (feature_name = case_when(
 
 `...1` =='feature_partition_branch'~'Branch length at the parititon',
 `...1` =='feature_partition_branch_vs_mean'~'Branch length at the parititon divided by total tree divergence',
+`...1` =='feature_var_bl'~'Variance of branch lengths across the tree',
+`...1` =='feature_25_pct_bl'~'25th percentile of tree branch lengths',
+`...1` =='feature_75_pct_bl'~'75th percentile of tree branch lengths',
+`...1` =='feature_mean_bl'~'Average of tree branch length',
 
 
 `...1` =='feature_partition_divergence'~'Total divergence in the smaller subtree defined by the bipartition',
@@ -174,16 +287,132 @@ vi_data<- vi %>% arrange (`...1`) %>% mutate (feature_name = case_when(
 `...1` =='feature_msa_n_unique_sites'~'Number of unique positions in the MSA',
 `...1` =='feature_msa_n_seq'~'Number of sequences in the MSA',
 `...1` =='feature_msa_pypythia_msa_difficulty'~'MSA difficulty',
+`...1` =='feature_max_mean_branch_length_opt=True_model_False'~'Difference in branch lengths',
 
 
 
-)) %>% dplyr::select (`...1`,feature_name,`Gini-importance`, mcc ) %>% arrange(feature_name,-`Gini-importance`)
+
+)) %>% dplyr::select (`...1`,feature_name,`Gini-importance`, mcc_0.5 ) %>% arrange(-`Gini-importance`,feature_name)
 vi_data
 write_tsv(vi_data,out_path)
                                 
 ```
 
+FASTTREE
 
+```{r}
+out_path <-paste(prefix,"ML_results/","fasttree","/vi_text",".tsv", sep = "")
+
+vi_data<- fasttree_vi %>% arrange (`...1`) %>% mutate (feature_name = case_when(
+  `...1` == "feature_min_ll_diff_opt=True_model_False"~ "Minimum log-likelihood difference between an NNI neighbor near the bipartition and current tree",
+  `...1` =="feature_max_ll_diff_opt=True_model_False"~ "Maximum log-likelihood difference between an NNI neighbor near the split and current tree",
+  
+    `...1` == "feature_min_ll_diff_opt=False_model_False"~ "Minimum log-likelihood difference between an NNI neighbor near the bipartition and current tree",
+  `...1` =="feature_max_ll_diff_opt=False_model_False"~ "Maximum log-likelihood difference between an NNI neighbor near the split and current tree",
+  
+  `...1` =='feature_mean_parsimony_trees_binary'~"Fraction of parsimoy trees in which the bipartition exists",
+  `...1` =='feature_mean_parsimony_trees_neighbors_binary'~"Fraction of parsimony trees in which the neighbouring bipartitions exist",
+  
+  
+    `...1`=='feature_mean_all_ML_boot_raxml_neighbors_binary'~'Fraction of final ML trees in which the bipartition exists',
+  
+   `...1` =='feature_mean_all_ML_boot_raxml_binary'~"Fraction of parsimony trees in which the neighbouring bipartitions exist",
+
+  
+`...1` =='feature_mean_parsimony_trees'~"Mean transfer distance of the bipartition across parsimoy trees",
+`...1` =='feature_mean_parsimony_trees_neighbors'~"Mean transfer distance of the neighbouring bipartitions across parsimoy trees",
+
+
+`...1` =='feature_mean_all_ML_boot_raxml'~'Mean transfer distance of the bipartition across final ML trees',
+`...1` =='feature_mean_all_ML_boot_raxml_neighbors'~'Mean transfer distance of the neighbouring bipartitions across final ML trees',
+
+`...1` =='feature_partition_branch'~'Branch length at the parititon',
+`...1` =='feature_partition_branch_vs_mean'~'Branch length at the parititon divided by total tree divergence',
+`...1` =='feature_var_bl'~'Variance of branch lengths across the tree',
+`...1` =='feature_25_pct_bl'~'25th percentile of tree branch lengths',
+`...1` =='feature_75_pct_bl'~'75th percentile of tree branch lengths',
+`...1` =='feature_mean_bl'~'Average of tree branch length',
+
+
+`...1` =='feature_partition_divergence'~'Total divergence in the smaller subtree defined by the bipartition',
+`...1` =='feature_divergence_ratio'~'Total divergence in the smaller subtree defined by the bipartition divided by total tree divergence',
+`...1` =='feature_partition_size'~'Number of leaves in the smaller subtree defined by the bipartition',
+`...1` =='feature_partition_size_ratio'~'Fraction of leaves in the smaller subtree defined by the bipartition',
+
+`...1` =='feature_min_neighbor_brlen'~'Minimal branch length among the neighbouring branches',
+`...1` =='feature_mean_neighbor_brlen'~'Mean branch length among the neighbouring branches',
+`...1` =='feature_msa_constant_sites_pct'~'Fraction of constant sites among the MSA sites',
+`...1` =='feature_msa_n_loci'~'Number of positions in the MSA',
+`...1` =='feature_msa_n_unique_sites'~'Number of unique positions in the MSA',
+`...1` =='feature_msa_n_seq'~'Number of sequences in the MSA',
+`...1` =='feature_msa_pypythia_msa_difficulty'~'MSA difficulty',
+`...1` =='feature_max_mean_branch_length_opt=True_model_False'~'Difference in branch lengths',
+
+
+
+
+)) %>% dplyr::select (`...1`,feature_name,`Gini-importance`, mcc_0.5 ) %>% arrange(-`Gini-importance`)
+vi_data 
+write_tsv(vi_data,out_path)
+```
+
+RAXML
+
+```{r}
+out_path <-paste(prefix,"ML_results/","raxml","/vi_text",".tsv", sep = "")
+
+vi_data<- raxml_vi %>% arrange (`...1`) %>% mutate (feature_name = case_when(
+  `...1` == "feature_min_ll_diff_opt=True_model_False"~ "Minimum log-likelihood difference between an NNI neighbor near the bipartition and current tree",
+  `...1` =="feature_max_ll_diff_opt=True_model_False"~ "Maximum log-likelihood difference between an NNI neighbor near the split and current tree",
+  
+    `...1` == "feature_min_ll_diff_opt=False_model_False"~ "Minimum log-likelihood difference between an NNI neighbor near the bipartition and current tree",
+  `...1` =="feature_max_ll_diff_opt=False_model_False"~ "Maximum log-likelihood difference between an NNI neighbor near the split and current tree",
+  
+  `...1` =='feature_mean_parsimony_trees_binary'~"Fraction of parsimoy trees in which the bipartition exists",
+  `...1` =='feature_mean_parsimony_trees_neighbors_binary'~"Fraction of parsimony trees in which the neighbouring bipartitions exist",
+  
+  
+    `...1`=='feature_mean_all_ML_boot_raxml_neighbors_binary'~'Fraction of final ML trees in which the bipartition exists',
+  
+   `...1` =='feature_mean_all_ML_boot_raxml_binary'~"Fraction of parsimony trees in which the neighbouring bipartitions exist",
+
+  
+`...1` =='feature_mean_parsimony_trees'~"Mean transfer distance of the bipartition across parsimoy trees",
+`...1` =='feature_mean_parsimony_trees_neighbors'~"Mean transfer distance of the neighbouring bipartitions across parsimoy trees",
+
+
+`...1` =='feature_mean_all_ML_boot_raxml'~'Mean transfer distance of the bipartition across final ML trees',
+`...1` =='feature_mean_all_ML_boot_raxml_neighbors'~'Mean transfer distance of the neighbouring bipartitions across final ML trees',
+
+`...1` =='feature_partition_branch'~'Branch length at the parititon',
+`...1` =='feature_partition_branch_vs_mean'~'Branch length at the parititon divided by total tree divergence',
+`...1` =='feature_var_bl'~'Variance of branch lengths across the tree',
+`...1` =='feature_25_pct_bl'~'25th percentile of tree branch lengths',
+`...1` =='feature_75_pct_bl'~'75th percentile of tree branch lengths',
+`...1` =='feature_mean_bl'~'Average of tree branch length',
+
+
+`...1` =='feature_partition_divergence'~'Total divergence in the smaller subtree defined by the bipartition',
+`...1` =='feature_divergence_ratio'~'Total divergence in the smaller subtree defined by the bipartition divided by total tree divergence',
+`...1` =='feature_partition_size'~'Number of leaves in the smaller subtree defined by the bipartition',
+`...1` =='feature_partition_size_ratio'~'Fraction of leaves in the smaller subtree defined by the bipartition',
+
+`...1` =='feature_min_neighbor_brlen'~'Minimal branch length among the neighbouring branches',
+`...1` =='feature_mean_neighbor_brlen'~'Mean branch length among the neighbouring branches',
+`...1` =='feature_msa_constant_sites_pct'~'Fraction of constant sites among the MSA sites',
+`...1` =='feature_msa_n_loci'~'Number of positions in the MSA',
+`...1` =='feature_msa_n_unique_sites'~'Number of unique positions in the MSA',
+`...1` =='feature_msa_n_seq'~'Number of sequences in the MSA',
+`...1` =='feature_msa_pypythia_msa_difficulty'~'MSA difficulty',
+`...1` =='feature_max_mean_branch_length_opt=True_model_False'~'Difference in branch lengths',
+
+
+
+
+)) %>% dplyr::select (`...1`,feature_name,`Gini-importance`, mcc_0.5 ) %>% arrange(-`Gini-importance`)
+vi_data %>% arrange(feature_name)
+write_tsv(vi_data,out_path)
+```
 
 Confusion matrix
 
@@ -201,23 +430,13 @@ ggplotConfusionMatrix <- function(m){
     ggtitle(mytitle)+theme(text = element_text(size = 13))
   return(p)
 }
-conf_data<-enriched_test %>% dplyr::select (prob_predictions, true_label) %>% mutate (pred_status = prob_predictions>0.5) 
+conf_data<-iqtree_enriched_test %>% dplyr::select (prob_predictions, true_label) %>% mutate (pred_status = prob_predictions>0.5) 
 
 obs<- factor(conf_data %>% pull (true_label))
 pred<- factor(conf_data %>% pull (pred_status))
 
 
 confusion_plot<-ggplotConfusionMatrix(confusionMatrix(data = pred, reference= obs))+theme(legend.position = "none")
-
-```
-Prediction metrics
-
-
-
-```{r}
-library(predtools)
-library(MASS)
-library(caret)
 
 error_vs_size<- all_models_performance %>% filter (metric_type=='all_data', dataset =='test', analysis_type=='full_standard')
 error_vs_size_plt = error_vs_size %>% mutate(n_MSAs = sample_frac*2007) %>% ggplot(aes(x=n_MSAs, y = mcc))+geom_line()+ expand_limits(y = 0)+xlab("Number of MSAs")+ theme(text = element_text(size = 13))+ylab("MCC")+geom_point()
@@ -234,9 +453,16 @@ global_max_auc_plt<-ggroc(rocobj,colour = 'steelblue', size = 2)+
 ggarrange(global_max_auc_plt,confusion_plot,error_vs_size_plt, labels = c("A","B","C"),align = "h", nrow = 2, ncol = 2 )
 
 ```
-```{r}
-test_group_performance %>% filter (grouping_col_name =='feature_msa_n_loci') 
-```
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -262,18 +488,18 @@ n_loci_scatter<-enriched_test %>% dplyr::select (msa_path,prob_predictions, feat
 ggarrange(seq_scatter,Pypythia_scatter,n_loci_scatter, n_seq_error,Pypythia_error, n_loci_error,labels = c("A","C","E","B","D","F"),align = "h", nrow = 3, ncol = 3, legend = "bottom",vjust= 1)
 #error_vs_group_5_5_including_plt
 
-
-```
-
-```{r}
 cor.test( enriched_test$feature_msa_pypythia_msa_difficulty,  enriched_test$prob_predictions)
 cor.test( enriched_test$feature_msa_n_seq, enriched_test$prob_predictions)
 cor.test( enriched_test$feature_msa_n_loci, enriched_test$prob_predictions)
+
+
 ```
 
 
 
 
+
+Running time
 
 
 ```{r}
@@ -300,6 +526,7 @@ summary(running_time_data %>% pull (nni_ll_eval_running_time))
 summary(running_time_data %>% pull (program_boot_run_time))
 #enriched_test %>% dplyr::select (boot_run_time, extraction_running_time, nni_ll_eval_running_time)
 ```
+
 ```{r}
 summary(validation_data$feature_n_unique_seq)
 raxml_validation_data$
