@@ -286,12 +286,14 @@ def main():
 
 
     if args.use_val_data:
-        fasttree_validation = pd.read_csv(os.path.join(args.validation_data_folder, f'simulations_df_fasttree.tsv'))
-        iqtree_validation = pd.read_csv(os.path.join(args.validation_data_folder, f'simulations_df_iqtree.tsv'))
-        raxml_validation = pd.read_csv(os.path.join(args.validation_data_folder, f'simulations_df_raxml.tsv'))
+        fasttree_validation = pd.read_csv(os.path.join(args.validation_data_folder, f'simulations_df_fasttree.tsv'), sep='\t')
+        iqtree_validation = pd.read_csv(os.path.join(args.validation_data_folder, f'simulations_df_iqtree.tsv'),sep='\t')
+        raxml_validation = pd.read_csv(os.path.join(args.validation_data_folder, f'simulations_df_raxml.tsv'),sep='\t')
         common_tree_ids = list(set(fasttree_validation['tree_id']) & set(raxml_validation['tree_id']) & set(
            iqtree_validation['tree_id']))
         selected_tree_ids = sample(common_tree_ids,args.n_val_samp)
+    else:
+        selected_tree_ids = []
 
     for program in args.programs.split('_'):
         logging.info(f"Program = {program}")
@@ -304,6 +306,7 @@ def main():
             logging.info(f"Using existing training data in {training_data_path} ")
             program_data = pd.read_csv(training_data_path, sep='\t')
         program_data = transform_data(program_data, program)
+        program_data = program_data.loc[~program_data.tree_id.isin(selected_tree_ids)]
         validation_dict = {}
         validation_data_path = os.path.join(args.validation_data_folder, f'simulations_df_{program}.tsv')
         if args.use_val_data:
