@@ -321,7 +321,7 @@ def main():
 
             program_validation_data = transform_data(program_validation_data,program)
             logging.info("Subsampling tree inds in validation to the common tree inds")
-            logging.info(f"Number of MSAs in validation is {len(program_data['tree_id'].unqiue())}")
+            logging.info(f"Number of MSAs in validation is {len(np.unique(program_data['tree_id']))}")
             program_validation_data = program_validation_data.loc[program_validation_data.tree_id.isin(selected_tree_ids)]
             for model_mode in np.unique(program_validation_data["model_mode"]):
                 validation_dict[f'val_{model_mode}'] = program_validation_data.loc[
