@@ -341,7 +341,7 @@ def main():
 
 
 
-                curr_model_metrics, groups_analysis, curr_predictions = ML_pipeline(program_data, bootstrap_cols, args.cpus_per_main_job,
+                curr_model_metrics, groups_analysis = ML_pipeline(program_data, bootstrap_cols, args.cpus_per_main_job,
                                                                   sample_frac_working_dir, sample_frac,
                                                                   compare_to_bootstrap_models=False,
                                                                   subsample_train=True, do_RFE=args.RFE,
