@@ -196,8 +196,7 @@ def ML_pipeline(program_data, bootstrap_cols, cpus_per_main_job, working_dir, sa
     group_performance_full["sample_frac"] = sample_frac
     if extract_predictions:
         generate_enriched_datasets(working_dir, all_perdictions, train, test, validation_dict)
-        all_models_performance.to_csv(os.path.join(working_dir, 'final_model_performance.tsv'), sep=CSV_SEP)
-        group_performance_full.to_csv(os.path.join(working_dir, 'groups_performance.tsv'), sep=CSV_SEP)
+    return all_models_performance, group_performance_full
 
 
 
@@ -321,7 +320,7 @@ def main():
 
             program_validation_data = transform_data(program_validation_data,program)
             logging.info("Subsampling tree inds in validation to the common tree inds")
-            logging.info(f"Number of MSAs in validation is {len(np.unique(program_data['tree_id']))}")
+            logging.info(f"Number of MSAs in validation is {len(np.unique(program_validation_data['tree_id']))}")
             program_validation_data = program_validation_data.loc[program_validation_data.tree_id.isin(selected_tree_ids)]
             for model_mode in np.unique(program_validation_data["model_mode"]):
                 validation_dict[f'val_{model_mode}'] = program_validation_data.loc[
@@ -342,7 +341,7 @@ def main():
 
 
 
-                curr_model_metrics, groups_analysis, curr_test_with_predictions = ML_pipeline(program_data, bootstrap_cols, args.cpus_per_main_job,
+                curr_model_metrics, groups_analysis, curr_predictions = ML_pipeline(program_data, bootstrap_cols, args.cpus_per_main_job,
                                                                   sample_frac_working_dir, sample_frac,
                                                                   compare_to_bootstrap_models=False,
                                                                   subsample_train=True, do_RFE=args.RFE,
@@ -353,13 +352,14 @@ def main():
         logging.info(f"Generating optimized final model")
         final_model_working_dir = os.path.join(working_dir, f"final_model")
         create_dir_if_not_exists(final_model_working_dir)
-        ML_pipeline(program_data, bootstrap_cols, args.cpus_per_main_job,
+        final_models_performance,final_group_performance_full= ML_pipeline(program_data, bootstrap_cols, args.cpus_per_main_job,
                                                            final_model_working_dir, sample_frac=-1,
                                                            subsample_train=False, do_RFE=args.RFE,
                                                            large_grid=args.full_grid, name=f"final_model",
                                                            validation_dict=validation_dict,
                                                            compare_to_bootstrap_models=True, extract_predictions=True)
-
+        final_models_performance.to_csv(os.path.join(working_dir, 'final_model_performance.tsv'), sep=CSV_SEP)
+        final_group_performance_full.to_csv(os.path.join(working_dir, 'groups_performance.tsv'), sep=CSV_SEP)
 
     #     print(test_metrics)
 

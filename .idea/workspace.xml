@@ -54,8 +54,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ML_pipeline/ML_boot_edit.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="267">
-              <caret line="323" column="74" selection-start-line="323" selection-start-column="74" selection-end-line="323" selection-end-column="74" />
+            <state relative-caret-position="-3331">
+              <caret line="198" column="8" selection-start-line="198" selection-start-column="8" selection-end-line="198" selection-end-column="8" />
             </state>
           </provider>
         </entry>
@@ -83,8 +83,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>msa_path_edit_analysis</find>
-      <find>tree_search_model</find>
       <find>model</find>
       <find>standard_ete = Tree(newick=standard_bootstrap, format=0)</find>
       <find>max_ll_diff</find>
@@ -102,7 +100,6 @@
       <find>return all_models_performance, group_performance_full,test_with_predictions</find>
       <find>standard_model_pipeline</find>
       <find>overall_model_performance_analysis</find>
-      <find>ML_pipeline</find>
       <find>bootstrap_cols</find>
       <find>'bootstrap_support'</find>
       <find>test</find>
@@ -112,7 +109,10 @@
       <find>transform_data</find>
       <find>&quot;prediction</find>
       <find>bootstrap_model_pipeline</find>
+      <find>250</find>
       <find>n_val_samp</find>
+      <find>sample</find>
+      <find>ML_pipeline</find>
     </findStrings>
     <replaceStrings>
       <replace>job_data_path</replace>
@@ -165,9 +165,9 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="145" />
-    <option name="y" value="91" />
-    <option name="width" value="1440" />
+    <option name="x" value="-166" />
+    <option name="y" value="25" />
+    <option name="width" value="1606" />
     <option name="height" value="800" />
   </component>
   <component name="ProjectView">
@@ -385,14 +385,13 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="34" width="1440" height="800" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16420014" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.19097957" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49550563" weight="0.28196347" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.67159975" weight="0.17236467" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.67159975" visible="true" weight="0.3019943" />
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.47145876" weight="0.23076923" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -510,7 +509,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/ML_pipeline/ML_boot_edit.py</url>
-          <line>250</line>
+          <line>249</line>
           <option name="timeStamp" value="233" />
         </line-breakpoint>
       </breakpoints>
@@ -778,8 +777,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ML_pipeline/ML_boot_edit.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="267">
-          <caret line="323" column="74" selection-start-line="323" selection-start-column="74" selection-end-line="323" selection-end-column="74" />
+        <state relative-caret-position="-3331">
+          <caret line="198" column="8" selection-start-line="198" selection-start-column="8" selection-end-line="198" selection-end-column="8" />
         </state>
       </provider>
     </entry>
