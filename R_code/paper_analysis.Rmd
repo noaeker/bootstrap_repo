@@ -17,12 +17,8 @@ library(predtools)
 library(MASS)
 library(caret)
 ```
-```{r}
-validation_data_prefix = "/Users/noa/Workspace/bootstrap_results/validation_data"
-fasttree_validation_data = read_tsv(paste(validation_data_prefix,"/simulations_df_fasttree.tsv", sep = ""))
-raxml_validation_data = read_tsv(paste(validation_data_prefix,"/simulations_df_raxml.tsv", sep = ""))
-iqtree_validation_data = read_tsv(paste(validation_data_prefix,"/simulations_df_iqtree.tsv", sep = ""))
-```
+
+
 
 
 
@@ -35,115 +31,32 @@ fasttree_all_models_performance = read_tsv(paste(prefix,"ML_results/fasttree/all
 fasttree_final_models_performance = read_tsv(paste(prefix,"ML_results/fasttree/final_model_performance.tsv", sep = ""))
 fasttree_group_performance = read_tsv(paste(prefix,"ML_results/fasttree/groups_performance.tsv", sep = ""))
 fasttree_vi =  read_tsv(paste(prefix,"ML_results/fasttree/final_model/full_model/model_standard_vi.tsv", sep = ""))
-fasttree_enriched_test = read_tsv(paste(prefix,"ML_results/fasttree/test_with_predictions.tsv", sep = ""))
+fasttree_enriched_test = read_tsv(paste(prefix,"ML_results/fasttree/final_model/test.tsv", sep = ""))
 fasttree_validation = read_tsv(paste(prefix,"validation_data/simulations_df_fasttree.tsv", sep = ""))
+fasttree_enriched_val_downgrade = read_tsv(paste(prefix,"ML_results/fasttree/final_model/val_downgrade.tsv", sep = ""))
+fasttree_enriched_val_standard = read_tsv(paste(prefix,"ML_results/fasttree/final_model/val_upgrade.tsv", sep = ""))
+fasttree_enriched_val_upgrade = read_tsv(paste(prefix,"ML_results/fasttree/final_model/val_standard.tsv", sep = ""))
 #####
 iqtree_all_models_performance = read_tsv(paste(prefix,"ML_results/iqtree/all_models_performance.tsv", sep = ""))
 iqtree_final_models_performance = read_tsv(paste(prefix,"ML_results/iqtree/final_model_performance.tsv", sep = ""))
 iqtree_group_performance = read_tsv(paste(prefix,"ML_results/iqtree/groups_performance.tsv", sep = ""))
 iqtree_vi =  read_tsv(paste(prefix,"ML_results/iqtree/final_model/full_model/model_standard_vi.tsv", sep = ""))
-iqtree_enriched_test = read_tsv(paste(prefix,"ML_results/iqtree/test_with_predictions.tsv", sep = ""))
-iqtree_validation = read_tsv(paste(prefix,"validation_data/simulations_df_iqtree.tsv", sep = ""))
+iqtree_enriched_test = read_tsv(paste(prefix,"ML_results/iqtree/final_model/test.tsv", sep = ""))
+iqtree_enriched_val_downgrade = read_tsv(paste(prefix,"ML_results/iqtree/final_model/val_downgrade.tsv", sep = ""))
+iqtree_enriched_val_standard = read_tsv(paste(prefix,"ML_results/iqtree/final_model/val_upgrade.tsv", sep = ""))
+iqtree_enriched_val_upgrade = read_tsv(paste(prefix,"ML_results/iqtree/final_model/val_standard.tsv", sep = ""))
 #####
 raxml_all_models_performance = read_tsv(paste(prefix,"ML_results/raxml/all_models_performance.tsv", sep = ""))
 raxml_final_models_performance = read_tsv(paste(prefix,"ML_results/raxml/final_model_performance.tsv", sep = ""))
 raxml_group_performance = read_tsv(paste(prefix,"ML_results/raxml/groups_performance.tsv", sep = ""))
 raxml_vi =  read_tsv(paste(prefix,"ML_results/raxml/final_model/full_model/model_standard_vi.tsv", sep = ""))
-raxml_enriched_test = read_tsv(paste(prefix,"ML_results/raxml//test_with_predictions.tsv", sep = ""))
-raxml_validation = read_tsv(paste(prefix,"validation_data/simulations_df_raxml.tsv", sep = ""))
+raxml_enriched_test = read_tsv(paste(prefix,"ML_results/raxml/final_model/test.tsv", sep = ""))
+raxml_enriched_val_downgrade = read_tsv(paste(prefix,"ML_results/fasttree/final_model/val_downgrade.tsv", sep = ""))
+raxml_enriched_val_standard = read_tsv(paste(prefix,"ML_results/fasttree/final_model/val_upgrade.tsv", sep = ""))
+raxml_enriched_val_upgrade = read_tsv(paste(prefix,"ML_results/fasttree/final_model/val_standard.tsv", sep = ""))
 
 
 ```
-
-
-
-
-Choose specific program
-```{r}
-program = 'fasttree'
-if (program=='fasttree') {
-    all_models_performance = fasttree_all_models_performance
-    final_models_performance = fasttree_final_models_performance %>% filter(analysis_type!='feature_standard_fasttree_boot_support')
-    group_performance = fasttree_group_performance
-    vi = fasttree_vi
-    enriched_test = fasttree_enriched_test
-    #validation_data = fasttree_validation_data
-    
-} else if (program=='iqtree') {
-    all_models_performance = iqtree_all_models_performance
-    final_models_performance = iqtree_final_models_performance
-    group_performance = iqtree_group_performance
-    vi = iqtree_vi
-    enriched_test = iqtree_enriched_test
-    #validation_data = iqtree_validation_data
-} else if (program=='raxml') {
-    all_models_performance = raxml_all_models_performance
-    final_models_performance = raxml_final_models_performance
-    group_performance = raxml_group_performance
-    vi = raxml_vi
-    enriched_test = raxml_enriched_test
-    #validation_data = raxml_validation
-}
-```
-
-
-
-IQTREE
-```{r}
-
-summm_iqtree<- iqtree_enriched_test %>% group_by(tree_id) %>% summarise(mean_true = mean(true_binary_support), mean_pred = mean(prob_predictions), mean_bayes = mean(feature_aBayes_iqtree_support), mean_ultrafast = mean(bootstrap_support), mean_bayes_cal = mean(predictions_feature_aBayes_iqtree_support_only_boot),
-                                                mean_alrt = mean(feature_aLRT_iqtree_support), mean_alrt_cal = mean(predictions_feature_aLRT_iqtree_support_only_boot))
-                                                
-
-bayes<-summm_iqtree%>% ggplot(aes(y=mean_true,x=mean_bayes))+geom_point(alpha = 1/3)+geom_abline(slope=1, intercept = 0,color = "green")+ylab("True fraction")+xlab("aBayes test")+theme(text = element_text(size = 11))+ coord_flip()
-
-alrt<-summm_iqtree %>% ggplot(aes(y=mean_true,x=mean_alrt))+geom_point(alpha = 1/3)+geom_abline(slope=1, intercept = 0,color = "green")+ylab("True fraction")+xlab("aLRT test ")+theme(text = element_text(size = 11))+ coord_flip()
-
-ultrafast<-summm_iqtree %>% ggplot(aes(y=mean_true,x=mean_ultrafast/100))+geom_point(alpha = 1/3)+geom_abline(slope=1, intercept = 0,color = "green")+ylab("True fraction")+xlab("Ultrafast\nbootstrap")+theme(text = element_text(size = 11))+ coord_flip()
-
-
-pred_iqtree<-summm_iqtree  %>% ggplot(aes(y=mean_true,x=mean_pred))+geom_point(alpha = 1/3)+geom_abline(slope=1, intercept = 0,color = "green")+ylab("True fraction")+xlab("IQTREE\nmodel")+theme(text = element_text(size = 11))+ coord_flip()
-
-
-
-iqtree_plot<-ggarrange(pred_iqtree,ultrafast,bayes,alrt, labels = c("A","B","C"),align = "h", nrow = 2, ncol = 2 )
-iqtree_plot
-```
-FASTTREE
-
-```{r}
-summm_fasttree<- fasttree_enriched_test %>% group_by(tree_id) %>% summarise(mean_true = mean(true_binary_support), mean_pred = mean(prob_predictions), mean_sh = mean(bootstrap_support))
-                                                
-
-pred_fasttree<-summm_fasttree  %>% ggplot(aes(y=mean_true,x=mean_pred))+geom_point(alpha = 1/3)+geom_abline(slope=1, intercept = 0,color = "green")+ylab("True fraction")+xlab("Fasttree\nmodel")+theme(text = element_text(size = 11))+ coord_flip()
-
-sh<-summm_fasttree  %>% ggplot(aes(y=mean_true,x=mean_sh))+geom_point(alpha = 1/3)+geom_abline(slope=1, intercept = 0,color = "green")+ylab("True fraction")+xlab("SH test")+theme(text = element_text(size = 11))+ coord_flip()
-
-
-fasttree_plot<-ggarrange(pred_fasttree,sh, labels = c("A","B"),align = "h", nrow = 1, ncol = 2 )
-fasttree_plot
-```
-
-
-RAXML
-```{r}
-summm_raxml<- raxml_enriched_test %>% group_by(tree_id) %>% summarise(mean_true = mean(true_binary_support), mean_pred = mean(prob_predictions), mean_sh = mean(bootstrap_support))
-                                                
-
-pred_raxml<-summm_raxml  %>% ggplot(aes(y=mean_true,x=mean_pred))+geom_point(alpha = 1/3)+geom_abline(slope=1, intercept = 0, color = "green")+ylab("True fraction")+xlab("RAxML-NG\nmodel")+theme(text = element_text(size = 11))+ coord_flip()
-
-rapid<-summm_fasttree  %>% ggplot(aes(y=mean_true,x=mean_sh))+geom_point(alpha = 1/3)+geom_abline(slope=1, intercept = 0,color = "green")+ylab("True fraction")+xlab("Bootstrap\nsupport")+theme(text = element_text(size = 11))+ coord_flip()
-
-
-raxml_plot<-ggarrange(pred_raxml,rapid, labels = c("A","B"),align = "h", nrow = 1, ncol = 2 )
-raxml_plot
-```
-
-```{r}
-ggarrange(pred_iqtree,alrt, bayes, ultrafast,pred_raxml,rapid,"","",pred_fasttree,sh,align = "h", nrow = 3, ncol = 4 )
-
-```
-
 
 
 General performance
@@ -152,7 +65,7 @@ IQTREE
 
 out_path <-paste(prefix,"ML_results/","iqtree","/performance_text",".tsv", sep = "")
 
-paper_performance_iqtree<-iqtree_final_models_performance  %>% filter (metric_type=='all_data') %>% dplyr::select (dataset,analysis_type,name,mcc_0.5,logloss, AUC,average_precision, tp_0.5, tn_0.5, fp_0.5, fn_0.5)  %>% arrange(dataset) %>% mutate (description = case_when(analysis_type == "full_standard" & name =="model_standard" ~ "all features", 
+paper_performance_iqtree<-iqtree_final_models_performance  %>% filter (metric_type=='all_data') %>% dplyr::select (dataset,analysis_type,name,brier_loss,logloss, AUC,average_precision,mcc_0.5, tp_0.5, tn_0.5, fp_0.5, fn_0.5)  %>% arrange(dataset) %>% mutate (description = case_when(analysis_type == "full_standard" & name =="model_standard" ~ "all features", 
                                 analysis_type == "fast_standard" & name =="model_standard" ~ "All features except NNI features",
                                 analysis_type == "bootstrap_support" & name =="raw_only_boot" ~ "Raw ultrafast bootstrap support",
                                 analysis_type == "bootstrap_support" & name =="only_boot" ~ "Calibrated ultrafast bootstrap support",
@@ -163,7 +76,7 @@ paper_performance_iqtree<-iqtree_final_models_performance  %>% filter (metric_ty
                                                                     analysis_type == "feature_aBayes_iqtree_support" & name =="raw_only_boot" ~ "Raw aBayes support",
                                 analysis_type == "feature_aBayes_iqtree_support" & name =="only_boot" ~ "Calibrated aBayes support",
                                 analysis_type == "feature_aBayes_iqtree_support" & name =="inc_boot" ~ "All features+ aBayes support",
-                                )) %>% mutate(TPR =`tp_0.5`/(`tp_0.5`+`fn_0.5`),TNR =`tn_0.5`/(`tn_0.5`+`fp_0.5`),FPR =`fp_0.5`/(`tn_0.5`+`fp_0.5`),FNR =`fn_0.5`/(`tp_0.5`+`fn_0.5`)) %>% dplyr::select (dataset, description,logloss, mcc_0.5,FPR,FNR, AUC,average_precision)  %>% arrange(dataset)
+                                )) %>% mutate(TPR =`tp_0.5`/(`tp_0.5`+`fn_0.5`),TNR =`tn_0.5`/(`tn_0.5`+`fp_0.5`),FPR =`fp_0.5`/(`tn_0.5`+`fp_0.5`),FNR =`fn_0.5`/(`tp_0.5`+`fn_0.5`)) %>% dplyr::select (dataset, description, brier_loss,logloss,AUC,average_precision, mcc_0.5,FPR,FNR, )  %>% arrange(dataset)
 
 paper_performance_iqtree
 write_tsv(paper_performance_iqtree,out_path)
@@ -453,14 +366,6 @@ global_max_auc_plt<-ggroc(rocobj,colour = 'steelblue', size = 2)+
 ggarrange(global_max_auc_plt,confusion_plot,error_vs_size_plt, labels = c("A","B","C"),align = "h", nrow = 2, ncol = 2 )
 
 ```
-
-
-
-
-
-
-
-
 
 
 

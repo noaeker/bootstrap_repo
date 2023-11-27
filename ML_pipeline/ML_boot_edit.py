@@ -240,7 +240,7 @@ def transform_data(df, program):
     #df['model_short'] = df['model_short'].apply(lambda x: x.split('+')[0])
     #df['feature_free_parameters'] = df['model_short'].apply(lambda x: get_n_free_parameters(x))
     df = df[[col for col in df.columns if
-             'msa_entropy' not in col and 'extraction_of_features_time' not in col and 'feature_abayes_opt' not in col and 'column_variance' not in col and 'feature_min_mean_branch_length' not in col and 'feature_max_mean_branch_length' and 'll_diff_norm' not in col ]]
+             'msa_entropy' not in col and 'extraction_of_features_time' not in col and 'feature_abayes_opt' not in col and 'column_variance' not in col and 'feature_min_mean_branch_length' not in col and 'feature_max_mean_branch_length' not in col and 'll_diff_norm' not in col ]]
     # df = pd.get_dummies(df,prefix='feature_model_',columns=['model_short']) #
     if program=='raxml':
         df['bootstrap_support'] =df['bootstrap_support']/100
@@ -249,7 +249,7 @@ def transform_data(df, program):
         df['feature_aLRT_iqtree_support']= np.minimum(df['feature_aLRT_iqtree_support'],1)
         df['feature_aBayes_iqtree_support'] = np.minimum(df['feature_aBayes_iqtree_support'],1)
     elif program=='fasttree':
-        df['bootstrap_support'] = np.maximum(df['bootstrap_support'], 1)
+        df['bootstrap_support'] = np.minimum(df['bootstrap_support'], 1)
     return df
     # +[col for col in df.columns if 'msa_entropy' in col]
 
