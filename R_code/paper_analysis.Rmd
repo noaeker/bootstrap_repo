@@ -10,12 +10,10 @@ Try executing this chunk by clicking the *Run* button within the chunk or by pla
 ```{r}
 library(scales)
 library(tidyverse)
-library(caret)
 library(ggpubr)
 library(pROC)
 library(predtools)
 library(MASS)
-library(caret)
 ```
 
 
@@ -32,6 +30,7 @@ fasttree_final_models_performance = read_tsv(paste(prefix,"ML_results/fasttree/f
 fasttree_group_performance = read_tsv(paste(prefix,"ML_results/fasttree/groups_performance.tsv", sep = ""))
 fasttree_vi =  read_tsv(paste(prefix,"ML_results/fasttree/final_model/full_model/model_standard_vi.tsv", sep = ""))
 fasttree_enriched_test = read_tsv(paste(prefix,"ML_results/fasttree/final_model/test.tsv", sep = ""))
+fasttree_enriched_train = read_tsv(paste(prefix,"ML_results/fasttree/final_model/train.tsv", sep = ""))
 fasttree_validation = read_tsv(paste(prefix,"validation_data/simulations_df_fasttree.tsv", sep = ""))
 fasttree_enriched_val_downgrade = read_tsv(paste(prefix,"ML_results/fasttree/final_model/val_downgrade.tsv", sep = ""))
 fasttree_enriched_val_standard = read_tsv(paste(prefix,"ML_results/fasttree/final_model/val_upgrade.tsv", sep = ""))
@@ -42,6 +41,7 @@ iqtree_final_models_performance = read_tsv(paste(prefix,"ML_results/iqtree/final
 iqtree_group_performance = read_tsv(paste(prefix,"ML_results/iqtree/groups_performance.tsv", sep = ""))
 iqtree_vi =  read_tsv(paste(prefix,"ML_results/iqtree/final_model/full_model/model_standard_vi.tsv", sep = ""))
 iqtree_enriched_test = read_tsv(paste(prefix,"ML_results/iqtree/final_model/test.tsv", sep = ""))
+iqtree_enriched_train = read_tsv(paste(prefix,"ML_results/iqtree/final_model/train.tsv", sep = ""))
 iqtree_enriched_val_downgrade = read_tsv(paste(prefix,"ML_results/iqtree/final_model/val_downgrade.tsv", sep = ""))
 iqtree_enriched_val_standard = read_tsv(paste(prefix,"ML_results/iqtree/final_model/val_upgrade.tsv", sep = ""))
 iqtree_enriched_val_upgrade = read_tsv(paste(prefix,"ML_results/iqtree/final_model/val_standard.tsv", sep = ""))
@@ -58,79 +58,21 @@ raxml_enriched_val_upgrade = read_tsv(paste(prefix,"ML_results/fasttree/final_mo
 
 ```
 
-
-General performance
-IQTREE
 ```{r}
+iqtree_enriched_train %>% ggplot(aes(x=feature_msa_pypythia_msa_difficulty))+geom_histogram()
+iqtree_enriched_test %>% ggplot(aes(x=feature_msa_pypythia_msa_difficulty))+geom_histogram()
+iqtree_enriched_val_standard %>% ggplot(aes(x=feature_msa_pypythia_msa_difficulty))+geom_histogram()
+iqtree_enriched_val_upgrade %>% ggplot(aes(x=feature_msa_pypythia_msa_difficulty))+geom_histogram()
+iqtree_enriched_val_downgrade %>% ggplot(aes(x=feature_msa_pypythia_msa_difficulty))+geom_histogram()
 
-out_path <-paste(prefix,"ML_results/","iqtree","/performance_text",".tsv", sep = "")
 
-paper_performance_iqtree<-iqtree_final_models_performance  %>% filter (metric_type=='all_data') %>% dplyr::select (dataset,analysis_type,name,brier_loss,logloss, AUC,average_precision,mcc_0.5, tp_0.5, tn_0.5, fp_0.5, fn_0.5)  %>% arrange(dataset) %>% mutate (description = case_when(analysis_type == "full_standard" & name =="model_standard" ~ "all features", 
-                                analysis_type == "fast_standard" & name =="model_standard" ~ "All features except NNI features",
-                                analysis_type == "bootstrap_support" & name =="raw_only_boot" ~ "Raw ultrafast bootstrap support",
-                                analysis_type == "bootstrap_support" & name =="only_boot" ~ "Calibrated ultrafast bootstrap support",
-                                analysis_type == "bootstrap_support" & name =="inc_boot" ~ "All features+ ultrafast bootstrap support",
-                                    analysis_type == "feature_aLRT_iqtree_support" & name =="raw_only_boot" ~ "Raw aLRT support",
-                                analysis_type == "feature_aLRT_iqtree_support" & name =="only_boot" ~ "Calibrated aLRT support",
-                                analysis_type == "feature_aLRT_iqtree_support" & name =="inc_boot" ~ "All features+ aLRT support",
-                                                                    analysis_type == "feature_aBayes_iqtree_support" & name =="raw_only_boot" ~ "Raw aBayes support",
-                                analysis_type == "feature_aBayes_iqtree_support" & name =="only_boot" ~ "Calibrated aBayes support",
-                                analysis_type == "feature_aBayes_iqtree_support" & name =="inc_boot" ~ "All features+ aBayes support",
-                                )) %>% mutate(TPR =`tp_0.5`/(`tp_0.5`+`fn_0.5`),TNR =`tn_0.5`/(`tn_0.5`+`fp_0.5`),FPR =`fp_0.5`/(`tn_0.5`+`fp_0.5`),FNR =`fn_0.5`/(`tp_0.5`+`fn_0.5`)) %>% dplyr::select (dataset, description, brier_loss,logloss,AUC,average_precision, mcc_0.5,FPR,FNR, )  %>% arrange(dataset)
-
-paper_performance_iqtree
-write_tsv(paper_performance_iqtree,out_path)
-
-paper_performance_iqtree %>% arrange(description)
-
+iqtree_enriched_test %>% ggplot(aes(x=feature_msa_pypythia_msa_difficulty))+geom_histogram()
+iqtree_enriched_val_standard %>% ggplot(aes(x=feature_msa_pypythia_msa_difficulty))+geom_histogram()
+iqtree_enriched_val_upgrade %>% ggplot(aes(x=feature_msa_pypythia_msa_difficulty))+geom_histogram()
+iqtree_enriched_val_downgrade %>% ggplot(aes(x=feature_msa_pypythia_msa_difficulty))+geom_histogram()
 ```
-FASTTREE
-```{r}
-
-out_path <-paste(prefix,"ML_results/","fasttree","/performance_text",".tsv", sep = "")
-
-paper_performance_fasttree<-fasttree_final_models_performance  %>% filter (metric_type=='all_data') %>% dplyr::select (dataset,analysis_type,name,mcc_0.5,logloss, AUC,average_precision, tp_0.5, tn_0.5, fp_0.5, fn_0.5)  %>% arrange(dataset) %>% mutate (description = case_when(analysis_type == "full_standard" & name =="model_standard" ~ "all features", 
-                                analysis_type == "fast_standard" & name =="model_standard" ~ "All features except NNI features",
-                                analysis_type == "bootstrap_support" & name =="raw_only_boot" ~ "Raw SH support",
-                                analysis_type == "bootstrap_support" & name =="only_boot" ~ "Calibrated SH support",
-                                analysis_type == "bootstrap_support" & name =="inc_boot" ~ "All features+ SH support",
-                                    analysis_type == "feature_aLRT_iqtree_support" & name =="raw_only_boot" ~ "Raw aLRT support",
-                                analysis_type == "feature_aLRT_iqtree_support" & name =="only_boot" ~ "Calibrated aLRT support",
-                                analysis_type == "feature_aLRT_iqtree_support" & name =="inc_boot" ~ "All features+ aLRT support",
-                                                                    analysis_type == "feature_aBayes_iqtree_support" & name =="raw_only_boot" ~ "Raw aBayes support",
-                                analysis_type == "feature_aBayes_iqtree_support" & name =="only_boot" ~ "Calibrated aBayes support",
-                                analysis_type == "feature_aBayes_iqtree_support" & name =="inc_boot" ~ "All features+ aBayes support",
-                                )) %>% mutate(TPR =`tp_0.5`/(`tp_0.5`+`fn_0.5`),TNR =`tn_0.5`/(`tn_0.5`+`fp_0.5`),FPR =`fp_0.5`/(`tn_0.5`+`fp_0.5`),FNR =`fn_0.5`/(`tp_0.5`+`fn_0.5`)) %>% dplyr::select (dataset, description,logloss, mcc_0.5,FPR,FNR, AUC,average_precision)  %>% arrange(dataset)
-
-paper_performance_fasttree
-write_tsv(paper_performance_fasttree,out_path)
-paper_performance_fasttree %>% arrange(description)
 
 
-```
-RAXML
-```{r}
-
-out_path <-paste(prefix,"ML_results/","raxml","/performance_text",".tsv", sep = "")
-
-paper_performance_raxml<-raxml_final_models_performance  %>% filter (metric_type=='all_data') %>% dplyr::select (dataset,analysis_type,name,mcc_0.5,logloss, AUC,average_precision, tp_0.5, tn_0.5, fp_0.5, fn_0.5)  %>% arrange(dataset) %>% mutate (description = case_when(analysis_type == "full_standard" & name =="model_standard" ~ "all features", 
-                                analysis_type == "fast_standard" & name =="model_standard" ~ "All features except NNI features",
-                                analysis_type == "bootstrap_support" & name =="raw_only_boot" ~ "Raw bootstrap support",
-                                analysis_type == "bootstrap_support" & name =="only_boot" ~ "Calibrated bootstrap support",
-                                analysis_type == "bootstrap_support" & name =="inc_boot" ~ "All features+ bootstrap support",
-                                    analysis_type == "feature_aLRT_iqtree_support" & name =="raw_only_boot" ~ "Raw aLRT support",
-                                analysis_type == "feature_aLRT_iqtree_support" & name =="only_boot" ~ "Calibrated aLRT support",
-                                analysis_type == "feature_aLRT_iqtree_support" & name =="inc_boot" ~ "All features+ aLRT support",
-                                                                    analysis_type == "feature_aBayes_iqtree_support" & name =="raw_only_boot" ~ "Raw aBayes support",
-                                analysis_type == "feature_aBayes_iqtree_support" & name =="only_boot" ~ "Calibrated aBayes support",
-                                analysis_type == "feature_aBayes_iqtree_support" & name =="inc_boot" ~ "All features+ aBayes support",
-                                )) %>% mutate(TPR =`tp_0.5`/(`tp_0.5`+`fn_0.5`),TNR =`tn_0.5`/(`tn_0.5`+`fp_0.5`),FPR =`fp_0.5`/(`tn_0.5`+`fp_0.5`),FNR =`fn_0.5`/(`tp_0.5`+`fn_0.5`)) %>% dplyr::select (dataset, description,logloss, mcc_0.5,FPR,FNR, AUC,average_precision)  %>% arrange(dataset)
-
-paper_performance_raxml
-write_tsv(paper_performance_raxml,out_path)
-paper_performance_raxml %>% arrange(description)
-
-```
 
 Results on test data
 ```{r}
@@ -144,8 +86,6 @@ logloss_plot<-total_model_performance %>% ggplot(aes(y=logloss, x = program, fil
 
 ggarrange(mcc_plot,logloss_plot, labels = c("A","B"),align = "h", nrow = 2, ncol = 1, common.legend = TRUE )
 ```
-
-
 
 
 
@@ -323,106 +263,85 @@ vi_data<- raxml_vi %>% arrange (`...1`) %>% mutate (feature_name = case_when(
 
 
 )) %>% dplyr::select (`...1`,feature_name,`Gini-importance`, mcc_0.5 ) %>% arrange(-`Gini-importance`)
-vi_data %>% arrange(feature_name)
+vi_data 
 write_tsv(vi_data,out_path)
 ```
 
-Confusion matrix
+
+Performance per sample fraction
 
 ```{r}
-ggplotConfusionMatrix <- function(m){
-  mytitle <- ""#paste("Accuracy", percent_format()(m$overall[1]))
-                  # "Kappa", percent_format()(m$overall[2]))
-  p <-
-    ggplot(data = as.data.frame(m$table) ,
-           aes(x = Reference, y = Prediction)) +
-    geom_tile(aes(fill = log(Freq)), colour = "white") +
-    scale_fill_gradient(low = "white", high = "steelblue") +
-    geom_text(aes(x = Reference, y = Prediction, label = scales::comma(Freq))) +
-    theme(legend.position = "none") +
-    ggtitle(mytitle)+theme(text = element_text(size = 13))
-  return(p)
-}
-conf_data<-iqtree_enriched_test %>% dplyr::select (prob_predictions, true_label) %>% mutate (pred_status = prob_predictions>0.5) 
+iqtree_data<- iqtree_all_models_performance %>% filter (dataset=='test', name =='model_standard', analysis_type=='full_standard')  %>% dplyr::select (sample_frac, AUC,logloss) %>% mutate (Program = 'IQTREE') 
 
-obs<- factor(conf_data %>% pull (true_label))
-pred<- factor(conf_data %>% pull (pred_status))
+raxml_data<- raxml_all_models_performance %>% filter (dataset=='test', name =='model_standard', analysis_type=='full_standard')  %>% dplyr::select (sample_frac, AUC,logloss) %>% mutate (Program = 'RAxML-NG') 
 
+fasttree_data<- fasttree_all_models_performance %>% filter (dataset=='test', name =='model_standard', analysis_type=='full_standard')  %>% dplyr::select (sample_frac, AUC,logloss) %>% mutate (Program = 'FastTree') 
 
-confusion_plot<-ggplotConfusionMatrix(confusionMatrix(data = pred, reference= obs))+theme(legend.position = "none")
-
-error_vs_size<- all_models_performance %>% filter (metric_type=='all_data', dataset =='test', analysis_type=='full_standard')
-error_vs_size_plt = error_vs_size %>% mutate(n_MSAs = sample_frac*2007) %>% ggplot(aes(x=n_MSAs, y = mcc))+geom_line()+ expand_limits(y = 0)+xlab("Number of MSAs")+ theme(text = element_text(size = 13))+ylab("MCC")+geom_point()
-
-rocobj <- roc(enriched_test$true_label, enriched_test$prob_predictions)
-auc <- round(auc(enriched_test$true_label, enriched_test$prob_predictions),3)
-
-global_max_auc_plt<-ggroc(rocobj,colour = 'steelblue', size = 2)+
-  ggtitle(paste0('AUC = ', auc))+theme(text = element_text(size = 13))+xlab("Specificity")
-
-
-
-
-ggarrange(global_max_auc_plt,confusion_plot,error_vs_size_plt, labels = c("A","B","C"),align = "h", nrow = 2, ncol = 2 )
-
+sample_frac_vs_result_plot<-rbind(iqtree_data,raxml_data,fasttree_data) %>% ggplot(aes(x=sample_frac*4652, y = logloss, color = Program))+geom_line()+expand_limits(y = c(0,0))+xlab("Number of training MSAs")+theme_classic()
+sample_frac_vs_result_plot
 ```
 
 
 
 
-
-Group performance
+Performance per group
 
 ```{r}
-test_group_performance<- group_performance %>% filter (dataset=='test')
+library(yardstick)
+per_group_data_iqtree<-iqtree_enriched_test%>% dplyr::select (predictions_full_standard, true_binary_support, model_short, feature_msa_pypythia_msa_difficulty,tree_search_model,feature_msa_n_loci, tree_search_model,feature_msa_n_seq) %>% mutate(Pypythia_group = ntile(feature_msa_pypythia_msa_difficulty,n = 20),
+n_seq_group  = ntile(feature_msa_n_seq, 20), n_loci_group = ntile(feature_msa_n_loci,n = 20), true = as.factor(true_binary_support), pred = 1-predictions_full_standard) %>% mutate(Program='IQTREE') %>% group_by(n_seq_group) %>% mutate(median_seq_per_group = median(feature_msa_n_seq)) %>% ungroup() %>% group_by(n_loci_group) %>% mutate(median_loci_per_group = median(feature_msa_n_loci)) %>% ungroup() %>% group_by(Pypythia_group) %>% mutate(median_pythia_per_group = median(feature_msa_pypythia_msa_difficulty)) %>% ungroup()
 
-Pypythia_error<-test_group_performance %>% filter (grouping_col_name =='msa_difficulty_group') %>%  mutate(grouping_col = factor(grouping_col, levels = c('(0.00328, 0.303]','(0.303, 0.538]','(0.538, 0.571]','	(0.571, 0.865]'))) %>%
-ggplot(aes(y=grouping_col, x=Balanced_Accuracy))+geom_col()+ expand_limits(y = c(0.5,1))+ylab('MSA\ndifficulty')+ xlab('Balanced\naccuracy')+theme(text = element_text(size = 11))
+per_group_data_fasttree<-fasttree_enriched_test%>% dplyr::select (predictions_full_standard, true_binary_support, model_short, feature_msa_pypythia_msa_difficulty,tree_search_model,feature_msa_n_loci, tree_search_model,feature_msa_n_seq) %>% mutate(Pypythia_group = ntile(feature_msa_pypythia_msa_difficulty,n = 20),
+n_seq_group  = ntile(feature_msa_n_seq, 20), n_loci_group = ntile(feature_msa_n_loci,n = 20), true = as.factor(true_binary_support), pred = 1-predictions_full_standard) %>% mutate(Program='FastTree') %>% group_by(n_seq_group) %>% mutate(median_seq_per_group = median(feature_msa_n_seq)) %>% ungroup() %>% group_by(n_loci_group) %>% mutate(median_loci_per_group = median(feature_msa_n_loci)) %>% ungroup() %>% group_by(Pypythia_group) %>% mutate(median_pythia_per_group = median(feature_msa_pypythia_msa_difficulty)) %>% ungroup()
 
-n_seq_error<-test_group_performance %>% filter (grouping_col_name =='n_seq_group')   %>%  mutate(grouping_col = factor(grouping_col, levels = c('(4.999, 69.0]','(69.0, 129.0]','129.0, 236.0]','	(236.0, 827.0]]'))) %>% ggplot(aes(y=grouping_col, x=Balanced_Accuracy))+geom_col()+ expand_limits(y = c(0.5,1))+ylab('Number\nof sequences')+xlab('Balanced\naccuracy')+theme(text = element_text(size = 11))
+per_group_data_raxml<-raxml_enriched_test%>% dplyr::select (predictions_full_standard, true_binary_support, model_short, feature_msa_pypythia_msa_difficulty,tree_search_model,feature_msa_n_loci, tree_search_model,feature_msa_n_seq) %>% mutate(Pypythia_group = ntile(feature_msa_pypythia_msa_difficulty,n = 20),
+n_seq_group  = ntile(feature_msa_n_seq, 20), n_loci_group = ntile(feature_msa_n_loci,n = 20), true = as.factor(true_binary_support), pred = 1-predictions_full_standard) %>% mutate(Program='RAxML-NG') %>% group_by(n_seq_group) %>% mutate(median_seq_per_group = median(feature_msa_n_seq)) %>% ungroup() %>% group_by(n_loci_group) %>% mutate(median_loci_per_group = median(feature_msa_n_loci)) %>% ungroup() %>% group_by(Pypythia_group) %>% mutate(median_pythia_per_group = median(feature_msa_pypythia_msa_difficulty)) %>% ungroup()
 
 
-n_loci_error<-test_group_performance %>% filter (grouping_col_name =='feature_msa_n_loci') %>%  mutate(grouping_col = factor(grouping_col, levels = c('(61.999, 727.0]','(69.0, 129.0]','129.0, 236.0]','	(236.0, 827.0]]')))  %>% ggplot(aes(y=grouping_col, x=Balanced_Accuracy))+geom_col()+ expand_limits(y = c(0.5,1))+ylab('Number\nof positions')+xlab('Balanced\naccuracy')+theme(text = element_text(size = 11))
+                                                                                                                                                                                                                            
+total_data <- rbind(per_group_data_iqtree, per_group_data_fasttree, per_group_data_raxml) 
 
-Pypythia_scatter<-enriched_test %>% dplyr::select (msa_path,prob_predictions,  feature_msa_pypythia_msa_difficulty) %>% group_by(msa_path,feature_msa_pypythia_msa_difficulty) %>% summarise(mean_prob = mean(prob_predictions)) %>% ggplot(aes(x=feature_msa_pypythia_msa_difficulty, y = mean_prob))+geom_point(size = 0.7)+xlab("MSA\ndifficulty")+ylab("Predicted\nprobability")+theme(text = element_text(size = 11))
+pythia<- total_data  %>% group_by(median_pythia_per_group, Program) %>% roc_auc( true, pred) %>% mutate(AUC=.estimate) %>% ggplot(aes(x=median_pythia_per_group, y = AUC, color = Program))+expand_limits(y = c(0.5,1))+geom_line()+xlab("MSA difficulty")+ theme_classic()
+loci<-total_data %>% group_by(median_loci_per_group,Program) %>% roc_auc( true, pred) %>% mutate(AUC=.estimate) %>% ggplot(aes(x=median_loci_per_group, y = AUC, color = Program))+expand_limits(y = c(0.5,1))+geom_line()+xlab("Number of positions")+ theme_classic()
+n_seq<-total_data  %>% group_by(median_seq_per_group, Program) %>% roc_auc( true, pred) %>% mutate(AUC=.estimate) %>% ggplot(aes(x=median_seq_per_group, y = AUC, color = Program))+expand_limits(y = c(0.5,1))+geom_line()+xlab("Number of sequences")+ theme_classic()
 
-seq_scatter<-enriched_test %>% dplyr::select (msa_path,prob_predictions, feature_msa_n_seq, feature_msa_pypythia_msa_difficulty) %>% group_by(msa_path,feature_msa_n_seq) %>% summarise(mean_prob = mean(prob_predictions)) %>% ggplot(aes(x=feature_msa_n_seq, y = mean_prob))+geom_point(size = 0.7)+xlab("Number of\nsequences")+ylab("Predicted\nprobability")+theme(text = element_text(size = 11))
 
-n_loci_scatter<-enriched_test %>% dplyr::select (msa_path,prob_predictions, feature_msa_n_loci) %>% group_by(msa_path,feature_msa_n_loci) %>% summarise(mean_prob = mean(prob_predictions)) %>% ggplot(aes(x=feature_msa_n_loci, y = mean_prob))+geom_point(size = 0.7)+xlab("Number of\n positions")+ylab("Predicted\nprobability")+theme(text = element_text(size = 11))
 
-ggarrange(seq_scatter,Pypythia_scatter,n_loci_scatter, n_seq_error,Pypythia_error, n_loci_error,labels = c("A","C","E","B","D","F"),align = "h", nrow = 3, ncol = 3, legend = "bottom",vjust= 1)
-#error_vs_group_5_5_including_plt
 
-cor.test( enriched_test$feature_msa_pypythia_msa_difficulty,  enriched_test$prob_predictions)
-cor.test( enriched_test$feature_msa_n_seq, enriched_test$prob_predictions)
-cor.test( enriched_test$feature_msa_n_loci, enriched_test$prob_predictions)
+
+
 
 
 ```
 
-
-
-
-
-Running time
-
+```{r}
+ggarrange(sample_frac_vs_result_plot,pythia,loci,n_seq, labels = c("A","B","C","D"),align = "h", nrow = 2, ncol = 2, common.legend = TRUE )
+```
 
 ```{r}
-running_time_data<- enriched_test%>% dplyr::select (boot_run_time,extraction_running_time,nni_ll_eval_running_time) %>% mutate (diff1 = boot_run_time/extraction_running_time, diff2 = boot_run_time/(extraction_running_time+nni_ll_eval_running_time
-)) 
-summary(running_time_data %>% pull (diff1))
-summary(running_time_data %>% pull (diff2))
-summary(running_time_data %>% pull (extraction_running_time))
-summary(running_time_data %>% pull (nni_ll_eval_running_time))
-#enriched_test %>% dplyr::select (boot_run_time, extraction_runni
+cor.test(iqtree_enriched_test$predictions_full_standard, iqtree_enriched_test$feature_msa_pypythia_msa_difficulty)
+cor.test(raxml_enriched_test$predictions_full_standard, raxml_enriched_test$feature_msa_pypythia_msa_difficulty)
+cor.test(fasttree_enriched_test$predictions_full_standard, fasttree_enriched_test$feature_msa_pypythia_msa_difficulty)
+
+cor.test(iqtree_enriched_test$predictions_full_standard, iqtree_enriched_test$feature_msa_n_loci)
+cor.test(raxml_enriched_test$predictions_full_standard, raxml_enriched_test$feature_msa_n_loci)
+cor.test(fasttree_enriched_test$predictions_full_standard, fasttree_enriched_test$feature_msa_n_loci)
+
+cor.test(iqtree_enriched_test$predictions_full_standard, iqtree_enriched_test$feature_msa_n_seq)
+cor.test(raxml_enriched_test$predictions_full_standard, raxml_enriched_test$feature_msa_n_seq)
+cor.test(fasttree_enriched_test$predictions_full_standard, fasttree_enriched_test$feature_msa_n_seq)
+
+```
+
+```{r}
+iqtree_val
 ```
 
 
-
 ```{r}
 
 
-running_time_data<- enriched_test%>% dplyr::select (program_boot_run_time,extraction_running_time,nni_ll_eval_running_time) %>% mutate (diff1 = program_boot_run_time/extraction_running_time, diff2 = program_boot_run_time/(extraction_running_time+nni_ll_eval_running_time
+running_time_data<- raxml_enriched_test%>% dplyr::select (raxml_enriched_test$time) %>% mutate (diff1 = program_boot_run_time/extraction_running_time, diff2 = program_boot_run_time/(extraction_running_time+nni_ll_eval_running_time
 )) 
 summary(running_time_data %>% pull (diff1))
 summary(running_time_data %>% pull (diff2))
@@ -432,10 +351,7 @@ summary(running_time_data %>% pull (program_boot_run_time))
 #enriched_test %>% dplyr::select (boot_run_time, extraction_running_time, nni_ll_eval_running_time)
 ```
 
-```{r}
-summary(validation_data$feature_n_unique_seq)
-raxml_validation_data$
-```
+
 
 Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
 

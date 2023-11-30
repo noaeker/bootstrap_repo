@@ -1,5 +1,5 @@
 import sys
-
+import random
 if sys.platform == "linux" or sys.platform == "linux2":
     PROJECT_ROOT_DIRECRTORY = "/groups/pupko/noaeker/bootstrap_repo"
 else:
@@ -7,14 +7,14 @@ else:
 sys.path.append(PROJECT_ROOT_DIRECRTORY)
 
 from ML_utils.ML_algorithms_and_hueristics import *
+from ML_pipeline.ML_argparser import main_parser
 from side_code.file_handling import create_or_clean_dir, create_dir_if_not_exists
 from side_code.combine_current_results import unify_results_across_jobs
-from side_code.MSA_manipulation import get_MSA_seq_names
-from sklearn.metrics import balanced_accuracy_score
 import os
 import matplotlib.pyplot as plt
 from random import sample
 import argparse
+from functools import reduce
 
 
 def per_tree_analysis(test, features, model):
@@ -66,7 +66,7 @@ def generate_data_dict_from_column_subset(data_dict, column_subset):
     return res
 
 
-def bootstrap_model_pipeline(working_dir, train, test, validation_dict, features, bootstrap_col, groups,
+def bootstrap_model_pipeline(working_dir, train, test, validation_dict,ML_model, features, bootstrap_col, groups,
                              cpus_per_main_job, sample_frac, do_RFE, large_grid, name):
     data_dict = {'test': test, 'train': train}
     data_dict.update(validation_dict)
@@ -75,32 +75,35 @@ def bootstrap_model_pipeline(working_dir, train, test, validation_dict, features
     inc_boot_dict = generate_data_dict_from_column_subset(data_dict, column_subset=[col for col in train.columns if
                                                                                     col in features] + [bootstrap_col])
 
-    model_only_boot = ML_model(only_boot_dict["train"]["X"], groups, only_boot_dict["train"]["y"],
+    model_only_boot = ML_training(only_boot_dict["train"]["X"], groups, only_boot_dict["train"]["y"],
                                n_jobs=cpus_per_main_job,
                                path=os.path.join(working_dir, f'model_only_boot'),
-                               classifier=True, model='lightgbm', calibrate=True, name=name,
+                               classifier=True, model=ML_model, calibrate=True, name=name,
                                large_grid=large_grid, do_RFE=do_RFE,
                                n_cv_folds=3)
-    model_inc_boot = ML_model(inc_boot_dict["train"]["X"], groups, inc_boot_dict["train"]["y"],
+    model_inc_boot = ML_training(inc_boot_dict["train"]["X"], groups, inc_boot_dict["train"]["y"],
                               n_jobs=cpus_per_main_job,
                               path=os.path.join(working_dir, f'model_inc_boot'
                               f''),
-                              classifier=True, model='lightgbm', calibrate=True, name=name, large_grid=large_grid,
+                              classifier=True, model=ML_model, calibrate=True, name=name, large_grid=large_grid,
                               do_RFE=do_RFE,
                               n_cv_folds=3)
 
     raw_boot_performance, groups_data_raw_boot,predictions_raw_boot = overall_model_performance_analysis(working_dir,
                                                                                                          None,
                                                                                                          only_boot_dict,
+                                                                                                         ML_model,
                                                                                                          name="raw_only_boot")
 
     only_boot_performance, groups_data_only_boot,predictions_only_boot = overall_model_performance_analysis(working_dir,
                                                                                                             model_only_boot,
                                                                                                             only_boot_dict,
+                                                                                                            ML_model,
                                                                                                             name="only_boot")
     inc_boot_performance, groups_data_inc_boot,predictions_inc_boot = overall_model_performance_analysis(working_dir,
                                                                                                          model_inc_boot,
                                                                                                          inc_boot_dict,
+                                                                                                         ML_model,
                                                                                                          name="inc_boot")
     bootstrap_models_performance = pd.concat([raw_boot_performance, only_boot_performance, inc_boot_performance])
     bootstrap_models_performance["analysis_type"] = bootstrap_col
@@ -109,7 +112,7 @@ def bootstrap_model_pipeline(working_dir, train, test, validation_dict, features
     return bootstrap_models_performance,performance_dict
 
 
-def standard_model_pipeline(train, test, validation_dict, groups, features, cpus_per_main_job, working_dir, do_RFE,
+def standard_model_pipeline(train, test, validation_dict,ML_model, groups, features, cpus_per_main_job, working_dir, do_RFE,
                             large_grid, name, extract_predictions):
     all_datasets = {'test': test, 'train': train}
     all_datasets.update(validation_dict)
@@ -117,14 +120,14 @@ def standard_model_pipeline(train, test, validation_dict, groups, features, cpus
                                                                                        col in features])
 
     logging.info("Training ML model")
-    model = ML_model(datasets_dict["train"]["X"], groups, datasets_dict["train"]["y"], n_jobs=cpus_per_main_job,
+    model = ML_training(datasets_dict["train"]["X"], groups, datasets_dict["train"]["y"], n_jobs=cpus_per_main_job,
                      path=os.path.join(working_dir, f'model_stadard'),
-                     classifier=True, model='lightgbm', calibrate=True, name=name, large_grid=large_grid, do_RFE=do_RFE,
+                     classifier=True, model=ML_model, calibrate=True, name=name, large_grid=large_grid, do_RFE=do_RFE,
                      n_cv_folds=3)
 
     logging.info("Evaluating model performance")
     model_performance, group_performance, model_predictions = overall_model_performance_analysis(working_dir, model,
-                                                                                                 datasets_dict,
+                                                                                                 datasets_dict,ML_model,
                                                                                                  name=f"model_standard")
     model_performance["analysis_type"] = name
     return model_performance, group_performance, model_predictions
@@ -141,7 +144,7 @@ def generate_enriched_datasets(working_dir,all_perdictions,train,test,validation
 
 
 def ML_pipeline(program_data, bootstrap_cols, cpus_per_main_job, working_dir, sample_frac, subsample_train, do_RFE,
-                large_grid, name, validation_dict, compare_to_bootstrap_models=False, extract_predictions=False):
+                large_grid, name, validation_dict, ML_model, compare_to_bootstrap_models=False, extract_predictions=False):
     all_models_performance = pd.DataFrame()
     all_perdictions = {}
     program_data = program_data.dropna(axis=1, how='all')
@@ -156,7 +159,7 @@ def ML_pipeline(program_data, bootstrap_cols, cpus_per_main_job, working_dir, sa
     logging.info(f"Evaluating full standard model- including nni feautres, number of features is {len(full_features)}")
     full_model_working_dir = os.path.join(working_dir, 'full_model')
     create_dir_if_not_exists(full_model_working_dir)
-    model_performance_full, group_performance_full, predictions_full = standard_model_pipeline(train, test, validation_dict, groups,
+    model_performance_full, group_performance_full, predictions_full = standard_model_pipeline(train, test, validation_dict, ML_model, groups,
                                                                              full_features, cpus_per_main_job,
                                                                              full_model_working_dir, do_RFE, large_grid,
                                                                              name, extract_predictions)
@@ -171,7 +174,7 @@ def ML_pipeline(program_data, bootstrap_cols, cpus_per_main_job, working_dir, sa
     logging.info(f"Evaluating fast standard model- no nni feautres, number of features is {len(fast_features)}")
     fast_model_working_dir = os.path.join(working_dir, 'fast_model')
     create_dir_if_not_exists(fast_model_working_dir)
-    model_performance_fast, group_performance_fast,predictions_fast = standard_model_pipeline(train, test, validation_dict, groups,
+    model_performance_fast, group_performance_fast,predictions_fast = standard_model_pipeline(train, test, validation_dict, ML_model, groups,
                                                                              fast_features, cpus_per_main_job,
                                                                              fast_model_working_dir, do_RFE, large_grid,
                                                                              name, extract_predictions)
@@ -185,7 +188,7 @@ def ML_pipeline(program_data, bootstrap_cols, cpus_per_main_job, working_dir, sa
             logging.info(f"Bootstrap col {bootstrap_col}")
             bootstrap_working_dir = os.path.join(working_dir, bootstrap_col)
             create_dir_if_not_exists(bootstrap_working_dir)
-            bootstrap_models_performance, bootstrap_performance_dict = bootstrap_model_pipeline(bootstrap_working_dir, train, test, validation_dict,
+            bootstrap_models_performance, bootstrap_performance_dict = bootstrap_model_pipeline(bootstrap_working_dir, train, test, validation_dict, ML_model,
                                                                     full_features, bootstrap_col, groups,
                                                                     cpus_per_main_job, sample_frac, do_RFE, large_grid,
                                                                     name=name + bootstrap_col)
@@ -202,31 +205,6 @@ def ML_pipeline(program_data, bootstrap_cols, cpus_per_main_job, working_dir, sa
 
 
 
-def get_n_free_parameters(x):
-    if x == 'GTR':
-        n = 8
-    elif x == 'K80':
-        n = 2
-    elif x == 'JC':
-        n = 1
-    elif x == 'HKY':
-        n = 2
-    elif x == 'TVM':
-        n = 7
-    elif x == 'SYM':
-        n = 5
-    elif x == 'F81':
-        n = 3
-    elif x == 'TIM':
-        n = 6
-    elif x == 'F84':
-        n = 4
-    elif x == 'TPM3':
-        n = 3
-    else:
-        n = -1
-    return n
-
 
 def transform_data(df, program):
     df['true_binary_support'] = df['true_support'] == 1
@@ -240,7 +218,7 @@ def transform_data(df, program):
     #df['model_short'] = df['model_short'].apply(lambda x: x.split('+')[0])
     #df['feature_free_parameters'] = df['model_short'].apply(lambda x: get_n_free_parameters(x))
     df = df[[col for col in df.columns if
-             'msa_entropy' not in col and 'extraction_of_features_time' not in col and 'feature_abayes_opt' not in col and 'column_variance' not in col and 'feature_min_mean_branch_length' not in col and 'feature_max_mean_branch_length' not in col and 'll_diff_norm' not in col ]]
+             'msa_entropy' not in col and 'extraction_of_features_time' not in col and 'feature_abayes_opt' not in col and 'column_variance' not in col and 'feature_min_mean_branch_length' not in col and 'feature_max_mean_branch_length' not in col and 'll_diff_norm' not in col and 'opt=False_model_False' not in col ]]
     # df = pd.get_dummies(df,prefix='feature_model_',columns=['model_short']) #
     if program=='raxml':
         df['bootstrap_support'] =df['bootstrap_support']/100
@@ -254,82 +232,71 @@ def transform_data(df, program):
     # +[col for col in df.columns if 'msa_entropy' in col]
 
 
-def sample_validation_data(fasttree_validation, iqtree_validation,raxml_validation):
-    common_tree_ids = set(fasttree_validation['tree_id'])&set(fasttree_validation['tree_id'])&set(fasttree_validation['tree_id'])
-    return common_tree_ids
+def generate_data_dict_per_program(programs, folder, n_samp):
+    data_per_program = {}
+    for program in programs:
+        data_path = os.path.join(folder, f'simulations_df_{program}.tsv')
+        if not os.path.exists(data_path):
+            logging.info(f"Re-uniting data and saving to {data_path}")
+            program_data = unify_results_across_jobs(folder,
+                                                     name=f'simulations_df_{program}', n_jobs=1000)
+        else:
+            logging.info(f"Using existing training data in {data_path} ")
+            program_data = pd.read_csv(data_path, sep='\t')
+        program_data = program_data.dropna(axis=1, how='all')
+        program_data = program_data.dropna(axis=0, how='all')
+        program_data= transform_data(program_data, program)
+        data_per_program[program] = program_data
+    data_per_program = retain_only_common_tree_ids(data_per_program, n_samp)
+    return data_per_program
+
+
+def retain_only_common_tree_ids(data_per_program, n_samp):
+    tree_ids_list = []
+    for program in data_per_program:
+        tree_ids = np.unique(data_per_program[program]['tree_id'])
+        tree_ids_list.append(tree_ids)
+    common_tree_ids = list(reduce(np.intersect1d, tree_ids_list))
+    random.seed(42)
+    common_tree_ids = random.sample(common_tree_ids, n_samp)
+    logging.info(f"Number of common tree IDS is {len(common_tree_ids)}")
+    for program in data_per_program:
+        program_data = data_per_program[program]
+        program_data = program_data.loc[program_data.tree_id.isin(common_tree_ids)]
+        data_per_program[program] = program_data
+    return data_per_program
 
 
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--working_dir', type=str, default=os.getcwd())
-    parser.add_argument('--RFE', action='store_true', default=False)
-    parser.add_argument('--full_grid', action='store_true', default=False)
-    parser.add_argument('--programs', type=str, default='iqtree_raxml_fasttree')
-    parser.add_argument('--cpus_per_main_job', type=int, default=1)
-    parser.add_argument('--sample_fracs', type=str, default='0.25_0.5_1')
-    parser.add_argument('--inc_sample_fracs', action='store_true', default=False)
-    parser.add_argument('--reunite_val_data', action='store_true', default=False)
-    parser.add_argument('--use_val_data', action='store_true', default=False)
-    parser.add_argument('--reunite_training_data', action='store_true', default=False)
-    parser.add_argument('--main_data_folder', type=str,
-                        default='/Users/noa/Workspace/bootstrap_results/remote_results/full_data')
-    parser.add_argument('--validation_data_folder', type=str,
-                        default='/Users/noa/Workspace/bootstrap_results/remote_results/validation_data')
-    parser.add_argument('--sample_val', action='store_true', default=False)
-    parser.add_argument('--n_val_samp', type=int, default=250)
+    parser = main_parser()
     args = parser.parse_args()
     log_file_path = os.path.join(args.working_dir, "ML.log")
     logging.basicConfig(filename=log_file_path, level=logging.INFO)
     create_dir_if_not_exists(args.working_dir)
-
-
+    main_data_dict = generate_data_dict_per_program(programs = ['fasttree','iqtree','raxml'], folder= args.main_data_folder, n_samp=args.n_main_samp)
     if args.use_val_data:
-        fasttree_validation = pd.read_csv(os.path.join(args.validation_data_folder, f'simulations_df_fasttree.tsv'), sep='\t')
-        iqtree_validation = pd.read_csv(os.path.join(args.validation_data_folder, f'simulations_df_iqtree.tsv'),sep='\t')
-        raxml_validation = pd.read_csv(os.path.join(args.validation_data_folder, f'simulations_df_raxml.tsv'),sep='\t')
-        common_tree_ids = list(set(fasttree_validation['tree_id']) & set(raxml_validation['tree_id']) & set(
-           iqtree_validation['tree_id']))
-        selected_tree_ids = sample(common_tree_ids,args.n_val_samp)
-    else:
-        selected_tree_ids = []
+        val_data_dict = generate_data_dict_per_program(programs = ['fasttree','iqtree','raxml'], folder= args.validation_data_folder,
+                                                       n_samp= args.n_val_samp)
 
     for program in args.programs.split('_'):
         logging.info(f"Program = {program}")
-        training_data_path = os.path.join(args.main_data_folder, f'simulations_df_{program}.tsv')
-        if args.reunite_training_data or not os.path.exists(training_data_path):
-            logging.info(f"Re-uniting training data and saving to {training_data_path}")
-            program_data = unify_results_across_jobs(args.main_data_folder,
-                                                     name=f'simulations_df_{program}', n_jobs=1000)
-        else:
-            logging.info(f"Using existing training data in {training_data_path} ")
-            program_data = pd.read_csv(training_data_path, sep='\t')
-        program_data = transform_data(program_data, program)
-        program_data = program_data.loc[~program_data.tree_id.isin(selected_tree_ids)]
+        program_data = main_data_dict[program]
+        logging.info(f"Number of trees in main data is {len(np.unique(program_data['tree_id']))}")
         validation_dict = {}
-        validation_data_path = os.path.join(args.validation_data_folder, f'simulations_df_{program}.tsv')
         if args.use_val_data:
             logging.info("Using validation data")
-            if (args.reunite_val_data or not os.path.exists(validation_data_path)):
-                logging.info(f"Re-uniting validation data and saving to {validation_data_path}")
-                program_validation_data = unify_results_across_jobs(args.validation_data_folder,
-                                                                    name=f'simulations_df_{program}', n_jobs=1000)
-            else:
-                logging.info("Using existing validation data")
-                program_validation_data = pd.read_csv(validation_data_path, sep='\t')
+            program_validation_data = val_data_dict[program]
 
             program_validation_data = transform_data(program_validation_data,program)
-            logging.info("Subsampling tree inds in validation to the common tree inds")
-            logging.info(f"Number of MSAs in validation is {len(np.unique(program_validation_data['tree_id']))}")
-            program_validation_data = program_validation_data.loc[program_validation_data.tree_id.isin(selected_tree_ids)]
+            logging.info(f"Number of trees in validation is {len(np.unique(program_validation_data['tree_id']))}")
             for model_mode in np.unique(program_validation_data["model_mode"]):
                 validation_dict[f'val_{model_mode}'] = program_validation_data.loc[
                     program_validation_data.model_mode == model_mode].copy()
         working_dir = os.path.join(args.working_dir, program)
         create_dir_if_not_exists(working_dir)
         bootstrap_cols = get_bootstrap_col(program)
-        program_data = program_data.dropna(axis=1, how='all')
-        program_data = program_data.dropna(axis=0)
+
         sample_fracs = [float(frac) for frac in (args.sample_fracs).split('_')]
         all_model_merics = pd.DataFrame()
         if args.inc_sample_fracs:
@@ -346,7 +313,7 @@ def main():
                                                                   compare_to_bootstrap_models=False,
                                                                   subsample_train=True, do_RFE=args.RFE,
                                                                   large_grid=False, name=f"frac_{sample_frac}",
-                                                                  validation_dict=validation_dict)
+                                                                  validation_dict=validation_dict, ML_model=args.ML_model)
                 all_model_merics = pd.concat([all_model_merics, curr_model_metrics])
         all_model_merics.to_csv(os.path.join(working_dir, 'all_models_performance.tsv'), sep=CSV_SEP)
         logging.info(f"Generating optimized final model")
@@ -356,7 +323,7 @@ def main():
                                                            final_model_working_dir, sample_frac=-1,
                                                            subsample_train=False, do_RFE=args.RFE,
                                                            large_grid=args.full_grid, name=f"final_model",
-                                                           validation_dict=validation_dict,
+                                                           validation_dict=validation_dict, ML_model=args.ML_model,
                                                            compare_to_bootstrap_models=True, extract_predictions=True)
         final_models_performance.to_csv(os.path.join(working_dir, 'final_model_performance.tsv'), sep=CSV_SEP)
         final_group_performance_full.to_csv(os.path.join(working_dir, 'groups_performance.tsv'), sep=CSV_SEP)

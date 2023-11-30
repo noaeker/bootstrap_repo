@@ -66,7 +66,7 @@ def RFE(model, X, y, group_splitter, n_jobs, scoring, do_RFE):
 
 
 
-def ML_model(X_train, groups, y_train, n_jobs, path, classifier=False, model='lightgbm', calibrate=True, name="", large_grid = False, do_RFE = False, n_cv_folds = 3):
+def ML_training(X_train, groups, y_train, n_jobs, path, classifier=False, model='lightgbm', calibrate=True, name="", large_grid = False, do_RFE = False, n_cv_folds = 3):
     logging.info(f"Building a {name} model and saving to {path}")
     if path and os.path.exists(path):
         logging.info(f"Using existing model in {path}")
@@ -126,16 +126,18 @@ def calibration_plot(model, test_data, y_test):
     pyplot.show()
 
 def enrich_with_single_feature_metrics(var_impt, train_X, y_train, test_X, y_test):
-    mcc_thresholds = [0.5,0.95]
-    for threshold in mcc_thresholds:
         curr_mcc_scores = []
+        curr_auc_scores = []
         for feature in var_impt.index:
-                #lg = LogisticRegression(random_state=0).fit(train_X[[feature]], y_train)
-                lg = lightgbm.LGBMClassifier(importance_type='gain').fit(train_X[[feature]], y_train)
-                pred = lg.predict_proba(test_X[[feature]])[:, 1] >= threshold
-                mcc = matthews_corrcoef(y_test, pred)
-                curr_mcc_scores.append(mcc)
-        var_impt[f"mcc_{threshold}"] = curr_mcc_scores
+            lg = lightgbm.LGBMClassifier(importance_type='gain').fit(train_X[[feature]], y_train)
+            pred_prob= lg.predict_proba(test_X[[feature]])[:, 1]
+            pred = lg.predict_proba(test_X[[feature]])[:, 1] >= 0.5
+            curr_mcc_scores.append(matthews_corrcoef(y_test, pred))
+            auc = roc_auc_score(y_test,pred_prob)
+            curr_auc_scores.append(auc)
+
+        var_impt[f"mcc"] = curr_mcc_scores
+        var_impt[f"auc"] = curr_auc_scores
 
 
 def model_evaluation_metrics(y_true, prob_predictions, estimate_auc = True):
@@ -165,8 +167,8 @@ def model_groups_anlaysis(X,y_true, predictions):
     return performance_per_group
 
 
-def overall_model_performance_analysis(working_dir, model, data_dict, name):
-    if model:
+def overall_model_performance_analysis(working_dir, model, data_dict, ML_model, name):
+    if model and ML_model=='lightgbm':
         var_impt = variable_importance((data_dict["train"]["X"]).columns[model['selector'].get_support(indices=True)], model['best_model'])
         enrich_with_single_feature_metrics(var_impt, data_dict["train"]["X"], data_dict["train"]["y"], data_dict["test"]["X"], data_dict["test"]["y"])
         vi_path = os.path.join(working_dir, f'{name}_vi.tsv')
