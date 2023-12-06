@@ -17,6 +17,7 @@ import argparse
 from functools import reduce
 
 
+
 def per_tree_analysis(test, features, model):
     balanced_accuracies = []
     for tree_id in test['tree_id'].unique():
@@ -279,54 +280,58 @@ def main():
         val_data_dict = generate_data_dict_per_program(programs = ['fasttree','iqtree','raxml'], folder= args.validation_data_folder,
                                                        n_samp= args.n_val_samp)
 
-    for program in args.programs.split('_'):
-        logging.info(f"Program = {program}")
-        program_data = main_data_dict[program]
-        logging.info(f"Number of trees in main data is {len(np.unique(program_data['tree_id']))}")
-        validation_dict = {}
-        if args.use_val_data:
-            logging.info("Using validation data")
-            program_validation_data = val_data_dict[program]
+    for ML_model in args.ML_model.split('_'):
+        logging.info(f"Model = {ML_model}")
+        model_working_dir = os.path.join(args.working_dir, ML_model)
+        create_dir_if_not_exists(model_working_dir)
+        for program in args.programs.split('_'):
+            logging.info(f"Program = {program}")
+            program_data = main_data_dict[program]
+            logging.info(f"Number of trees in main data is {len(np.unique(program_data['tree_id']))}")
+            validation_dict = {}
+            if args.use_val_data:
+                logging.info("Using validation data")
+                program_validation_data = val_data_dict[program]
 
-            program_validation_data = transform_data(program_validation_data,program)
-            logging.info(f"Number of trees in validation is {len(np.unique(program_validation_data['tree_id']))}")
-            for model_mode in np.unique(program_validation_data["model_mode"]):
-                validation_dict[f'val_{model_mode}'] = program_validation_data.loc[
-                    program_validation_data.model_mode == model_mode].copy()
-        working_dir = os.path.join(args.working_dir, program)
-        create_dir_if_not_exists(working_dir)
-        bootstrap_cols = get_bootstrap_col(program)
+                program_validation_data = transform_data(program_validation_data,program)
+                logging.info(f"Number of trees in validation is {len(np.unique(program_validation_data['tree_id']))}")
+                for model_mode in np.unique(program_validation_data["model_mode"]):
+                    validation_dict[f'val_{model_mode}'] = program_validation_data.loc[
+                        program_validation_data.model_mode == model_mode].copy()
+            working_dir = os.path.join(model_working_dir, program)
+            create_dir_if_not_exists(working_dir)
+            bootstrap_cols = get_bootstrap_col(program)
 
-        sample_fracs = [float(frac) for frac in (args.sample_fracs).split('_')]
-        all_model_merics = pd.DataFrame()
-        if args.inc_sample_fracs:
-            for sample_frac in sample_fracs:
-                logging.info(f"\n#Sample frac = {sample_frac}")
-                sample_frac_working_dir = os.path.join(working_dir, f"frac_{sample_frac}")
-                create_dir_if_not_exists(sample_frac_working_dir)
-
-
+            sample_fracs = [float(frac) for frac in (args.sample_fracs).split('_')]
+            all_model_merics = pd.DataFrame()
+            if args.inc_sample_fracs and ML_model=='lightgbm':
+                for sample_frac in sample_fracs:
+                    logging.info(f"\n#Sample frac = {sample_frac}")
+                    sample_frac_working_dir = os.path.join(working_dir, f"frac_{sample_frac}")
+                    create_dir_if_not_exists(sample_frac_working_dir)
 
 
-                curr_model_metrics, groups_analysis = ML_pipeline(program_data, bootstrap_cols, args.cpus_per_main_job,
-                                                                  sample_frac_working_dir, sample_frac,
-                                                                  compare_to_bootstrap_models=False,
-                                                                  subsample_train=True, do_RFE=args.RFE,
-                                                                  large_grid=False, name=f"frac_{sample_frac}",
-                                                                  validation_dict=validation_dict, ML_model=args.ML_model)
-                all_model_merics = pd.concat([all_model_merics, curr_model_metrics])
-        all_model_merics.to_csv(os.path.join(working_dir, 'all_models_performance.tsv'), sep=CSV_SEP)
-        logging.info(f"Generating optimized final model")
-        final_model_working_dir = os.path.join(working_dir, f"final_model")
-        create_dir_if_not_exists(final_model_working_dir)
-        final_models_performance,final_group_performance_full= ML_pipeline(program_data, bootstrap_cols, args.cpus_per_main_job,
-                                                           final_model_working_dir, sample_frac=-1,
-                                                           subsample_train=False, do_RFE=args.RFE,
-                                                           large_grid=args.full_grid, name=f"final_model",
-                                                           validation_dict=validation_dict, ML_model=args.ML_model,
-                                                           compare_to_bootstrap_models=True, extract_predictions=True)
-        final_models_performance.to_csv(os.path.join(working_dir, 'final_model_performance.tsv'), sep=CSV_SEP)
-        final_group_performance_full.to_csv(os.path.join(working_dir, 'groups_performance.tsv'), sep=CSV_SEP)
+
+
+                    curr_model_metrics, groups_analysis = ML_pipeline(program_data, bootstrap_cols, args.cpus_per_main_job,
+                                                                      sample_frac_working_dir, sample_frac,
+                                                                      compare_to_bootstrap_models=False,
+                                                                      subsample_train=True, do_RFE=args.RFE,
+                                                                      large_grid=False, name=f"frac_{sample_frac}",
+                                                                      validation_dict=validation_dict, ML_model=ML_model)
+                    all_model_merics = pd.concat([all_model_merics, curr_model_metrics])
+            all_model_merics.to_csv(os.path.join(working_dir, 'all_models_performance.tsv'), sep=CSV_SEP)
+            logging.info(f"Generating optimized final model")
+            final_model_working_dir = os.path.join(working_dir, f"final_model")
+            create_dir_if_not_exists(final_model_working_dir)
+            final_models_performance,final_group_performance_full= ML_pipeline(program_data, bootstrap_cols, args.cpus_per_main_job,
+                                                               final_model_working_dir, sample_frac=-1,
+                                                               subsample_train=False, do_RFE=args.RFE,
+                                                               large_grid=args.full_grid, name=f"final_model",
+                                                               validation_dict=validation_dict, ML_model=ML_model,
+                                                               compare_to_bootstrap_models=True, extract_predictions=True)
+            final_models_performance.to_csv(os.path.join(working_dir, 'final_model_performance.tsv'), sep=CSV_SEP)
+            final_group_performance_full.to_csv(os.path.join(working_dir, 'groups_performance.tsv'), sep=CSV_SEP)
 
     #     print(test_metrics)
 

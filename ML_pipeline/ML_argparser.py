@@ -19,5 +19,5 @@ def main_parser():
                         default='/Users/noa/Workspace/bootstrap_results/remote_results/validation_data')
     parser.add_argument('--n_val_samp', type=int, default=250)
     parser.add_argument('--n_main_samp', type=int, default=6000)
-    parser.add_argument('--ML_model', action='store_true', default='lightgbm')
+    parser.add_argument('--ML_model', action='store_true', default='lightgbm_rf_sgd')
     return parser
