@@ -272,9 +272,9 @@ def retain_only_common_tree_ids(data_per_program, n_samp):
 def main():
     parser = main_parser()
     args = parser.parse_args()
+    create_dir_if_not_exists(args.working_dir)
     log_file_path = os.path.join(args.working_dir, "ML.log")
     logging.basicConfig(filename=log_file_path, level=logging.INFO)
-    create_dir_if_not_exists(args.working_dir)
     main_data_dict = generate_data_dict_per_program(programs = ['fasttree','iqtree','raxml'], folder= args.main_data_folder, n_samp=args.n_main_samp)
     if args.use_val_data:
         val_data_dict = generate_data_dict_per_program(programs = ['fasttree','iqtree','raxml'], folder= args.validation_data_folder,
