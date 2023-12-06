@@ -210,7 +210,8 @@ def ML_pipeline(program_data, bootstrap_cols, cpus_per_main_job, working_dir, sa
 def transform_data(df, program):
     df['true_binary_support'] = df['true_support'] == 1
     #df['feature_msa_n_seq'] = df['feature_n_unique_seq']
-    df.drop(columns=['feature_n_unique_seq'], inplace=True)
+    if 'feature_n_unique_seq' in df.columns:
+        df.drop(columns=['feature_n_unique_seq'], inplace=True)
     #df['feature_G'] = df['model_short'].str.contains('+G', regex=False)
     #df['feature_I'] = df['model_short'].str.contains('+I', regex=False)
     #df['feature_F'] = df['model_short'].str.contains('+F', regex=False)
