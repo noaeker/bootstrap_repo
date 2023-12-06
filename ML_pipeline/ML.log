@@ -781,3 +781,4 @@ INFO:root:Evaluating full standard model- including nni feautres, number of feat
 INFO:root:Training ML model
 INFO:root:Building a final_model model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/rf/iqtree/final_model/full_model/model_stadard
 INFO:root:Number of features after feature selection: 19 out of 19
+INFO:root:Using existing training data in /Users/noa/Workspace/bootstrap_results/remote_results/full_data/simulations_df_fasttree.tsv 
