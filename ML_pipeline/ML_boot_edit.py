@@ -276,9 +276,9 @@ def main():
     create_dir_if_not_exists(args.working_dir)
     log_file_path = os.path.join(args.working_dir, "ML.log")
     logging.basicConfig(filename=log_file_path, level=logging.INFO)
-    main_data_dict = generate_data_dict_per_program(programs = ['fasttree','iqtree','raxml'], folder= args.main_data_folder, n_samp=args.n_main_samp)
+    main_data_dict = generate_data_dict_per_program(programs = ['iqtree','fasttree','raxml'], folder= args.main_data_folder, n_samp=args.n_main_samp)
     if args.use_val_data:
-        val_data_dict = generate_data_dict_per_program(programs = ['fasttree','iqtree','raxml'], folder= args.validation_data_folder,
+        val_data_dict = generate_data_dict_per_program(programs = ['iqtree','fasttree','raxml'], folder= args.validation_data_folder,
                                                        n_samp= args.n_val_samp)
 
     for ML_model in args.ML_model.split('_'):
@@ -293,8 +293,6 @@ def main():
             if args.use_val_data:
                 logging.info("Using validation data")
                 program_validation_data = val_data_dict[program]
-
-                program_validation_data = transform_data(program_validation_data,program)
                 logging.info(f"Number of trees in validation is {len(np.unique(program_validation_data['tree_id']))}")
                 for model_mode in np.unique(program_validation_data["model_mode"]):
                     validation_dict[f'val_{model_mode}'] = program_validation_data.loc[
