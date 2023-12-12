@@ -29,10 +29,6 @@ def get_bootstrap_and_all_mles_path(program, bootstrap_tree_details):
         final_tree_aLRT = bootstrap_tree_details['final_tree_aLRT']
         final_tree_aBayes_path = bootstrap_tree_details['final_tree_aBayes']
         extra_support_values = {'aLRT_iqtree': final_tree_aLRT, 'aBayes_iqtree': final_tree_aBayes_path}
-    elif program == 'fasttree':
-        standard_bootstrap = bootstrap_tree_details['standard_bootstrap']
-        extra_support_values = {'standard_fasttree_boot': standard_bootstrap}
-
     return extra_support_values, all_mles_path
 
 
