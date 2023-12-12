@@ -5,25 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c7df0e90-f129-4c06-bac2-5459d2cc3269" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/simulation_edit/feature_extraction.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/simulation_edit/trees_features_extraction_helper.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/programs/raxml.py" beforeDir="false" afterPath="$PROJECT_DIR$/programs/raxml.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/python notebooks/.ipynb_checkpoints/Untitled-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/python notebooks/.ipynb_checkpoints/Untitled-checkpoint.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/python notebooks/Untitled.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/python notebooks/Untitled.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/side_code/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/side_code/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/simulation_edit/bootstrap_edit.py" beforeDir="false" afterPath="$PROJECT_DIR$/simulation_edit/bootstrap_edit.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/simulation_edit/garbage/booster_ml.nw" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/simulation_edit/garbage/booster_pars.nw" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/simulation_edit/garbage/booster_true.nw" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/simulation_edit/garbage/ml.tree" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/simulation_edit/garbage/pars.tree" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/simulation_edit/garbage/pars_tree_generation.raxml.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/simulation_edit/garbage/pars_tree_generation.raxml.rba" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/simulation_edit/garbage/pars_tree_generation.raxml.startTree" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/simulation_edit/garbage/tmp.ml.tree" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/simulations_generation/msa_features.py" beforeDir="false" afterPath="$PROJECT_DIR$/simulation_edit/msa_features.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/simulations_generation/simulations.py" beforeDir="false" afterPath="$PROJECT_DIR$/simulations_generation/simulations.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/simulation_edit/feature_extraction.py" beforeDir="false" afterPath="$PROJECT_DIR$/simulation_edit/feature_extraction.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -54,8 +36,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/simulation_edit/bootstrap_edit.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
-              <caret line="63" column="73" lean-forward="true" selection-start-line="63" selection-start-column="73" selection-end-line="63" selection-end-column="73" />
+            <state relative-caret-position="305">
+              <caret line="63" column="74" lean-forward="true" selection-start-line="63" selection-start-column="74" selection-end-line="63" selection-end-column="74" />
             </state>
           </provider>
         </entry>
@@ -63,8 +45,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/simulation_edit/feature_extraction.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="334">
-              <caret line="167" column="83" selection-start-line="167" selection-start-column="83" selection-end-line="167" selection-end-column="83" />
+            <state relative-caret-position="295">
+              <caret line="113" column="53" selection-start-line="113" selection-start-column="53" selection-end-line="113" selection-end-column="53" />
             </state>
           </provider>
         </entry>
@@ -168,8 +150,8 @@
       <find>.support</find>
       <find>nni</find>
       <find>garbage_dir</find>
-      <find>'gar</find>
       <find>garba</find>
+      <find>'gar</find>
     </findStrings>
     <replaceStrings>
       <replace>job_data_path</replace>
@@ -441,12 +423,12 @@
     <frame x="60" y="63" width="1758" height="949" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.19458838" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19458838" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49550563" weight="0.2773208" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.67159975" visible="true" weight="0.31962398" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.67159975" visible="true" weight="0.39952996" />
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.47145876" weight="0.22561692" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -574,7 +556,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/simulation_edit/feature_extraction.py</url>
-          <line>168</line>
+          <line>169</line>
           <option name="timeStamp" value="248" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -903,13 +885,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/simulation_edit/bootstrap_edit.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="63" column="73" lean-forward="true" selection-start-line="63" selection-start-column="73" selection-end-line="63" selection-end-column="73" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/simulation_edit/trees_features_extraction_helper.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="168">
@@ -920,10 +895,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/simulation_edit/bootstrap_edit.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="305">
+          <caret line="63" column="74" lean-forward="true" selection-start-line="63" selection-start-column="74" selection-end-line="63" selection-end-column="74" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/simulation_edit/feature_extraction.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="334">
-          <caret line="167" column="83" selection-start-line="167" selection-start-column="83" selection-end-line="167" selection-end-column="83" />
+        <state relative-caret-position="295">
+          <caret line="113" column="53" selection-start-line="113" selection-start-column="53" selection-end-line="113" selection-end-column="53" />
         </state>
       </provider>
     </entry>
