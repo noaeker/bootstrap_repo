@@ -169,13 +169,13 @@ def generate_n_unique_tree_topologies_as_starting_trees(n, original_file_path, c
     return newicks
 
 
-def generate_n_tree_topologies(n, original_file_path, curr_run_directory,
+def generate_n_tree_topologies(n, msa_path, curr_run_directory,
                                seed, tree_type, model):
     prefix = os.path.join(curr_run_directory, f"{tree_type}_tree_generation")
     random_tree_generation_command = (
         "{raxml_exe_path} --force msa --force perf_threads  --msa {msa_path} --model {model} --start --tree {tree_type}{{{n}}} --prefix {prefix} --seed {seed} --redo ").format(
         n=n, raxml_exe_path=RAXML_NG_EXE, tree_type=tree_type,
-        msa_path=original_file_path, prefix=prefix, seed=seed, model=model)
+        msa_path=msa_path, prefix=prefix, seed=seed, model=model)
     trees_path = prefix + ".raxml.startTree"
     execute_command_and_write_to_log(random_tree_generation_command)
     return trees_path

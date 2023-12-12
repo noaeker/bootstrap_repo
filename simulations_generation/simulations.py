@@ -13,7 +13,7 @@ from programs.raxml import raxml_bootstrap_pipeline, remove_redundant_sequences
 from programs.FastTree import fasttree_pipeline
 from programs.IQTREE import iqtree_pipeline
 from simulations_generation.simulations_argparser import  job_parser
-from simulations_generation.msa_features import get_msa_stats
+from simulation_edit.msa_features import get_msa_stats
 from side_code.MSA_manipulation import get_MSA_seq_names
 from simulation_edit.bootstrap_edit import msa_path_edit_analysis
 from side_code.file_handling import create_dir_if_not_exists, create_or_clean_dir

@@ -51,8 +51,6 @@ def get_msa_stats(msa_path, model):
     alignment_data = get_alignment_data(get_local_path(msa_path))
     alignment_df = alignment_list_to_df(alignment_data)
     alignment_df_fixed = alignment_df.replace('-', np.nan)
-    #gap_fracs_per_seq = alignment_df_fixed.isna().sum(axis=1) / n_loci
-    #gap_fracs_per_loci = alignment_df_fixed.isna().sum(axis=0) / n_seq
     alignment_df_unique = alignment_df.T.drop_duplicates().T
     counts_per_position = [dict(alignment_df_fixed[col].value_counts(dropna=True)) for col in list(alignment_df)]
     probabilities = [list(map(lambda x: x / sum(counts_per_position[col].values()), counts_per_position[col].values()))
