@@ -26,7 +26,9 @@ def generate_results_folder(curr_run_prefix):
 
 def distribute_MSAS_over_jobs(raw_data, all_jobs_results_folder,args):
     job_dict = {}
-    tree_names = list(np.unique(raw_data["tree_id"]))
+    tree_names = (np.unique(raw_data["tree_id"]))
+    np.random.seed(5)
+    np.random.shuffle(tree_names)
     tree_splits = np.array_split(list(tree_names), min(args.n_jobs, len(tree_names)))
     for job_ind, job_trees in enumerate(tree_splits):
         logging.info(f"Job {job_ind} runs on {len(job_trees)} trees")
