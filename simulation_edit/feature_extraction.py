@@ -59,14 +59,15 @@ def get_pruned_tree_and_msa(curr_run_dir, msa_path, mle_tree_ete):
     return pruned_tree_path, pruned_msa_path
 
 
-def get_nni_statistics(working_dir, orig_tree_ll, nni_neighbors, neighbors_tmp_path, msa_path, model, garbage_dir):
+def get_nni_statistics(working_dir, orig_tree_ll, nni_neighbors, msa_path, model, garbage_dir):
     st_ll = time.time()
     all_neig_ll = []
+    neighbors_tmp_path = os.path.join(garbage_dir,'tmp_neigh.tree')
     for neighbor in nni_neighbors:
         neighbor.write(format=1, outfile=neighbors_tmp_path)
         neighbor = Tree(neighbors_tmp_path, format=1)
         curr_pruned_tree_path, curr_pruned_msa_path = get_pruned_tree_and_msa(working_dir, msa_path,
-                                                                              model, neighbor)
+                                                                               neighbor)
         neighbor_ll, optimized_tree = raxml_optimize_trees_for_given_msa(curr_pruned_msa_path,
                                                                          ll_on_data_prefix="nni_neighbors",
                                                                          tree_file=curr_pruned_tree_path,
@@ -88,7 +89,7 @@ def get_nni_statistics(working_dir, orig_tree_ll, nni_neighbors, neighbors_tmp_p
                       f'feature_max_ll_diff': max_ll_diff,
                       }
 
-    return nni_statistics, neig_ll_evaluation_time
+    return nni_statistics
 
 
 
@@ -158,10 +159,14 @@ def extract_all_features_per_mle(working_dir, msa_path, model, mle_tree_path, ex
     all_splits = pd.DataFrame()
     for node in mle_tree_obj.iter_descendants():
         if not node.is_leaf():
+            nni_neighobrs = get_nni_neighbors(mle_with_internal_path,node.name )
+            NNI_stats = get_nni_statistics(working_dir, mle_tree_feautres["orig_tree_ll"], nni_neighobrs , msa_path,
+                                           model, garbage_dir)
             partition_statistics = get_partition_statistics(node, mle_tree_obj, extra_support_features_dict,fbp_true_support_tree,bootstrap_support_trees_dict)
             partition_statistics.update({'node_name': node.name})
             partition_statistics.update(msa_features)
             partition_statistics.update(mle_tree_feautres)
+            partition_statistics.update(NNI_stats)
             node.add_feature("partition_statistics" , partition_statistics)
             all_splits = all_splits.append(partition_statistics, ignore_index= True)
     end_features = time.time()

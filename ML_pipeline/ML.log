@@ -857,3 +857,5 @@ INFO:root:Using existing training data in /Users/noa/Workspace/bootstrap_results
 INFO:root:Using existing training data in /Users/noa/Workspace/bootstrap_results/remote_results/full_data/simulations_df_fasttree.tsv 
 INFO:root:Using existing training data in /Users/noa/Workspace/bootstrap_results/remote_results/full_data/simulations_df_raxml.tsv 
 INFO:root:Number of common tree IDS is 6000
+INFO:root:Using existing training data in /Users/noa/Workspace/bootstrap_results/test_iqtree/simulations_df_iqtree.tsv 
+INFO:root:Using existing training data in /Users/noa/Workspace/bootstrap_results/test_iqtree/simulations_df_iqtree.tsv 

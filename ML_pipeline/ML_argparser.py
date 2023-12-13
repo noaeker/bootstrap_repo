@@ -11,10 +11,10 @@ def main_parser():
     parser.add_argument('--sample_fracs', type=str, default='0.25_0.5_1')
     parser.add_argument('--inc_sample_fracs', action='store_true', default=False)
     parser.add_argument('--reunite_val_data', action='store_true', default=False)
-    parser.add_argument('--use_val_data', action='store_true', default=True)
+    parser.add_argument('--use_val_data', action='store_true', default=False)
     parser.add_argument('--reunite_training_data', action='store_true', default=False)
     parser.add_argument('--main_data_folder', type=str,
-                        default='/Users/noa/Workspace/bootstrap_results/remote_results/full_data')
+                        default='/Users/noa/Workspace/bootstrap_results/test_iqtree')
     parser.add_argument('--validation_data_folder', type=str,
                         default='/Users/noa/Workspace/bootstrap_results/remote_results/all_val')
     parser.add_argument('--n_val_samp', type=int, default=250)

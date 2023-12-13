@@ -59,7 +59,7 @@ def main():
                 program_bootstrap_support_paths, all_mle_path = get_bootstrap_and_all_mles_path(program, bootstrap_tree_details)
                 tree_obj_with_features, all_msa_splits_df = extract_all_features_per_mle(working_dir, msa_path, model, mle_tree_path, extra_bootstrap_support_paths =program_bootstrap_support_paths , all_mles_tree_path =all_mle_path, true_tree_path = true_tree_path)
                 all_msa_splits_df["program"] = program
-                all_msa_splits_df = pd.concat([all_msa_splits_df,bootstrap_tree_details],axis=1)
+                all_msa_splits_df = all_msa_splits_df.assign(**bootstrap_tree_details)
 
                 all_splits = pd.concat([all_splits, all_msa_splits_df])
                 all_splits.to_csv(args.job_final_output_path, sep='\t')
