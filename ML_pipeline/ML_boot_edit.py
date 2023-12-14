@@ -226,8 +226,8 @@ def transform_data(df, program):
         df['bootstrap_support'] =df['bootstrap_support']/100
     elif program=='iqtree':
         df['bootstrap_support'] = df['bootstrap_support']/100
-        df['feature_aLRT_iqtree_support']= np.minimum(df['feature_aLRT_iqtree_support'],1)
-        df['feature_aBayes_iqtree_support'] = np.minimum(df['feature_aBayes_iqtree_support'],1)
+        df['aLRT_iqtree']= np.minimum(df['aLRT_iqtree'],1)
+        df['aBayes_iqtree_support'] = np.minimum(df['aBayes_iqtree_support'],1)
     elif program=='fasttree':
         df['bootstrap_support'] = np.minimum(df['bootstrap_support'], 1)
     return df
