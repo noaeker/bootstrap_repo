@@ -50,7 +50,7 @@ def get_bootstrap_col(program):
         # full_data["feature_ML_vs_pars"] = full_data["feature_parsimony_trees_binary_mean"]- full_data["feature_all_ML_ete_binary_mean"]
         bootstrap_cols = ['bootstrap_support']
     elif program == 'iqtree':
-        bootstrap_cols = ['bootstrap_support', 'feature_aLRT_iqtree_support', 'feature_aBayes_iqtree_support']
+        bootstrap_cols = ['bootstrap_support', 'aLRT_iqtree', 'aBayes_iqtree_support']
     elif program == 'fasttree':
         bootstrap_cols = ['bootstrap_support']
     return bootstrap_cols
