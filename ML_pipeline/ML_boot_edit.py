@@ -50,7 +50,7 @@ def get_bootstrap_col(program):
         # full_data["feature_ML_vs_pars"] = full_data["feature_parsimony_trees_binary_mean"]- full_data["feature_all_ML_ete_binary_mean"]
         bootstrap_cols = ['bootstrap_support']
     elif program == 'iqtree':
-        bootstrap_cols = ['bootstrap_support', 'aLRT_iqtree', 'aBayes_iqtree_support']
+        bootstrap_cols = ['bootstrap_support', 'aLRT_iqtree', 'aBayes_iqtree']
     elif program == 'fasttree':
         bootstrap_cols = ['bootstrap_support']
     return bootstrap_cols
@@ -227,7 +227,7 @@ def transform_data(df, program):
     elif program=='iqtree':
         df['bootstrap_support'] = df['bootstrap_support']/100
         df['aLRT_iqtree']= np.minimum(df['aLRT_iqtree'],1)
-        df['aBayes_iqtree_support'] = np.minimum(df['aBayes_iqtree_support'],1)
+        df['aBayes_iqtree'] = np.minimum(df['aBayes_iqtree'],1)
     elif program=='fasttree':
         df['bootstrap_support'] = np.minimum(df['bootstrap_support'], 1)
     return df

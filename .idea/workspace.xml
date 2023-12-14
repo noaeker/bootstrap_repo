@@ -37,7 +37,7 @@
         <entry file="file://$PROJECT_DIR$/ML_pipeline/ML_boot_edit.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="144">
-              <caret line="228" column="23" selection-start-line="228" selection-start-column="12" selection-end-line="228" selection-end-column="23" />
+              <caret line="52" column="76" selection-start-line="52" selection-start-column="76" selection-end-line="52" selection-end-column="76" />
             </state>
           </provider>
         </entry>
@@ -122,7 +122,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>all_pars_ete</find>
       <find>importance</find>
       <find>mad</find>
       <find>internal</find>
@@ -152,6 +151,7 @@
       <find>zero_grad</find>
       <find>model.train</find>
       <find>aLRT_iqtree</find>
+      <find>aBayes_iqtree</find>
     </findStrings>
     <replaceStrings>
       <replace>job_data_path</replace>
@@ -952,7 +952,7 @@
     <entry file="file://$PROJECT_DIR$/ML_pipeline/ML_boot_edit.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="144">
-          <caret line="228" column="23" selection-start-line="228" selection-start-column="12" selection-end-line="228" selection-end-column="23" />
+          <caret line="52" column="76" selection-start-line="52" selection-start-column="76" selection-end-line="52" selection-end-column="76" />
         </state>
       </provider>
     </entry>
