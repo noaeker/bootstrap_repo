@@ -24,26 +24,27 @@ class BootstrapDataset(Dataset):
 
 
 class BootstrapClassification(nn.Module):
-    def __init__(self, x, y):
+    def __init__(self, n_features):
         super(BootstrapClassification, self).__init__()
-        self.layer_1 = nn.Linear(x, y)
-        self.layer_2 = nn.Linear(100, 50)
-        self.layer_out = nn.Linear(50, 1)
+        #self.layer_1 = nn.Linear(n_features, 100)
+        #self.layer_2 = nn.Linear(100, 50)
+        #self.layer_out = nn.Linear(50, 1)
 
-        self.relu = nn.ReLU()
-        self.sigmoid = nn.Sigmoid()
-        self.dropout = nn.Dropout(p=0.1)
-        self.batchnorm1 = nn.BatchNorm1d(100)
-        self.batchnorm2 = nn.BatchNorm1d(50)
+        #self.relu = nn.ReLU()
+        #self.sigmoid = nn.Sigmoid()
+        #self.dropout = nn.Dropout(p=0.1)
+        #self.batchnorm1 = nn.BatchNorm1d(100)
+        #self.batchnorm2 = nn.BatchNorm1d(50)
+        self.linear = torch.nn.Linear(n_features, 1)
 
     def forward(self, inputs):
-        x = self.relu(self.layer_1(inputs))
-        x = self.batchnorm1(x)
-        x = self.relu(self.layer_2(x))
-        x = self.batchnorm2(x)
-        x = self.dropout(x)
-        x = self.sigmoid(self.layer_out(x))
-
+        #x = self.relu(self.layer_1(inputs))
+        #x = self.batchnorm1(x)
+        #x = self.relu(self.layer_2(x))
+        #x = self.batchnorm2(x)
+        #x = self.dropout(x)
+        #x = self.sigmoid(self.layer_out(x))
+        x = torch.sigmoid(self.linear(inputs))
         return x
 
 
@@ -66,6 +67,11 @@ def train(dataloader, model, loss_fn, optimizer,device):
             loss, current = loss.item(), (batch + 1) * len(X)
             print(f"loss: {loss:>7f}  [{current:>5d}/{size:>5d}]")
 
+def accuracy_fn(y_true, y_pred):
+    correct = torch.eq(y_true, y_pred).sum().item()
+    acc = correct / len(y_pred) * 100
+    return acc
+
 def test_loop(dataloader, model, loss_fn):
     # Set the model to evaluation mode - important for batch normalization and dropout layers
     # Unnecessary in this situation but added for best practices
@@ -79,16 +85,17 @@ def test_loop(dataloader, model, loss_fn):
     with torch.no_grad():
         for X, y in dataloader:
             pred = model(X.float())
+            pred_rounded = torch.round((pred))
             test_loss += loss_fn(pred.squeeze(), y.float().squeeze()).item()
-            correct += (pred.argmax(1) == y).type(torch.float).sum().item()
+            correct += (pred_rounded.argmax(1) == y).type(torch.float).sum().item()
 
     test_loss /= num_batches
     correct /= size
     print(f"Test Error: \n Accuracy: {(100*correct):>0.1f}%, Avg loss: {test_loss:>8f} \n")
 
-def NN_pipeline(dataloader,test_dataloader):
+def NN_pipeline(n_features,dataloader,test_dataloader):
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
-    model = BootstrapClassification(5, 7).to(device) # instantinate model and move to device
+    model = BootstrapClassification(n_features).to(device) # instantinate model and move to device
 
     # Define hyperparameters:
     learning_rate = 0.001
@@ -96,7 +103,7 @@ def NN_pipeline(dataloader,test_dataloader):
 
     optimizer = torch.optim.SGD(params=model.parameters(), lr=learning_rate)
     # Forward pass
-    epochs = 100
+    epochs = 1000
     for t in range(epochs):
         print(f"Epoch {t + 1}\n-------------------------------")
         train(dataloader, model, loss_fn, optimizer, device)
@@ -116,16 +123,18 @@ def main():
     data['true_binary_support'] = data['true_support'] == 1
     data = data.sample(n=10000)
     X = data[[col for col in data.columns if 'feature' in col]]#data[['feature_min_ll_diff','feature_partition_branch','feature_mean_parsimony_trees_binary']]
+    print(X.shape)
+    n_features = X.shape[1]
     y = data['true_binary_support'].astype(int)
     X_train,X_test,y_train,y_test = train_test_split(X, y, test_size=0.25, shuffle=True)
-    scaler = StandardScaler()
-    X_train = scaler.fit_transform(X_train)
-    X_test = scaler.transform(X_test)
+    #scaler = StandardScaler()
+    X_train = X_train.values#scaler.fit_transform(X_train)
+    X_test = X_test.values #scaler.transform(X_test)
     train_dataset = BootstrapDataset(X=X_train, y=y_train)
     test_dataset = BootstrapDataset(X=X_test, y=y_test)
     train_dataloader = DataLoader(train_dataset, batch_size=64, shuffle=True)
     test_dataloader = DataLoader(test_dataset, batch_size=32, shuffle=True)
-    NN_pipeline(train_dataloader,test_dataloader)
+    NN_pipeline(n_features,train_dataloader,test_dataloader)
 
 if __name__ == "__main__":
     main()
