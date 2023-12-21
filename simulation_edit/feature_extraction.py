@@ -116,8 +116,12 @@ def get_partition_statistics(node, mle_tree_obj, extra_support_features_dict, fb
              'feature_var_bl_bipart': np.var(bipart_branch_lengths) / np.max(bipart_branch_lengths),
              'feature_partition_branch_vs_mean': node.dist / tree_divergence,
              'feature_partition_branch_vs_bipart_mean': node.dist / np.mean(bipart_branch_lengths)}
+
     for extra_support in extra_support_features_dict:
         stats[f"feature_{extra_support}"] = ((extra_support_features_dict[extra_support])&node.name).support
+        node_neighbors_supports = [((extra_support_features_dict[extra_support])&node_n.name).support for node_n in neighboring_node_pairs[0]+neighboring_node_pairs[1] if not node_n.is_leaf()]
+        stats.update({f'feature_{extra_support}_mean_bipart': np.mean(node_neighbors_supports),f'feature_{extra_support}_min_bipart': np.min(node_neighbors_supports)})
+
     if fbp_true_support_tree is not None:
         stats["true_support"] = ((fbp_true_support_tree) & node.name).support #update true support
     for bootstrap_support in bootstrap_support_trees_dict:

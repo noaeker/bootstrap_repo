@@ -220,7 +220,7 @@ def transform_data(df, program):
     #df['model_short'] = df['model_short'].apply(lambda x: x.split('+')[0])
     #df['feature_free_parameters'] = df['model_short'].apply(lambda x: get_n_free_parameters(x))
     df = df[[col for col in df.columns if
-             'msa_entropy' not in col and 'extraction_of_features_time' not in col and 'feature_abayes_opt' not in col and 'column_variance' not in col and 'feature_min_mean_branch_length' not in col and 'feature_max_mean_branch_length' not in col and 'll_diff_norm' not in col and 'opt=False_model_False' not in col ]]
+             'msa_entropy' not in col and 'feature_abayes' not in col and 'overall_feature_extraction_time' not in col and 'column_variance' not in col ]]
     # df = pd.get_dummies(df,prefix='feature_model_',columns=['model_short']) #
     if program=='raxml':
         df['bootstrap_support'] =df['bootstrap_support']/100
