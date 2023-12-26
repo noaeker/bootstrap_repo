@@ -62,8 +62,9 @@ def RFE(model, X, y, group_splitter, n_jobs, scoring, do_RFE):
         min_features = 1
     else:
         min_features = X.shape[1]
-
-    RFE_res = RFECV(RfePipeline([('sts',StandardScaler()), ('clf',LogisticRegression(max_iter=1000,random_state=0))]), step=1, cv=group_splitter, n_jobs=n_jobs, min_features_to_select=min_features,
+    if model is None:
+        model = RfePipeline([('sts', StandardScaler()), ('clf', LogisticRegression(max_iter=1000, random_state=0))])
+    RFE_res = RFECV(model, step=1, cv=group_splitter, n_jobs=n_jobs, min_features_to_select=min_features,
                  scoring=scoring)  # min_features_to_select= 30,X.shape[1] X.shape[1]
     selector =  RFE_res.fit(X, y.ravel())
     X_new = X[X.columns[selector.get_support(indices=True)]]
