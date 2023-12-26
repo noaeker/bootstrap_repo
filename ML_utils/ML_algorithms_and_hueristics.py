@@ -2,6 +2,8 @@ from side_code.config import *
 from ML_utils.ML_config import *
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.neural_network import MLPClassifier
+from sklearn.linear_model import LogisticRegression
 import pickle
 from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
 from sklearn.metrics import matthews_corrcoef, log_loss, brier_score_loss, roc_auc_score, average_precision_score
@@ -16,7 +18,7 @@ from sklearn.calibration import CalibratedClassifierCV, calibration_curve
 from sklearn.linear_model import LogisticRegression
 from sklearn.linear_model import SGDClassifier
 from sklearn.preprocessing import StandardScaler
-from sklearn.pipeline import make_pipeline
+from sklearn.pipeline import make_pipeline, Pipeline
 from sklearn.metrics import confusion_matrix
 
 
@@ -50,19 +52,23 @@ def score_func(y, y_pred, classification, groups_data):
         all_grouping.append(df)
     return pd.concat(all_grouping)
 
+class RfePipeline(Pipeline):
+    @property
+    def coef_(self):
+        return self._final_estimator.coef_
 
 def RFE(model, X, y, group_splitter, n_jobs, scoring, do_RFE):
     if do_RFE:
         min_features = 1
     else:
         min_features = X.shape[1]
-    selector = RFECV(model, step=1, cv=group_splitter, n_jobs=n_jobs, min_features_to_select=min_features,
-                     scoring=scoring)  # min_features_to_select= 30,X.shape[1] X.shape[1]
-    selector = selector.fit(X, y.ravel())
-    model = selector.estimator
+
+    RFE_res = RFECV(RfePipeline([('sts',StandardScaler()), ('clf',LogisticRegression(max_iter=1000,random_state=0))]), step=1, cv=group_splitter, n_jobs=n_jobs, min_features_to_select=min_features,
+                 scoring=scoring)  # min_features_to_select= 30,X.shape[1] X.shape[1]
+    selector =  RFE_res.fit(X, y.ravel())
     X_new = X[X.columns[selector.get_support(indices=True)]]
     logging.info(f"Number of features after feature selection: {X_new.shape[1]} out of {(X.shape[1])}")
-    return selector, X_new, model
+    return selector, X_new
 
 
 
@@ -80,9 +86,9 @@ def ML_training(X_train, groups, y_train, n_jobs, path, classifier=False, model=
                 param_grid = LIGHTGBM_CLASSIFICATION_PARAM_GRID
                 if large_grid:
                     param_grid.update(GENERAL_PARAM_GRID)
-            elif model=='sgd':
-                model = make_pipeline(StandardScaler(),SGDClassifier(loss='modified_huber'))
-                param_grid = {}
+            elif model=='NN':
+                model = make_pipeline(StandardScaler(),MLPClassifier(solver='adam', alpha=1e-5,hidden_layer_sizes = (30, 5), random_state = 1))
+                param_grid = {'mlpclassifier__hidden_layer_sizes':[(5,2),(25,5),(50,10)],'mlpclassifier__alpha': [0.0001,0.05]}
             elif model == 'rf':
                 model = RandomForestClassifier()
                 param_grid = {'max_depth': [3, 5, 10],'min_samples_split': [2, 5, 10]}
@@ -95,7 +101,7 @@ def ML_training(X_train, groups, y_train, n_jobs, path, classifier=False, model=
             scoring = 'neg_log_loss'
         else:
             scoring = 'r2'
-        selector, X_train, model = RFE(model, X_train, y_train, group_splitter, n_jobs, scoring, do_RFE)
+        selector, X_train = RFE(model, X_train, y_train, group_splitter, n_jobs, scoring, do_RFE = do_RFE)
         grid_search = GridSearchCV(estimator=model, param_grid=param_grid,
                                    cv=group_splitter, n_jobs=n_jobs, pre_dispatch='1*n_jobs', verbose=2,
                                    scoring=scoring)

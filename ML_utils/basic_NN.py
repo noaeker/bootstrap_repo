@@ -4,9 +4,11 @@ from torch import nn
 from sklearn.model_selection import train_test_split
 import torch
 from torch.utils.data import Dataset
+from sklearn.neural_network import MLPClassifier
 from torch.utils.data import DataLoader
 from sklearn.preprocessing import StandardScaler
-
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import matthews_corrcoef, log_loss, brier_score_loss, roc_auc_score, average_precision_score
 
 
 class BootstrapDataset(Dataset):
@@ -121,20 +123,34 @@ def main():
     data = data.dropna(axis=1, how='all')
     data = data.dropna(axis=0, how='all')
     data['true_binary_support'] = data['true_support'] == 1
-    data = data.sample(n=10000)
+    #data = data.sample(n=10000)
     X = data[[col for col in data.columns if 'feature' in col]]#data[['feature_min_ll_diff','feature_partition_branch','feature_mean_parsimony_trees_binary']]
     print(X.shape)
     n_features = X.shape[1]
     y = data['true_binary_support'].astype(int)
     X_train,X_test,y_train,y_test = train_test_split(X, y, test_size=0.25, shuffle=True)
+
+    clf = MLPClassifier(solver='adam', alpha=1e-5,hidden_layer_sizes = (30, 5), random_state = 1)
+    scaler = StandardScaler()
+    scaler.fit(X_train)
+    X_train = scaler.transform(X_train)
+    X_test = scaler.transform(X_test)
+    clf.fit(X_train, y_train)
+    res_p = clf.predict_proba(X_test)[:, 1]
+    print(roc_auc_score(y_test,res_p))
+
+
+
     #scaler = StandardScaler()
-    X_train = X_train.values#scaler.fit_transform(X_train)
-    X_test = X_test.values #scaler.transform(X_test)
-    train_dataset = BootstrapDataset(X=X_train, y=y_train)
-    test_dataset = BootstrapDataset(X=X_test, y=y_test)
-    train_dataloader = DataLoader(train_dataset, batch_size=64, shuffle=True)
-    test_dataloader = DataLoader(test_dataset, batch_size=32, shuffle=True)
-    NN_pipeline(n_features,train_dataloader,test_dataloader)
+
+
+    #X_train = X_train.values#scaler.fit_transform(X_train)
+    #X_test = X_test.values #scaler.transform(X_test)
+    #train_dataset = BootstrapDataset(X=X_train, y=y_train)
+    #test_dataset = BootstrapDataset(X=X_test, y=y_test)
+    #train_dataloader = DataLoader(train_dataset, batch_size=64, shuffle=True)
+    #test_dataloader = DataLoader(test_dataset, batch_size=32, shuffle=True)
+    #NN_pipeline(n_features,train_dataloader,test_dataloader)
 
 if __name__ == "__main__":
     main()

@@ -221,7 +221,7 @@ def transform_data(df, program):
     #df['feature_free_parameters'] = df['model_short'].apply(lambda x: get_n_free_parameters(x))
     df = df[[col for col in df.columns if
              'msa_entropy' not in col and 'feature_abayes' not in col and 'overall_feature_extraction_time' not in col and 'column_variance' not in col ]]
-    # df = pd.get_dummies(df,prefix='feature_model_',columns=['model_short']) #
+    # df = pd.get_dummies(df,prefix='feature_model_',cfolumns=['model_short']) #
     if program=='raxml':
         df['bootstrap_support'] =df['bootstrap_support']/100
     elif program=='iqtree':
@@ -244,7 +244,7 @@ def generate_data_dict_per_program(programs, folder, n_samp):
                                                      name=f'simulations_df_{program}', n_jobs=1000)
         else:
             logging.info(f"Using existing training data in {data_path} ")
-            program_data = pd.read_csv(data_path, sep='\t')
+            program_data = pd.read_csv(data_path, sep='\t').sample(n=100000)
         program_data = program_data.dropna(axis=1, how='all')
         program_data = program_data.dropna(axis=0, how='all')
         program_data= transform_data(program_data, program)
@@ -276,9 +276,9 @@ def main():
     create_dir_if_not_exists(args.working_dir)
     log_file_path = os.path.join(args.working_dir, "ML.log")
     logging.basicConfig(filename=log_file_path, level=logging.INFO)
-    main_data_dict = generate_data_dict_per_program(programs = ['iqtree','fasttree','raxml'], folder= args.main_data_folder, n_samp=args.n_main_samp)
+    main_data_dict = generate_data_dict_per_program(programs = ['raxml'], folder= args.main_data_folder, n_samp=args.n_main_samp)
     if args.use_val_data:
-        val_data_dict = generate_data_dict_per_program(programs = ['iqtree','fasttree','raxml'], folder= args.validation_data_folder,
+        val_data_dict = generate_data_dict_per_program(programs = ['raxml'], folder= args.validation_data_folder,
                                                        n_samp= args.n_val_samp)
 
     for ML_model in args.ML_model.split('_'):
