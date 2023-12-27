@@ -104,7 +104,7 @@ def ML_training(X_train, groups, y_train, n_jobs, path, classifier=False, model=
             scoring = 'r2'
         selector, X_train = RFE(model, X_train, y_train, group_splitter, n_jobs, scoring, do_RFE = do_RFE)
         grid_search = GridSearchCV(estimator=model, param_grid=param_grid,
-                                   cv=group_splitter, n_jobs=n_jobs-4, pre_dispatch='1', verbose=2,
+                                   cv=group_splitter, n_jobs=n_jobs-4, pre_dispatch=1, verbose=2,
                                    scoring=scoring)
         grid_search.fit(X_train, y_train.ravel())
         best_model = grid_search.best_estimator_
