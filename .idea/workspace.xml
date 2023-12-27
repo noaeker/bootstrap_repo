@@ -66,8 +66,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ML_utils/ML_algorithms_and_hueristics.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="178">
-              <caret line="106" column="32" selection-start-line="106" selection-start-column="32" selection-end-line="106" selection-end-column="32" />
+            <state relative-caret-position="125">
+              <caret line="106" column="26" selection-start-line="106" selection-start-column="26" selection-end-line="106" selection-end-column="26" />
               <folding>
                 <element signature="e#0#30#0" expanded="true" />
               </folding>
@@ -201,7 +201,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="y" value="92" />
     <option name="width" value="1791" />
     <option name="height" value="913" />
@@ -416,15 +416,15 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="92" width="1791" height="913" extended-state="0" />
+    <frame x="0" y="25" width="1440" height="800" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18757062" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.23396759" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49550563" weight="0.2773208" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.67159975" visible="true" weight="0.37055215" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.67159975" visible="true" weight="0.43019944" />
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.47145876" weight="0.23361823" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -966,8 +966,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ML_utils/ML_algorithms_and_hueristics.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="178">
-          <caret line="106" column="32" selection-start-line="106" selection-start-column="32" selection-end-line="106" selection-end-column="32" />
+        <state relative-caret-position="125">
+          <caret line="106" column="26" selection-start-line="106" selection-start-column="26" selection-end-line="106" selection-end-column="26" />
           <folding>
             <element signature="e#0#30#0" expanded="true" />
           </folding>

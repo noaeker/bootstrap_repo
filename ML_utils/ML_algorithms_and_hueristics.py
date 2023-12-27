@@ -104,7 +104,7 @@ def ML_training(X_train, groups, y_train, n_jobs, path, classifier=False, model=
             scoring = 'r2'
         selector, X_train = RFE(model, X_train, y_train, group_splitter, n_jobs, scoring, do_RFE = do_RFE)
         if large_grid:
-            n_jobs_grid = np.max(n_jobs-5,1)
+            n_jobs_grid = max(n_jobs-5,1)
         else:
             n_jobs_grid = 1
         logging.info(f'N jobs = {n_jobs}')
