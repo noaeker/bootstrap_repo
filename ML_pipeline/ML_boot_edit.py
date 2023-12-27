@@ -167,7 +167,7 @@ def ML_pipeline(program_data, bootstrap_cols, cpus_per_main_job, working_dir, sa
     all_perdictions["predictions_full_standard"] = predictions_full
     model_performance_full["analysis_type"] = "full_standard"
     all_models_performance = pd.concat([all_models_performance, model_performance_full])
-    nni_cols = ['feature_min_ll_diff', 'feature_min_ll_diff']
+    nni_cols = ['feature_min_ll_diff', 'feature_max_ll_diff']
 
     fast_features = [col for col in full_features if
                      col not in nni_cols]  # +['partition_branch_vs_mean','partition_branch','partition_size','partition_size_ratio','partition_divergence','divergence_ratio']
