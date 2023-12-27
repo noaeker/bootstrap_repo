@@ -83,7 +83,7 @@ def ML_training(X_train, groups, y_train, n_jobs, path, classifier=False, model=
         group_splitter = list(GroupKFold(n_splits=n_cv_folds).split(X_train, y_train.ravel(), groups=groups))
         if classifier:
             if model=='lightgbm':
-                model =lightgbm.LGBMClassifier(importance_type='gain',metric='binary_logloss')#importance_type='gain'
+                model =lightgbm.LGBMClassifier(importance_type='gain',metric='binary_logloss',n_jobs = 1)#importance_type='gain'
                 param_grid = LIGHTGBM_CLASSIFICATION_PARAM_GRID
                 if large_grid:
                     param_grid.update(GENERAL_PARAM_GRID)
@@ -104,7 +104,7 @@ def ML_training(X_train, groups, y_train, n_jobs, path, classifier=False, model=
             scoring = 'r2'
         selector, X_train = RFE(model, X_train, y_train, group_splitter, n_jobs, scoring, do_RFE = do_RFE)
         if large_grid:
-            n_jobs_grid = n_jobs-4
+            n_jobs_grid = np.max(n_jobs-5,1)
         else:
             n_jobs_grid = 1
         logging.info(f'N jobs = {n_jobs}')
