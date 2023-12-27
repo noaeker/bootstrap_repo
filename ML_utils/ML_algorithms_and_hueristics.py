@@ -62,7 +62,7 @@ def RFE(model, X, y, group_splitter, n_jobs, scoring, do_RFE):
         min_features = 1
     else:
         min_features = X.shape[1]
-    if model is None:
+    if model=='NN':
         model = RfePipeline([('sts', StandardScaler()), ('clf', LogisticRegression(max_iter=1000, random_state=0))])
     RFE_res = RFECV(model, step=1, cv=group_splitter, n_jobs=n_jobs, min_features_to_select=min_features,
                  scoring=scoring)  # min_features_to_select= 30,X.shape[1] X.shape[1]
@@ -104,11 +104,12 @@ def ML_training(X_train, groups, y_train, n_jobs, path, classifier=False, model=
             scoring = 'r2'
         selector, X_train = RFE(model, X_train, y_train, group_splitter, n_jobs, scoring, do_RFE = do_RFE)
         if large_grid:
-            n_jobs_grid = 1
-        else:
             n_jobs_grid = n_jobs-4
+        else:
+            n_jobs_grid = 1
+        logging.info(f'N jobs = {n_jobs}')
         grid_search = GridSearchCV(estimator=model, param_grid=param_grid,
-                                   cv=group_splitter, n_jobs=n_jobs_grid, pre_dispatch=0, verbose=2,
+                                   cv=group_splitter, n_jobs=n_jobs_grid, pre_dispatch=1, verbose=2,
                                    scoring=scoring)
         grid_search.fit(X_train, y_train.ravel())
         best_model = grid_search.best_estimator_
