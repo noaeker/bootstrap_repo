@@ -89,7 +89,7 @@ def ML_training(X_train, groups, y_train, n_jobs, path, classifier=False, model=
                     param_grid.update(GENERAL_PARAM_GRID)
             elif model=='NN':
                 model = make_pipeline(StandardScaler(),MLPClassifier(solver='adam', alpha=1e-5,hidden_layer_sizes = (30, 5), random_state = 1))
-                param_grid = {'mlpclassifier__hidden_layer_sizes':[(5,2),(25,5),(50,10)],'mlpclassifier__alpha': [0.0001,0.05]}
+                param_grid = {'mlpclassifier__hidden_layer_sizes':[(10,3),(30,5),(50,10)],'mlpclassifier__alpha': [0.0001,0.05]}
             elif model == 'rf':
                 model = RandomForestClassifier()
                 param_grid = {'max_depth': [3, 5, 10],'min_samples_split': [2, 5, 10]}

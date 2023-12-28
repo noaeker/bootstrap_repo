@@ -5,7 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c7df0e90-f129-4c06-bac2-5459d2cc3269" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/ML_pipeline/ML_boot_edit.py" beforeDir="false" afterPath="$PROJECT_DIR$/ML_pipeline/ML_boot_edit.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ML_utils/ML_algorithms_and_hueristics.py" beforeDir="false" afterPath="$PROJECT_DIR$/ML_utils/ML_algorithms_and_hueristics.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -54,20 +54,20 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ML_pipeline/ML_boot_edit.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="134">
-              <caret line="169" column="51" selection-start-line="169" selection-start-column="51" selection-end-line="169" selection-end-column="51" />
+            <state relative-caret-position="168">
+              <caret line="181" column="67" lean-forward="true" selection-start-line="181" selection-start-column="67" selection-end-line="181" selection-end-column="67" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ML_utils/ML_algorithms_and_hueristics.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="125">
-              <caret line="106" column="26" selection-start-line="106" selection-start-column="26" selection-end-line="106" selection-end-column="26" />
+            <state relative-caret-position="204">
+              <caret line="91" column="72" selection-start-line="91" selection-start-column="72" selection-end-line="91" selection-end-column="72" />
               <folding>
                 <element signature="e#0#30#0" expanded="true" />
               </folding>
@@ -113,7 +113,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>garba</find>
       <find>'gar</find>
       <find>bootstrap_tree_obj = Tree(newick=extra_bootstrap_support_paths</find>
       <find>try</find>
@@ -143,6 +142,7 @@
       <find>standard_model_pipeline</find>
       <find>ML_pipeline</find>
       <find>import</find>
+      <find>min_</find>
     </findStrings>
     <replaceStrings>
       <replace>job_data_path</replace>
@@ -196,12 +196,12 @@
         <option value="$PROJECT_DIR$/simulation_edit/feature_extraction.py" />
         <option value="$PROJECT_DIR$/ML_utils/basic_NN.py" />
         <option value="$PROJECT_DIR$/ML_pipeline/ML_argparser.py" />
-        <option value="$PROJECT_DIR$/ML_utils/ML_algorithms_and_hueristics.py" />
         <option value="$PROJECT_DIR$/ML_pipeline/ML_boot_edit.py" />
+        <option value="$PROJECT_DIR$/ML_utils/ML_algorithms_and_hueristics.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds">
     <option name="y" value="92" />
     <option name="width" value="1791" />
     <option name="height" value="913" />
@@ -416,15 +416,15 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="25" width="1440" height="800" extended-state="6" />
+    <frame x="0" y="92" width="1791" height="913" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2114165" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16949153" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49550563" weight="0.2773208" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.67159975" visible="true" weight="0.31766382" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.67159975" visible="true" weight="0.27361962" />
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.47145876" weight="0.23361823" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -957,20 +957,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ML_utils/ML_algorithms_and_hueristics.py">
+    <entry file="file://$PROJECT_DIR$/ML_pipeline/ML_boot_edit.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="125">
-          <caret line="106" column="26" selection-start-line="106" selection-start-column="26" selection-end-line="106" selection-end-column="26" />
-          <folding>
-            <element signature="e#0#30#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="168">
+          <caret line="181" column="67" lean-forward="true" selection-start-line="181" selection-start-column="67" selection-end-line="181" selection-end-column="67" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ML_pipeline/ML_boot_edit.py">
+    <entry file="file://$PROJECT_DIR$/ML_utils/ML_algorithms_and_hueristics.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="134">
-          <caret line="169" column="51" selection-start-line="169" selection-start-column="51" selection-end-line="169" selection-end-column="51" />
+        <state relative-caret-position="204">
+          <caret line="91" column="72" selection-start-line="91" selection-start-column="72" selection-end-line="91" selection-end-column="72" />
+          <folding>
+            <element signature="e#0#30#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
