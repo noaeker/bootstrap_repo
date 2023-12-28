@@ -109,7 +109,7 @@ def ML_training(X_train, groups, y_train, n_jobs, path, classifier=False, model=
             n_jobs_grid = 1
         logging.info(f'N jobs = {n_jobs}')
         grid_search = GridSearchCV(estimator=model, param_grid=param_grid,
-                                   cv=group_splitter, n_jobs=n_jobs_grid, pre_dispatch=1, verbose=2,
+                                   cv=group_splitter, n_jobs=n_jobs_grid, pre_dispatch='1*n_jobs', verbose=2,
                                    scoring=scoring)
         grid_search.fit(X_train, y_train.ravel())
         best_model = grid_search.best_estimator_
