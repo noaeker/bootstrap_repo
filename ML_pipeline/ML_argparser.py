@@ -4,7 +4,7 @@ import os
 def main_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument('--working_dir', type=str, default=os.getcwd())
-    parser.add_argument('--RFE', action='store_true', default=True)
+    parser.add_argument('--RFE', action='store_true', default=False)
     parser.add_argument('--full_grid', action='store_true', default=False)
     parser.add_argument('--programs', type=str, default='raxml')
     parser.add_argument('--cpus_per_main_job', type=int, default=1)
