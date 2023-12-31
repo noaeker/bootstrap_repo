@@ -108,6 +108,8 @@ def get_partition_statistics(node, mle_tree_obj, extra_support_features_dict, fb
                                                                              neighboring_node_pairs[1]]
 
     stats = {'bootstrap_support': node.support,
+             'feature_partition_size': min_partition_size,
+             'feature_partition_divergence':  min_partition_divergence ,
         'feature_partition_size_ratio': partition_size_ratio, 'feature_divergence_ratio': divergence_ratio,
              'feature_mean_bl_bipart': np.mean(bipart_branch_lengths),
              'feature_min_bl_bipart': np.min(bipart_branch_lengths),
@@ -115,6 +117,7 @@ def get_partition_statistics(node, mle_tree_obj, extra_support_features_dict, fb
              'feature_min_vs_max_bl_bipart': np.min(bipart_branch_lengths)/np.max(bipart_branch_lengths),
              'feature_var_bl_bipart': np.var(bipart_branch_lengths) / np.max(bipart_branch_lengths),
              'feature_partition_branch_vs_mean': node.dist / tree_divergence,
+             'feature_partition_branch': node.dist,
              'feature_partition_branch_vs_bipart_mean': node.dist / np.mean(bipart_branch_lengths)}
 
     for extra_support in extra_support_features_dict:

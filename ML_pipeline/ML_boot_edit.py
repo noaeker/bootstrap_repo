@@ -221,6 +221,13 @@ def transform_data(df, program):
     #df['feature_free_parameters'] = df['model_short'].apply(lambda x: get_n_free_parameters(x))
     df = df[[col for col in df.columns if
              'msa_entropy' not in col and 'feature_abayes' not in col and 'overall_feature_extraction_time' not in col and 'column_variance' not in col ]]
+
+    if 'feature_partition_branch' not in df.columns:
+        df['feature_partition_branch'] = df['feature_partition_branch_vs_bipart_mean']*df['feature_mean_bl_bipart']
+    if 'feature_partition_size' not in df.columns:
+        df['feature_partition_size'] = df['feature_partition_size_ratio']*df['feature_msa_n_seq']
+    if 'feature_partition_divergence' not in df.columns:
+        df['feature_partition_divergence'] = df['feature_divergence_ratio'] * df['feature_total_tree_divergence']
     # df = pd.get_dummies(df,prefix='feature_model_',cfolumns=['model_short']) #
     if program=='raxml':
         df['bootstrap_support'] =df['bootstrap_support']/100
