@@ -9,6 +9,7 @@ sys.path.append(PROJECT_ROOT_DIRECRTORY)
 
 from simulation_edit.simulations_edit_argparser import job_parser
 from simulation_edit.feature_extraction import extract_all_features_per_mle
+from simulation_edit.trees_features_extraction_helper import get_booster_tree
 from side_code.file_handling import *
 
 def get_program_default_ML_tree(program):
@@ -25,6 +26,7 @@ def get_bootstrap_and_all_mles_path(program, bootstrap_tree_details):
     extra_support_values= {}
     if program == 'raxml':
         all_mles_path = bootstrap_tree_details['all_final_tree_topologies_path']
+        extra_support_values = {'tbe_raxml':bootstrap_tree_details["tbe_bootstrap"]}
     elif program == 'iqtree':
         final_tree_aLRT = bootstrap_tree_details['final_tree_aLRT']
         final_tree_aBayes_path = bootstrap_tree_details['final_tree_aBayes']
@@ -55,6 +57,13 @@ def main():
                 bootstrap_tree_details = tree_program_data.loc[tree_program_data.msa_path == msa_path].head(1).squeeze()
 
                 mle_tree_path =  bootstrap_tree_details[get_program_default_ML_tree(program)]
+                if program=='raxml':
+                    all_bootstrap_trees_path = os.path.join( os.path.dirname(mle_tree_path).replace('results_folder','all_tree_searches'), 'boot.raxml.bootstraps')
+                    tbe_out_path = os.path.join( os.path.dirname(mle_tree_path), 'boot.raxml.tbe')
+                    bootstrap_tree_details["tbe_bootstrap"] = tbe_out_path
+                    get_booster_tree(mle_tree_path, all_bootstrap_trees_path, out_path =tbe_out_path, tbe = True)
+
+
                 model = bootstrap_tree_details["tree_search_model"]
                 program_bootstrap_support_paths, all_mle_path = get_bootstrap_and_all_mles_path(program, bootstrap_tree_details)
                 tree_obj_with_features, all_msa_splits_df = extract_all_features_per_mle(working_dir, msa_path, model, mle_tree_path, extra_bootstrap_support_paths =program_bootstrap_support_paths , all_mles_tree_path =all_mle_path, true_tree_path = true_tree_path)
