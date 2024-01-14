@@ -301,7 +301,7 @@ def main():
                 logging.info("Using validation data")
                 program_validation_data = val_data_dict[program].copy()
                 condition = lambda x: x['msa_path'].iloc[0]
-                program_validation_data = program_validation_data.groupby('tree_id').apply(condition).reset_index(drop=True)
+                program_validation_data = program_validation_data.groupby(['tree_id','model_mode']).apply(condition).reset_index(drop=True)
                 logging.info(f"Number of trees in validation is {len(np.unique(program_validation_data['tree_id']))}")
                 for model_mode in np.unique(program_validation_data["model_mode"]):
                     validation_dict[f'val_{model_mode}'] = program_validation_data.loc[
