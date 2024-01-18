@@ -48,7 +48,7 @@ def model_pipeline(working_dir, X_train, y_train, name):
 def get_bootstrap_col(program):
     if program == 'raxml':
         # full_data["feature_ML_vs_pars"] = full_data["feature_parsimony_trees_binary_mean"]- full_data["feature_all_ML_ete_binary_mean"]
-        bootstrap_cols = ['bootstrap_support']
+        bootstrap_cols = ['bootstrap_support', 'tbe_bootstrap']
     elif program == 'iqtree':
         bootstrap_cols = ['bootstrap_support', 'aLRT_iqtree', 'aBayes_iqtree']
     elif program == 'fasttree':
@@ -301,7 +301,7 @@ def main():
                 logging.info("Using validation data")
                 program_validation_data = val_data_dict[program].copy()
                 condition = lambda x: x['msa_path'].iloc[0]
-                program_validation_data = program_validation_data.groupby(['tree_id','model_mode']).apply(condition).reset_index(drop=True)
+                program_validation_data = program_validation_data.groupby(['tree_id','model_mode']).apply(condition).reset_index()
                 for model_mode in np.unique(program_validation_data["model_mode"]):
                     validation_dict[f'val_{model_mode}'] = program_validation_data.loc[
                         program_validation_data.model_mode == model_mode].copy()
