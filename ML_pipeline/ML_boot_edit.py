@@ -300,8 +300,8 @@ def main():
             if args.use_val_data:
                 logging.info("Using validation data")
                 program_validation_data = val_data_dict[program].copy()
-                condition = lambda x: x['msa_path'].iloc[0]
-                program_validation_data = program_validation_data.groupby(['tree_id','model_mode']).apply(condition).reset_index()
+                program_validation_data['first_msa'] = program_validation_data.groupby(['tree_id','model_mode'])['msa_path'].transform(np.min)
+                program_validation_data = program_validation_data.loc[program_validation_data.msa_path==program_validation_data.first_msa]
                 for model_mode in np.unique(program_validation_data["model_mode"]):
                     validation_dict[f'val_{model_mode}'] = program_validation_data.loc[
                         program_validation_data.model_mode == model_mode].copy()
