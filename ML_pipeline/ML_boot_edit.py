@@ -48,7 +48,7 @@ def model_pipeline(working_dir, X_train, y_train, name):
 def get_bootstrap_col(program):
     if program == 'raxml':
         # full_data["feature_ML_vs_pars"] = full_data["feature_parsimony_trees_binary_mean"]- full_data["feature_all_ML_ete_binary_mean"]
-        bootstrap_cols = ['bootstrap_support', 'tbe_bootstrap']
+        bootstrap_cols = ['bootstrap_support', 'tbe_raxml']
     elif program == 'iqtree':
         bootstrap_cols = ['bootstrap_support', 'aLRT_iqtree', 'aBayes_iqtree']
     elif program == 'fasttree':

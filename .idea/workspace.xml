@@ -36,8 +36,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ML_pipeline/ML_boot_edit.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="87">
-              <caret line="303" column="138" selection-start-line="303" selection-start-column="138" selection-end-line="303" selection-end-column="138" />
+            <state relative-caret-position="343">
+              <caret line="50" column="57" selection-start-line="50" selection-start-column="57" selection-end-line="50" selection-end-column="57" />
             </state>
           </provider>
         </entry>
@@ -192,7 +192,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds">
     <option name="x" value="198" />
     <option name="y" value="32" />
     <option name="width" value="1589" />
@@ -408,15 +408,15 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="25" width="1440" height="800" extended-state="6" />
+    <frame x="198" y="32" width="1589" height="921" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18604651" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16836734" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49550563" weight="0.2773208" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.67159975" visible="true" weight="0.42735043" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.67159975" visible="true" weight="0.23572296" />
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.47145876" weight="0.34045583" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -950,8 +950,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ML_pipeline/ML_boot_edit.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="87">
-          <caret line="303" column="138" selection-start-line="303" selection-start-column="138" selection-end-line="303" selection-end-column="138" />
+        <state relative-caret-position="343">
+          <caret line="50" column="57" selection-start-line="50" selection-start-column="57" selection-end-line="50" selection-end-column="57" />
         </state>
       </provider>
     </entry>
