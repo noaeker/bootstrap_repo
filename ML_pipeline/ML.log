@@ -1,1 +1,101 @@
 INFO:root:Using existing training data in /Users/noa/Workspace/bootstrap_results/remote_results/full_data/simulations_df_iqtree.tsv 
+INFO:root:Using existing training data in /Users/noa/Workspace/bootstrap_results/remote_results/full_data/simulations_df_iqtree.tsv 
+INFO:root:Using existing training data in /Users/noa/Workspace/bootstrap_results/remote_results/full_data/simulations_df_raxml.tsv 
+INFO:root:Number of common tree IDS is 6000
+INFO:root:Using existing training data in /Users/noa/Workspace/bootstrap_results/remote_results/full_data/simulations_df_raxml.tsv 
+INFO:root:Using existing training data in /Users/noa/Workspace/bootstrap_results/remote_results/full_data/simulations_df_raxml.tsv 
+INFO:root:Number of common tree IDS is 6000
+INFO:root:Model = NN
+INFO:root:Program = raxml
+INFO:root:Number of trees in main data is 6094
+INFO:root:Generating optimized final model
+INFO:root:Original number of trees in full data is 6094
+INFO:root:Partitioning MSAs according to number of sequences
+INFO:root:Number of MSAs in training data is 4683
+INFO:root:Number of MSAs in test data is 2007
+INFO:root:Number of different trees is 6094
+INFO:root:Full features are: ['feature_mean_parsimony_trees', 'feature_mean_parsimony_trees_binary', 'feature_mean_parsimony_trees_neighbors', 'feature_mean_parsimony_trees_neighbors_binary', 'feature_mean_all_ML_boot_raxml', 'feature_mean_all_ML_boot_raxml_binary', 'feature_mean_all_ML_boot_raxml_neighbors', 'feature_mean_all_ML_boot_raxml_neighbors_binary', 'feature_mean_neighbor_brlen', 'feature_min_neighbor_brlen', 'feature_partition_branch', 'feature_partition_branch_vs_mean', 'feature_partition_size', 'feature_partition_size_ratio', 'feature_partition_divergence', 'feature_divergence_ratio', 'feature_min_ll_diff', 'feature_max_ll_diff', 'feature_min_ll_diff_norm', 'feature_max_ll_diff_norm', 'feature_msa_n_seq', 'feature_msa_n_loci', 'feature_msa_constant_sites_pct', 'feature_msa_n_unique_sites', 'feature_msa_pypythia_msa_difficulty']
+INFO:root:Evaluating full standard model- including nni feautres, number of features is 25
+INFO:root:Training ML model
+INFO:root:Building a final_model model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/NN/raxml/final_model/full_model/model_stadard
+INFO:root:Using existing training data in /Users/noa/Workspace/bootstrap_results/remote_results/full_data/simulations_df_raxml.tsv 
+INFO:root:Number of common tree IDS is 600
+INFO:root:Model = lightgbm
+INFO:root:Program = raxml
+INFO:root:Number of trees in main data is 6094
+INFO:root:Generating optimized final model
+INFO:root:Original number of trees in full data is 6094
+INFO:root:Partitioning MSAs according to number of sequences
+INFO:root:Number of MSAs in training data is 4683
+INFO:root:Number of MSAs in test data is 2007
+INFO:root:Number of different trees is 6094
+INFO:root:Full features are: ['feature_mean_parsimony_trees', 'feature_mean_parsimony_trees_binary', 'feature_mean_parsimony_trees_neighbors', 'feature_mean_parsimony_trees_neighbors_binary', 'feature_mean_all_ML_boot_raxml', 'feature_mean_all_ML_boot_raxml_binary', 'feature_mean_all_ML_boot_raxml_neighbors', 'feature_mean_all_ML_boot_raxml_neighbors_binary', 'feature_mean_neighbor_brlen', 'feature_min_neighbor_brlen', 'feature_partition_branch', 'feature_partition_branch_vs_mean', 'feature_partition_size', 'feature_partition_size_ratio', 'feature_partition_divergence', 'feature_divergence_ratio', 'feature_min_ll_diff', 'feature_max_ll_diff', 'feature_min_ll_diff_norm', 'feature_max_ll_diff_norm', 'feature_msa_n_seq', 'feature_msa_n_loci', 'feature_msa_constant_sites_pct', 'feature_msa_n_unique_sites', 'feature_msa_pypythia_msa_difficulty']
+INFO:root:Evaluating full standard model- including nni feautres, number of features is 25
+INFO:root:Training ML model
+INFO:root:Building a final_model model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/lightgbm/raxml/final_model/full_model/model_stadard
+INFO:root:Number of features after feature selection: 25 out of 25
+INFO:root:N jobs = 1
+INFO:root:Generating calibrated model for classification model
+INFO:root:Evaluating model performance
+INFO:root:Model evaluation metrics {'tn_0.5': 134734, 'fp_0.5': 7269, 'fn_0.5': 5558, 'tp_0.5': 23795, 'mcc_0.5': 0.742737110425543, 'tn_0.95': 116821, 'fp_0.95': 25182, 'fn_0.95': 472, 'tp_0.95': 28881, 'mcc_0.95': 0.6539421761382695, 'ECE': 0.0016778185003200673, 'AUC': 0.9694375222345077, 'brier_loss': 0.05234306373349082, 'logloss': 0.16541546445765387, 'average_precision': 0.9937409363666375, 'dataset': 'test', 'name': 'model_standard', 'metric_type': 'all_data'}
+INFO:root:Model evaluation metrics {'tn_0.5': 316267, 'fp_0.5': 16450, 'fn_0.5': 12532, 'tp_0.5': 55869, 'mcc_0.5': 0.7507025219024857, 'tn_0.95': 274696, 'fp_0.95': 58021, 'fn_0.95': 506, 'tp_0.95': 67895, 'mcc_0.95': 0.6630877000635058, 'ECE': 0.0034034229626229004, 'AUC': 0.9732074216562515, 'brier_loss': 0.04975184248720314, 'logloss': 0.15484786086668248, 'average_precision': 0.9946509320038222, 'dataset': 'train', 'name': 'model_standard', 'metric_type': 'all_data'}
+INFO:root:Evaluating fast standard model- no nni feautres, number of features is 23
+INFO:root:Training ML model
+INFO:root:Building a final_model model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/lightgbm/raxml/final_model/fast_model/model_stadard
+INFO:root:Number of features after feature selection: 23 out of 23
+INFO:root:N jobs = 1
+INFO:root:Generating calibrated model for classification model
+INFO:root:Evaluating model performance
+INFO:root:Model evaluation metrics {'tn_0.5': 134730, 'fp_0.5': 7273, 'fn_0.5': 5661, 'tp_0.5': 23692, 'mcc_0.5': 0.7401975495729878, 'tn_0.95': 116219, 'fp_0.95': 25784, 'fn_0.95': 533, 'tp_0.95': 28820, 'mcc_0.95': 0.647092124576912, 'ECE': 0.001040626057936088, 'AUC': 0.9683614701324532, 'brier_loss': 0.052924973898145475, 'logloss': 0.16830104684916963, 'average_precision': 0.9934468568725725, 'dataset': 'test', 'name': 'model_standard', 'metric_type': 'all_data'}
+INFO:root:Model evaluation metrics {'tn_0.5': 316272, 'fp_0.5': 16445, 'fn_0.5': 12677, 'tp_0.5': 55724, 'mcc_0.5': 0.7492500677855655, 'tn_0.95': 273361, 'fp_0.95': 59356, 'fn_0.95': 557, 'tp_0.95': 67844, 'mcc_0.95': 0.6574315484076929, 'ECE': 0.003934392531525576, 'AUC': 0.9726045033779497, 'brier_loss': 0.050145724980549394, 'logloss': 0.15684403531206623, 'average_precision': 0.9945112639884178, 'dataset': 'train', 'name': 'model_standard', 'metric_type': 'all_data'}
+INFO:root:Comparing to bootstrap models
+INFO:root:Bootstrap col bootstrap_support
+INFO:root:Building a final_modelbootstrap_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/lightgbm/raxml/final_model/bootstrap_support/model_only_boot
+INFO:root:Number of features after feature selection: 2 out of 2
+INFO:root:N jobs = 1
+INFO:root:Generating calibrated model for classification model
+INFO:root:Building a final_modelbootstrap_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/lightgbm/raxml/final_model/bootstrap_support/model_inc_boot
+INFO:root:Number of features after feature selection: 26 out of 26
+INFO:root:N jobs = 1
+INFO:root:Generating calibrated model for classification model
+INFO:root:Model evaluation metrics {'tn_0.5': 136233, 'fp_0.5': 5770, 'fn_0.5': 10076, 'tp_0.5': 19277, 'mcc_0.5': 0.6570688289528165, 'tn_0.95': 96612, 'fp_0.95': 45391, 'fn_0.95': 381, 'tp_0.95': 28972, 'mcc_0.95': 0.5073343519403142, 'ECE': 0.01616068302247943, 'AUC': 0.9494182240845419, 'brier_loss': 0.06634679906160275, 'logloss': 0.2263965218592486, 'average_precision': 0.9885591489157667, 'dataset': 'test', 'name': 'raw_only_boot', 'metric_type': 'all_data'}
+INFO:root:Model evaluation metrics {'tn_0.5': 318991, 'fp_0.5': 13726, 'fn_0.5': 23095, 'tp_0.5': 45306, 'mcc_0.5': 0.6593590459063141, 'tn_0.95': 226680, 'fp_0.95': 106037, 'fn_0.95': 858, 'tp_0.95': 67543, 'mcc_0.95': 0.5076444389002933, 'ECE': 0.016078435772017112, 'AUC': 0.9507938093647492, 'brier_loss': 0.06550648362825902, 'logloss': 0.22152280155772772, 'average_precision': 0.988979408745456, 'dataset': 'train', 'name': 'raw_only_boot', 'metric_type': 'all_data'}
+INFO:root:Using existing training data in /Users/noa/Workspace/bootstrap_results/remote_results/full_data/simulations_df_raxml.tsv 
+INFO:root:Number of common tree IDS is 600
+INFO:root:Model = lightgbm
+INFO:root:Program = raxml
+INFO:root:Number of trees in main data is 6094
+INFO:root:Generating optimized final model
+INFO:root:Original number of trees in full data is 6094
+INFO:root:Partitioning MSAs according to number of sequences
+INFO:root:Number of MSAs in training data is 4683
+INFO:root:Number of MSAs in test data is 2007
+INFO:root:Number of different trees is 6094
+INFO:root:Full features are: ['feature_mean_parsimony_trees', 'feature_mean_parsimony_trees_binary', 'feature_mean_parsimony_trees_neighbors', 'feature_mean_parsimony_trees_neighbors_binary', 'feature_mean_all_ML_boot_raxml', 'feature_mean_all_ML_boot_raxml_binary', 'feature_mean_all_ML_boot_raxml_neighbors', 'feature_mean_all_ML_boot_raxml_neighbors_binary', 'feature_mean_neighbor_brlen', 'feature_min_neighbor_brlen', 'feature_partition_branch', 'feature_partition_branch_vs_mean', 'feature_partition_size', 'feature_partition_size_ratio', 'feature_partition_divergence', 'feature_divergence_ratio', 'feature_min_ll_diff', 'feature_max_ll_diff', 'feature_min_ll_diff_norm', 'feature_max_ll_diff_norm', 'feature_msa_n_seq', 'feature_msa_n_loci', 'feature_msa_constant_sites_pct', 'feature_msa_n_unique_sites', 'feature_msa_pypythia_msa_difficulty']
+INFO:root:Evaluating full standard model- including nni feautres, number of features is 25
+INFO:root:Training ML model
+INFO:root:Building a final_model model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/lightgbm/raxml/final_model/full_model/model_stadard
+INFO:root:Using existing model in /Users/noa/Workspace/bootstrap_repo/ML_pipeline/lightgbm/raxml/final_model/full_model/model_stadard
+INFO:root:Evaluating model performance
+INFO:root:Model evaluation metrics {'tn_0.5': 134734, 'fp_0.5': 7269, 'fn_0.5': 5558, 'tp_0.5': 23795, 'mcc_0.5': 0.742737110425543, 'tn_0.95': 116821, 'fp_0.95': 25182, 'fn_0.95': 472, 'tp_0.95': 28881, 'mcc_0.95': 0.6539421761382695, 'ECE': 0.0016778185003200673, 'AUC': 0.9694375222345077, 'brier_loss': 0.05234306373349082, 'logloss': 0.16541546445765387, 'average_precision': 0.9937409363666375, 'dataset': 'test', 'name': 'model_standard', 'metric_type': 'all_data'}
+INFO:root:Model evaluation metrics {'tn_0.5': 316267, 'fp_0.5': 16450, 'fn_0.5': 12532, 'tp_0.5': 55869, 'mcc_0.5': 0.7507025219024857, 'tn_0.95': 274696, 'fp_0.95': 58021, 'fn_0.95': 506, 'tp_0.95': 67895, 'mcc_0.95': 0.6630877000635058, 'ECE': 0.0034034229626229004, 'AUC': 0.9732074216562515, 'brier_loss': 0.04975184248720314, 'logloss': 0.15484786086668248, 'average_precision': 0.9946509320038222, 'dataset': 'train', 'name': 'model_standard', 'metric_type': 'all_data'}
+INFO:root:Evaluating fast standard model- no nni feautres, number of features is 23
+INFO:root:Training ML model
+INFO:root:Building a final_model model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/lightgbm/raxml/final_model/fast_model/model_stadard
+INFO:root:Using existing model in /Users/noa/Workspace/bootstrap_repo/ML_pipeline/lightgbm/raxml/final_model/fast_model/model_stadard
+INFO:root:Evaluating model performance
+INFO:root:Model evaluation metrics {'tn_0.5': 134730, 'fp_0.5': 7273, 'fn_0.5': 5661, 'tp_0.5': 23692, 'mcc_0.5': 0.7401975495729878, 'tn_0.95': 116219, 'fp_0.95': 25784, 'fn_0.95': 533, 'tp_0.95': 28820, 'mcc_0.95': 0.647092124576912, 'ECE': 0.001040626057936088, 'AUC': 0.9683614701324532, 'brier_loss': 0.052924973898145475, 'logloss': 0.16830104684916963, 'average_precision': 0.9934468568725725, 'dataset': 'test', 'name': 'model_standard', 'metric_type': 'all_data'}
+INFO:root:Model evaluation metrics {'tn_0.5': 316272, 'fp_0.5': 16445, 'fn_0.5': 12677, 'tp_0.5': 55724, 'mcc_0.5': 0.7492500677855655, 'tn_0.95': 273361, 'fp_0.95': 59356, 'fn_0.95': 557, 'tp_0.95': 67844, 'mcc_0.95': 0.6574315484076929, 'ECE': 0.003934392531525576, 'AUC': 0.9726045033779497, 'brier_loss': 0.050145724980549394, 'logloss': 0.15684403531206623, 'average_precision': 0.9945112639884178, 'dataset': 'train', 'name': 'model_standard', 'metric_type': 'all_data'}
+INFO:root:Comparing to bootstrap models
+INFO:root:Bootstrap col bootstrap_support
+INFO:root:Building a final_modelbootstrap_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/lightgbm/raxml/final_model/bootstrap_support/model_only_boot
+INFO:root:Using existing model in /Users/noa/Workspace/bootstrap_repo/ML_pipeline/lightgbm/raxml/final_model/bootstrap_support/model_only_boot
+INFO:root:Building a final_modelbootstrap_support model and saving to /Users/noa/Workspace/bootstrap_repo/ML_pipeline/lightgbm/raxml/final_model/bootstrap_support/model_inc_boot
+INFO:root:Using existing model in /Users/noa/Workspace/bootstrap_repo/ML_pipeline/lightgbm/raxml/final_model/bootstrap_support/model_inc_boot
+INFO:root:Model evaluation metrics {'tn_0.5': 136233, 'fp_0.5': 5770, 'fn_0.5': 10076, 'tp_0.5': 19277, 'mcc_0.5': 0.6570688289528165, 'tn_0.95': 96612, 'fp_0.95': 45391, 'fn_0.95': 381, 'tp_0.95': 28972, 'mcc_0.95': 0.5073343519403142, 'ECE': 0.01616068302247943, 'AUC': 0.9494182240845419, 'brier_loss': 0.06634679906160275, 'logloss': 0.2263965218592486, 'average_precision': 0.9885591489157667, 'dataset': 'test', 'name': 'raw_only_boot', 'metric_type': 'all_data'}
+INFO:root:Model evaluation metrics {'tn_0.5': 318991, 'fp_0.5': 13726, 'fn_0.5': 23095, 'tp_0.5': 45306, 'mcc_0.5': 0.6593590459063141, 'tn_0.95': 226680, 'fp_0.95': 106037, 'fn_0.95': 858, 'tp_0.95': 67543, 'mcc_0.95': 0.5076444389002933, 'ECE': 0.016078435772017112, 'AUC': 0.9507938093647492, 'brier_loss': 0.06550648362825902, 'logloss': 0.22152280155772772, 'average_precision': 0.988979408745456, 'dataset': 'train', 'name': 'raw_only_boot', 'metric_type': 'all_data'}
+INFO:root:Model evaluation metrics {'tn_0.5': 136233, 'fp_0.5': 5770, 'fn_0.5': 10076, 'tp_0.5': 19277, 'mcc_0.5': 0.6570688289528165, 'tn_0.95': 102534, 'fp_0.95': 39469, 'fn_0.95': 638, 'tp_0.95': 28715, 'mcc_0.95': 0.53907502649989, 'ECE': 0.0022367315498467598, 'AUC': 0.9493700846422868, 'brier_loss': 0.06546485280421822, 'logloss': 0.2082439616708939, 'average_precision': 0.9884275387566983, 'dataset': 'test', 'name': 'only_boot', 'metric_type': 'all_data'}
+INFO:root:Model evaluation metrics {'tn_0.5': 318991, 'fp_0.5': 13726, 'fn_0.5': 23095, 'tp_0.5': 45306, 'mcc_0.5': 0.6593590459063141, 'tn_0.95': 240700, 'fp_0.95': 92017, 'fn_0.95': 1385, 'tp_0.95': 67016, 'mcc_0.95': 0.5406465886579682, 'ECE': 0.00021863636808741593, 'AUC': 0.9508239387571288, 'brier_loss': 0.06451902008145924, 'logloss': 0.20475075700211232, 'average_precision': 0.9888701410321303, 'dataset': 'train', 'name': 'only_boot', 'metric_type': 'all_data'}
+INFO:root:Model evaluation metrics {'tn_0.5': 134779, 'fp_0.5': 7224, 'fn_0.5': 5486, 'tp_0.5': 23867, 'mcc_0.5': 0.7451938765083671, 'tn_0.95': 117155, 'fp_0.95': 24848, 'fn_0.95': 411, 'tp_0.95': 28942, 'mcc_0.95': 0.6584346565005305, 'ECE': 0.002044353249759977, 'AUC': 0.9704281370257717, 'brier_loss': 0.05174408549674995, 'logloss': 0.16283512754255686, 'average_precision': 0.9939931633075019, 'dataset': 'test', 'name': 'inc_boot', 'metric_type': 'all_data'}
+INFO:root:Model evaluation metrics {'tn_0.5': 316437, 'fp_0.5': 16280, 'fn_0.5': 12179, 'tp_0.5': 56222, 'mcc_0.5': 0.7555064588478839, 'tn_0.95': 275732, 'fp_0.95': 56985, 'fn_0.95': 478, 'tp_0.95': 67923, 'mcc_0.95': 0.6674033533722592, 'ECE': 0.003746315065907682, 'AUC': 0.9738775888886206, 'brier_loss': 0.04912797111258507, 'logloss': 0.15286974407948847, 'average_precision': 0.994789172981271, 'dataset': 'train', 'name': 'inc_boot', 'metric_type': 'all_data'}
+INFO:root:Bootstrap col tbe_raxml

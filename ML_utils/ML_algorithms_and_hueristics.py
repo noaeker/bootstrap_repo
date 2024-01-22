@@ -152,6 +152,23 @@ def enrich_with_single_feature_metrics(var_impt, train_X, y_train, test_X, y_tes
         var_impt[f"auc"] = curr_auc_scores
 
 
+def expected_calibration_error(samples, true_labels, M=30):
+    max_prob = np.max(samples, axis=1)
+    predicted_label = np.argmax(samples, axis=1)
+    correct_labels_indicator = predicted_label==true_labels
+    ece = 0
+    bins = np.linspace(0, 1, M + 1)
+    for bin_lower, bin_upper in zip(bins[:-1], bins[1:]):
+        probabilities_within_bin = np.logical_and(max_prob > bin_lower.item(), max_prob <= bin_upper.item())
+        pct_sampls_within_bin = probabilities_within_bin.mean()
+        if pct_sampls_within_bin.item() > 0:
+            accuracy_within_bin = correct_labels_indicator[probabilities_within_bin].mean()
+            mean_max_prob_within_bin = max_prob[probabilities_within_bin].mean()
+            ece += np.abs(mean_max_prob_within_bin - accuracy_within_bin) * pct_sampls_within_bin
+    print(f"ECE = {ece}")
+    return ece
+
+
 def model_evaluation_metrics(y_true, prob_predictions, estimate_auc = True):
     metrics = {}
     thresholds = [0.5,0.95]
@@ -161,7 +178,9 @@ def model_evaluation_metrics(y_true, prob_predictions, estimate_auc = True):
         t_metrics = {f'tn_{threshold}': tn, f'fp_{threshold}': fp,f'fn_{threshold}': fn,f'tp_{threshold}': tp, f'mcc_{threshold}': mcc}
         metrics.update(t_metrics)
     if estimate_auc:
-        prob_metrics = {'AUC': roc_auc_score(y_true, prob_predictions),'brier_loss': brier_score_loss(y_true, prob_predictions),
+        prob_samples = np.column_stack((1-np.array(prob_predictions),
+                                              np.array(prob_predictions)))
+        prob_metrics = {'ECE':expected_calibration_error(prob_samples,y_true),'AUC': roc_auc_score(y_true, prob_predictions),'brier_loss': brier_score_loss(y_true, prob_predictions),
                         'logloss': log_loss(y_true, prob_predictions), 'average_precision': average_precision_score(y_true, prob_predictions), }
         metrics.update(prob_metrics)
     return metrics
