@@ -285,6 +285,7 @@ def extract_metadata_to_folder(data_dict_per_program, out_folder):
     summarized_data = program_data[["tree_id","true_tree_path_orig", "msa_path", "model_short", "tree_folder"]].drop_duplicates()
     if 'model_mode' not in summarized_data:
         summarized_data['model_mode'] = ''
+    metadata_df = pd.DataFrame()
     for i, row in summarized_data.iterrows():
         tree_folder_name = f'{row["tree_id"]}_{row["model_mode"]}'
         tree_folder = os.path.join(out_folder, tree_folder_name)
@@ -293,9 +294,11 @@ def extract_metadata_to_folder(data_dict_per_program, out_folder):
         shutil.copyfile(row["true_tree_path_orig"],new_tree_path)
         new_msa_path = os.path.join(tree_folder,'simulated_msa')
         shutil.copyfile(row["msa_path"], new_msa_path)
-        row["simulated_msa_path"] = os.path.join(os.path.normpath(tree_folder),tree_folder,'simulated_msa')
-        row["tree_path"] = os.path.join(os.path.normpath(tree_folder),tree_folder,'empirical_tree.tree')
-    summarized_data[["tree_id","tree_path","simulated_msa_path","model_short"]].to_csv(os.path.join(out_folder,"metadata.csv"))
+        simulated_msa_path_ = os.path.join(os.path.normpath(tree_folder),tree_folder,'simulated_msa')
+        tree_path_ = os.path.join(os.path.normpath(tree_folder),tree_folder,'empirical_tree.tree')
+        metadata_df = metadata_df.append({'tree_id': row["tree_id"],'tree_path':tree_path_,'simulated_msa_path':simulated_msa_path_,'model':row["model_short"]})
+
+    metadata_df.to_csv(os.path.join(out_folder,"metadata.csv"))
 
 
 
