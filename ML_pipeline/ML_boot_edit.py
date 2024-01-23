@@ -296,7 +296,7 @@ def extract_metadata_to_folder(data_dict_per_program, out_folder):
         shutil.copyfile(row["msa_path"], new_msa_path)
         simulated_msa_path_ = os.path.join(os.path.normpath(tree_folder),tree_folder,'simulated_msa')
         tree_path_ = os.path.join(os.path.normpath(tree_folder),tree_folder,'empirical_tree.tree')
-        metadata_df = metadata_df.append({'tree_id': row["tree_id"],'tree_path':tree_path_,'simulated_msa_path':simulated_msa_path_,'model':row["model_short"]})
+        metadata_df = metadata_df.append({'tree_id': row["tree_id"],'tree_path':tree_path_,'simulated_msa_path':simulated_msa_path_,'model':row["model_short"]}, ignore_index= True)
 
     metadata_df.to_csv(os.path.join(out_folder,"metadata.csv"))
 
