@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 from random import sample
 import argparse
 from functools import reduce
-
+import shutil
 
 
 def per_tree_analysis(test, features, model):
@@ -241,7 +241,7 @@ def transform_data(df, program):
     # +[col for col in df.columns if 'msa_entropy' in col]
 
 
-def generate_data_dict_per_program(programs, folder, n_samp):
+def generate_data_dict_per_program(programs, folder, n_samp, exclude = None):
     data_per_program = {}
     for program in programs:
         data_path = os.path.join(folder, f'simulations_df_{program}.tsv')
@@ -255,9 +255,11 @@ def generate_data_dict_per_program(programs, folder, n_samp):
         program_data = program_data.dropna(axis=1, how='all')
         program_data = program_data.dropna(axis=0, how='all')
         program_data= transform_data(program_data, program)
+        if exclude is not None:
+            program_data=program_data.loc[~program_data.tree_id.isin(exclude)] #remove validation IDS
         data_per_program[program] = program_data
-    data_per_program = retain_only_common_tree_ids(data_per_program, n_samp)
-    return data_per_program
+    data_per_program,common_tree_ids = retain_only_common_tree_ids(data_per_program, n_samp)
+    return data_per_program,common_tree_ids
 
 
 def retain_only_common_tree_ids(data_per_program, n_samp):
@@ -265,7 +267,7 @@ def retain_only_common_tree_ids(data_per_program, n_samp):
     for program in data_per_program:
         tree_ids = np.unique(data_per_program[program]['tree_id'])
         tree_ids_list.append(tree_ids)
-    common_tree_ids = list(reduce(np.intersect1d, tree_ids_list))
+    common_tree_ids = sorted(list(reduce(np.intersect1d, tree_ids_list)))
     random.seed(42)
     common_tree_ids = random.sample(common_tree_ids, n_samp)
     logging.info(f"Number of common tree IDS is {len(common_tree_ids)}")
@@ -273,7 +275,30 @@ def retain_only_common_tree_ids(data_per_program, n_samp):
         program_data = data_per_program[program]
         program_data = program_data.loc[program_data.tree_id.isin(common_tree_ids)]
         data_per_program[program] = program_data
-    return data_per_program
+    return data_per_program,common_tree_ids
+
+def extract_metadata_to_folder(data_dict_per_program, out_folder):
+    program_data = data_dict_per_program['raxml']
+    columns = ["tree_id","true_tree_path_orig", "msa_path", "model_short"]
+    if 'model_mode' in program_data.columns:
+        columns+=['model_mode']
+    summarized_data = program_data[["tree_id","true_tree_path_orig", "msa_path", "model_short", "tree_folder"]].drop_duplicates()
+    if 'model_mode' not in summarized_data:
+        summarized_data['model_mode'] = ''
+    for i, row in summarized_data.iterrows():
+        new_folder = f'{row["tree_id"]}_{row["model_mode"]}'
+        create_dir_if_not_exists(os.path.join(out_folder,new_folder))
+        new_tree_path = os.path.join(out_folder, 'empirical_tree.tree')
+        shutil.copyfile(row["true_tree_path_orig"],new_tree_path)
+        new_msa_path = os.path.join(out_folder,'simulated_msa')
+        shutil.copyfile(row["msa_path"], new_msa_path)
+        row["simulated_msa_path"] = os.path.join(os.path.normpath(out_folder),new_folder,'simulated_msa')
+        row["tree_path"] = os.path.join(os.path.normpath(out_folder),new_folder,'empirical_tree.tree')
+    summarized_data[["tree_id","tree_path","simulated_msa_path","model_short"]].to_csv(os.path.join(out_folder,"metadata.csv"))
+
+
+
+
 
 
 
@@ -283,10 +308,25 @@ def main():
     create_dir_if_not_exists(args.working_dir)
     log_file_path = os.path.join(args.working_dir, "ML.log")
     logging.basicConfig(filename=log_file_path, level=logging.INFO)
-    main_data_dict = generate_data_dict_per_program(programs = ['iqtree','fasttree','raxml'], folder= args.main_data_folder, n_samp=args.n_main_samp)
+
+
     if args.use_val_data:
-        val_data_dict = generate_data_dict_per_program(programs = ['iqtree','fasttree','raxml'], folder= args.validation_data_folder,
+        val_data_dict, val_common_tree_ids = generate_data_dict_per_program(programs = ['iqtree','fasttree','raxml'], folder= args.validation_data_folder,
                                                        n_samp= args.n_val_samp)
+        val_data_folder = os.path.join(args.working_dir, 'val_data')
+        create_dir_if_not_exists(val_data_folder)
+        extract_metadata_to_folder(val_data_dict, val_data_folder)
+
+
+    main_data_dict, common_tree_ids = generate_data_dict_per_program(programs = ['iqtree','fasttree','raxml'], folder= args.main_data_folder, n_samp=args.n_main_samp, exclude = val_common_tree_ids)
+
+    main_data_folder = os.path.join(args.working_dir, 'main_data')
+    create_dir_if_not_exists(main_data_folder)
+    extract_metadata_to_folder(main_data_dict, main_data_folder)
+
+
+    if args.just_metadata:
+        return
 
     for ML_model in args.ML_model.split('_'):
         logging.info(f"Model = {ML_model}")

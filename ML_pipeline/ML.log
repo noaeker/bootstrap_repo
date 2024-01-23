@@ -99,3 +99,11 @@ INFO:root:Model evaluation metrics {'tn_0.5': 318991, 'fp_0.5': 13726, 'fn_0.5':
 INFO:root:Model evaluation metrics {'tn_0.5': 134779, 'fp_0.5': 7224, 'fn_0.5': 5486, 'tp_0.5': 23867, 'mcc_0.5': 0.7451938765083671, 'tn_0.95': 117155, 'fp_0.95': 24848, 'fn_0.95': 411, 'tp_0.95': 28942, 'mcc_0.95': 0.6584346565005305, 'ECE': 0.002044353249759977, 'AUC': 0.9704281370257717, 'brier_loss': 0.05174408549674995, 'logloss': 0.16283512754255686, 'average_precision': 0.9939931633075019, 'dataset': 'test', 'name': 'inc_boot', 'metric_type': 'all_data'}
 INFO:root:Model evaluation metrics {'tn_0.5': 316437, 'fp_0.5': 16280, 'fn_0.5': 12179, 'tp_0.5': 56222, 'mcc_0.5': 0.7555064588478839, 'tn_0.95': 275732, 'fp_0.95': 56985, 'fn_0.95': 478, 'tp_0.95': 67923, 'mcc_0.95': 0.6674033533722592, 'ECE': 0.003746315065907682, 'AUC': 0.9738775888886206, 'brier_loss': 0.04912797111258507, 'logloss': 0.15286974407948847, 'average_precision': 0.994789172981271, 'dataset': 'train', 'name': 'inc_boot', 'metric_type': 'all_data'}
 INFO:root:Bootstrap col tbe_raxml
+INFO:root:Using existing training data in /Users/noa/Workspace/bootstrap_results/remote_results/full_data/simulations_df_iqtree.tsv 
+INFO:root:Using existing training data in /Users/noa/Workspace/bootstrap_results/remote_results/full_data/simulations_df_iqtree.tsv 
+INFO:root:Using existing training data in /Users/noa/Workspace/bootstrap_results/remote_results/full_data/simulations_df_raxml.tsv 
+INFO:root:Number of common tree IDS is 6000
+INFO:root:Re-uniting data and saving to /Users/noa/Workspace/bootstrap_results/remote_results//Users/noa/Workspace/bootstrap_results/bootstrap_edit_results/simulations_df_raxml.tsv
+INFO:root:unifying csvs from all_jobs
+INFO:root:Using existing training data in /Users/noa/Workspace/bootstrap_results/remote_results/full_data/simulations_df_raxml.tsv 
+INFO:root:Number of common tree IDS is 6000
