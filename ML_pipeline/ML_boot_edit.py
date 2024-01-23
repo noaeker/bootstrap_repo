@@ -286,14 +286,15 @@ def extract_metadata_to_folder(data_dict_per_program, out_folder):
     if 'model_mode' not in summarized_data:
         summarized_data['model_mode'] = ''
     for i, row in summarized_data.iterrows():
-        new_folder = f'{row["tree_id"]}_{row["model_mode"]}'
-        create_dir_if_not_exists(os.path.join(out_folder,new_folder))
-        new_tree_path = os.path.join(out_folder, 'empirical_tree.tree')
+        tree_folder_name = f'{row["tree_id"]}_{row["model_mode"]}'
+        tree_folder = os.path.join(out_folder, tree_folder_name)
+        create_dir_if_not_exists(tree_folder)
+        new_tree_path = os.path.join(tree_folder, 'empirical_tree.tree')
         shutil.copyfile(row["true_tree_path_orig"],new_tree_path)
-        new_msa_path = os.path.join(out_folder,'simulated_msa')
+        new_msa_path = os.path.join(tree_folder,'simulated_msa')
         shutil.copyfile(row["msa_path"], new_msa_path)
-        row["simulated_msa_path"] = os.path.join(os.path.normpath(out_folder),new_folder,'simulated_msa')
-        row["tree_path"] = os.path.join(os.path.normpath(out_folder),new_folder,'empirical_tree.tree')
+        row["simulated_msa_path"] = os.path.join(os.path.normpath(tree_folder),tree_folder,'simulated_msa')
+        row["tree_path"] = os.path.join(os.path.normpath(tree_folder),tree_folder,'empirical_tree.tree')
     summarized_data[["tree_id","tree_path","simulated_msa_path","model_short"]].to_csv(os.path.join(out_folder,"metadata.csv"))
 
 
