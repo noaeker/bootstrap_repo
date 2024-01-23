@@ -249,11 +249,14 @@ def generate_data_dict_per_program(programs, folder, n_samp, exclude = None):
             logging.info(f"Re-uniting data and saving to {data_path}")
             program_data = unify_results_across_jobs(folder,
                                                      name=f'simulations_df_{program}', n_jobs=1000)
+
         else:
             logging.info(f"Using existing training data in {data_path} ")
             program_data = pd.read_csv(data_path, sep='\t')
         program_data = program_data.dropna(axis=1, how='all')
         program_data = program_data.dropna(axis=0, how='all')
+
+
         program_data= transform_data(program_data, program)
         if exclude is not None:
             program_data=program_data.loc[~program_data.tree_id.isin(exclude)] #remove validation IDS
@@ -283,7 +286,7 @@ def extract_metadata_to_folder(data_dict_per_program, out_folder):
     if 'model_mode' in program_data.columns:
         columns+=['model_mode']
     summarized_data = program_data[["tree_id","true_tree_path_orig", "msa_path", "model_short", "tree_folder"]].drop_duplicates()
-    if 'model_mode' not in summarized_data:
+    if 'model_mode' not in summarized_data.columns:
         summarized_data['model_mode'] = ''
     metadata_df = pd.DataFrame()
     for i, row in summarized_data.iterrows():
@@ -339,6 +342,13 @@ def main():
         for program in args.programs.split('_'):
             logging.info(f"Program = {program}")
             program_data = main_data_dict[program]
+
+            program_data['first_msa'] = program_data.groupby(['tree_id'])[
+                'msa_path'].transform(np.min)
+            program_data = program_data.loc[
+                program_data.msa_path == program_data.first_msa]
+
+
             logging.info(f"Number of trees in main data is {len(np.unique(program_data['tree_id']))}")
             validation_dict = {}
             if args.use_val_data:
