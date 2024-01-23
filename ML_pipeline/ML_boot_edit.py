@@ -282,12 +282,10 @@ def retain_only_common_tree_ids(data_per_program, n_samp):
 
 def extract_metadata_to_folder(data_dict_per_program, out_folder):
     program_data = data_dict_per_program['raxml']
-    columns = ["tree_id","true_tree_path_orig", "msa_path", "model_short"]
-    if 'model_mode' in program_data.columns:
-        columns+=['model_mode']
-    summarized_data = program_data[["tree_id","true_tree_path_orig", "msa_path", "model_short", "tree_folder"]].drop_duplicates()
-    if 'model_mode' not in summarized_data.columns:
-        summarized_data['model_mode'] = ''
+    columns = ["tree_id","true_tree_path_orig", "msa_path", "model_short","model_mode"]
+    if 'model_mode' not in program_data.columns:
+        program_data['model_mode'] = ''
+    summarized_data = program_data[columns].drop_duplicates()
     metadata_df = pd.DataFrame()
     for i, row in summarized_data.iterrows():
         tree_folder_name = f'{row["tree_id"]}_{row["model_mode"]}'
