@@ -249,6 +249,8 @@ def generate_data_dict_per_program(programs, folder, n_samp, exclude = None):
             logging.info(f"Re-uniting data and saving to {data_path}")
             program_data = unify_results_across_jobs(folder,
                                                      name=f'simulations_df_{program}', n_jobs=1000)
+            program_data["model_mode_per_tree"] = program_data.groupby("tree_id")["model_mode"].transform(pd.Series.nunique)
+            program_data = program_data.loc[program_data.model_mode_per_tree==3]
 
         else:
             logging.info(f"Using existing training data in {data_path} ")
