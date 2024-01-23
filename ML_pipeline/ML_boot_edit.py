@@ -319,18 +319,18 @@ def main():
                                                        n_samp= args.n_val_samp)
         val_data_folder = os.path.join(args.working_dir, 'val_data')
         create_dir_if_not_exists(val_data_folder)
-        extract_metadata_to_folder(val_data_dict, val_data_folder)
+        if args.extract_metadata:
+            extract_metadata_to_folder(val_data_dict, val_data_folder)
 
 
     main_data_dict, common_tree_ids = generate_data_dict_per_program(programs = ['iqtree','fasttree','raxml'], folder= args.main_data_folder, n_samp=args.n_main_samp, exclude = val_common_tree_ids)
 
     main_data_folder = os.path.join(args.working_dir, 'main_data')
     create_dir_if_not_exists(main_data_folder)
-    extract_metadata_to_folder(main_data_dict, main_data_folder)
+    if args.extract_metadata:
+        extract_metadata_to_folder(main_data_dict, main_data_folder)
 
 
-    if args.just_metadata:
-        return
 
     for ML_model in args.ML_model.split('_'):
         logging.info(f"Model = {ML_model}")

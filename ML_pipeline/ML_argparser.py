@@ -20,6 +20,7 @@ def main_parser():
     parser.add_argument('--n_val_samp', type=int, default=250)
     parser.add_argument('--n_main_samp', type=int, default=6000)
     parser.add_argument('--ML_model', type=str, default='NN')
+    parser.add_argument('extract_metadata',action='store_true', default=False)
     return parser
 
 
