@@ -241,7 +241,7 @@ def transform_data(df, program):
     # +[col for col in df.columns if 'msa_entropy' in col]
 
 
-def generate_data_dict_per_program(programs, folder, n_samp, exclude = None):
+def generate_data_dict_per_program(programs, folder, n_samp, exclude = None, model_mode = False):
     data_per_program = {}
     for program in programs:
         data_path = os.path.join(folder, f'simulations_df_{program}.tsv')
@@ -249,8 +249,9 @@ def generate_data_dict_per_program(programs, folder, n_samp, exclude = None):
             logging.info(f"Re-uniting data and saving to {data_path}")
             program_data = unify_results_across_jobs(folder,
                                                      name=f'simulations_df_{program}', n_jobs=1000)
-            program_data["model_mode_per_tree"] = program_data.groupby("tree_id")["model_mode"].transform(pd.Series.nunique)
-            program_data = program_data.loc[program_data.model_mode_per_tree==3]
+            if model_mode:
+                program_data["model_mode_per_tree"] = program_data.groupby("tree_id")["model_mode"].transform(pd.Series.nunique)
+                program_data = program_data.loc[program_data.model_mode_per_tree==3]
 
         else:
             logging.info(f"Using existing training data in {data_path} ")
@@ -319,7 +320,7 @@ def main():
 
     if args.use_val_data:
         val_data_dict, val_common_tree_ids = generate_data_dict_per_program(programs = ['iqtree','fasttree','raxml'], folder= args.validation_data_folder,
-                                                       n_samp= args.n_val_samp)
+                                                       n_samp= args.n_val_samp, model_mode = True)
         val_data_folder = os.path.join(args.working_dir, 'val_data')
         create_dir_if_not_exists(val_data_folder)
         if args.extract_metadata:
