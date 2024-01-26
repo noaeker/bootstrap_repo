@@ -4,3 +4,7 @@
 Simulations are performed based on empirical trees.
 3. After running the simulaions and tree-searches, we extract features from the inferred ML trees, in the 'simulation_edit' folder.
 4. Finally, we use the extracted features to predict branch support values, as implemented in the 'ML_pipeline' folder.
+
+The trained models can be downloaded from Figshare DOI 10.6084/m9.figshare.25050554.
+
+)
