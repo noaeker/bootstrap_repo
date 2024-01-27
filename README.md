@@ -8,7 +8,8 @@ Simulations are performed based on empirical trees.
 The trained models and the empirical trees and MSAs used for training can be downloaded from Figshare DOI 10.6084/m9.figshare.25050554.
 
 
-The file user_code/predict_branch_supports.py contains a user friendly code to use our model to predict branch supports.
+
+The "predict_branch_supports.py" file in the "user_code" directory contains a user-friendly code designed for utilizing our model to predict branch supports.
 Input:
 --working_dir
 --mle_tree_path, path of maximum likelihood tree
