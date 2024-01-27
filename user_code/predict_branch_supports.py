@@ -16,10 +16,14 @@ def main():
     parser.add_argument('--msa_path', type=str, default='/Users/noa/Workspace/bootstrap_results/test4/job_0/raxml_tree_0/original_raxml_grove_files/9130/iqtree_msa_0_upgrade/sim_msa.fa')
     parser.add_argument('--model', type=str, default="GTR+G")
     parser.add_argument('--trained_ML_model_path', type=str, default="/Users/noa/Workspace/bootstrap_results/remote_results/ML_results/raxml/final_model/full_model/model_stadard")
+    parser.add_argument('--raxml_ng_path', type=str, default="/Users/noa/Programs/Raxml/raxml-ng")
+    parser.add_argument('--mad_path', type=str, default="/Users/noa/Programs/mad.osx")
+    parser.add_argument('--booster_path', type=str, default="/Users/noa/Programs/booster_macos64")
+
     args = parser.parse_args()
     tmp_files_fodler = os.path.join(args.working_dir, 'tmp_feature_files')
     create_dir_if_not_exists(tmp_files_fodler)
-    final_tree,features_df = extract_all_features_per_mle(tmp_files_fodler,args.msa_path,args.model, args.mle_tree_path, {}, args.all_mles_tree_path)
+    final_tree,features_df = extract_all_features_per_mle(tmp_files_fodler, args.msa_path, args.model, args.mle_tree_path, {}, args.all_mles_tree_path, mad_program_path= args.mad_path, raxml_program_path= args.raxml_ng_path, booster_program_path= args.booster_path)
     model = pickle.load(open(args.trained_ML_model_path, 'rb'))
     shutil.rmtree(tmp_files_fodler)
     feature_names = model['best_model'].feature_name_

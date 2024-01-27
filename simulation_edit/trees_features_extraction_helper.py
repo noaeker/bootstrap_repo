@@ -29,8 +29,10 @@ def get_tree_divergence(tree):
     return np.sum(branch_lengths)
 
 
-def mad_tree_parameter(tree_path):
-    mad_command = "{mad_exe_path} -t -s {tree_path}".format(mad_exe_path=MAD_COMMAND_PREFIX,
+def mad_tree_parameter(tree_path, program_path = None):
+    if program_path is None:
+        program_path = MAD_COMMAND_PREFIX
+    mad_command = "{mad_exe_path} -t -s {tree_path}".format(mad_exe_path=program_path,
                                                             tree_path=tree_path)
     execute_command_and_write_to_log(mad_command)
     mad_log_path = tree_path + ".rooted"
@@ -38,9 +40,11 @@ def mad_tree_parameter(tree_path):
     os.remove(mad_log_path)
     return mad
 
-def get_booster_tree(mle_tree_path, comparison_tree, out_path ="booster.nw", tbe = False):
+def get_booster_tree(mle_tree_path, comparison_tree, out_path ="booster.nw", tbe = False, program_path = None):
     algo = 'tbe' if tbe else 'fbp'
-    cmd = f"{BOOSTER_EXE} -a {algo} -i {mle_tree_path} -b {comparison_tree} -@ 1 -o {out_path}"
+    if program_path is None:
+        program_path =BOOSTER_EXE
+    cmd = f"{program_path} -a {algo} -i {mle_tree_path} -b {comparison_tree} -@ 1 -o {out_path}"
     execute_command_and_write_to_log(cmd)
     with open(out_path) as B:
         bootster_tree = B.read()
@@ -51,11 +55,11 @@ def get_booster_tree(mle_tree_path, comparison_tree, out_path ="booster.nw", tbe
 
 
 
-def get_bootstrap_support(garbage_dir, mle_path, comparison_trees_path):
+def get_bootstrap_support(garbage_dir, mle_path, comparison_trees_path, program_path = None):
     tbe_comp_tree = get_booster_tree(mle_path, comparison_trees_path,
-                                     out_path=os.path.join(garbage_dir, "tbe_booster_pars.nw"), tbe= True)
+                                     out_path=os.path.join(garbage_dir, "tbe_booster_pars.nw"), program_path=program_path,tbe= True)
     fbp_comp_tree = get_booster_tree(mle_path, comparison_trees_path,
-                                     out_path=os.path.join(garbage_dir, "fbp_booster_pars.nw"), tbe = False)
+                                     out_path=os.path.join(garbage_dir, "fbp_booster_pars.nw"),program_path=program_path, tbe = False)
     return tbe_comp_tree, fbp_comp_tree
 
 

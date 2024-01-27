@@ -318,8 +318,8 @@ def standard_raxml_search(curr_run_directory, msa_path, prefix,model,n_pars, n_r
 
 
 def raxml_optimize_trees_for_given_msa(full_data_path, ll_on_data_prefix, tree_file,
-                                       curr_run_directory, model, opt_model_and_brlen=True,n_cpus = 1, n_workers = 'auto', return_opt_tree = False
-                                       ):
+                                       curr_run_directory, model, opt_model_and_brlen=True,n_cpus = 1, n_workers = 'auto', return_opt_tree = False,
+                                       program_path = None):
     curr_run_directory = os.path.join(curr_run_directory, ll_on_data_prefix)
     if os.path.exists(curr_run_directory):
         delete_dir_content(curr_run_directory)
@@ -327,9 +327,11 @@ def raxml_optimize_trees_for_given_msa(full_data_path, ll_on_data_prefix, tree_f
         os.mkdir(curr_run_directory)
     prefix = os.path.join(curr_run_directory, ll_on_data_prefix)
     brlen_command = "--opt-branches off --opt-model off " if not opt_model_and_brlen else ""
+    if program_path is None:
+        program_path = RAXML_NG_EXE
     compute_ll_run_command = (
         "{raxml_exe_path} --force msa --threads {n_cpus} --workers {n_workers} --workers auto --evaluate --msa {msa_path} --model {model} {brlen_command} --tree {tree_file} --seed {seed} --prefix {prefix} --redo").format(
-        raxml_exe_path=RAXML_NG_EXE, msa_path=full_data_path, tree_file=tree_file, seed=SEED,
+        raxml_exe_path= program_path, msa_path=full_data_path, tree_file=tree_file, seed=SEED,
         prefix=prefix, brlen_command=brlen_command, model=model, n_cpus = n_cpus, n_workers = n_workers)
     #optimized_trees_path = prefix + ".raxml.mlTrees"
     best_tree_path = prefix + ".raxml.bestTree"

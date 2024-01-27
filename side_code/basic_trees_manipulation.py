@@ -116,8 +116,10 @@ def get_distances_between_leaves(tree, topology_only = False):
     return distances
 
 
-def mad_tree_parameter(tree_path):
-        mad_command = "{mad_exe_path} -t -s {tree_path}".format(mad_exe_path=MAD_COMMAND_PREFIX,
+def mad_tree_parameter(tree_path, program_path=None):
+        if program_path is None:
+            program_path = MAD_COMMAND_PREFIX
+        mad_command = "{mad_exe_path} -t -s {tree_path}".format(mad_exe_path=program_path,
                                                                 tree_path=tree_path)
         execute_command_and_write_to_log(mad_command)
         mad_log_path = tree_path + ".rooted"
