@@ -12,7 +12,6 @@ The trained models and the empirical trees and MSAs used for training can be dow
 The "predict_branch_supports.py" file in the "user_code" directory contains a user-friendly code designed for utilizing our model to predict branch supports.
 Input:
 --working_dir
-
 --mle_tree_path, path of maximum likelihood tree
 --all_mles_tree_path, path of a set of obtained maximum likelihood tree (such as the files obtained by RAxML-NG) 
 --msa_path, path of the multiple sequence alignemnt 
