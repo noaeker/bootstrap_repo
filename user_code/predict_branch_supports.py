@@ -23,7 +23,11 @@ def main():
     args = parser.parse_args()
     tmp_files_fodler = os.path.join(args.working_dir, 'tmp_feature_files')
     create_dir_if_not_exists(tmp_files_fodler)
-    final_tree,features_df = extract_all_features_per_mle(tmp_files_fodler, args.msa_path, args.model, args.mle_tree_path, {}, args.all_mles_tree_path, mad_program_path= args.mad_path, raxml_program_path= args.raxml_ng_path, booster_program_path= args.booster_path)
+    if not os.path.exists(args.all_mles_tree_path):
+        all_mles_tree_path = None
+    else:
+        all_mles_tree_path = args.all_mles_tree_path
+    final_tree,features_df = extract_all_features_per_mle(tmp_files_fodler, args.msa_path, args.model, args.mle_tree_path, {}, all_mles_tree_path, mad_program_path= args.mad_path, raxml_program_path= args.raxml_ng_path, booster_program_path= args.booster_path)
     model = pickle.load(open(args.trained_ML_model_path, 'rb'))
     shutil.rmtree(tmp_files_fodler)
     feature_names = model['best_model'].feature_name_
