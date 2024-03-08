@@ -1,3 +1,10 @@
+import sys
+if sys.platform == "linux" or sys.platform == "linux2":
+    PROJECT_ROOT_DIRECRTORY = "/groups/pupko/noaeker/bootstrap_repo"
+else:
+    PROJECT_ROOT_DIRECRTORY = "/Users/noa/Workspace/bootstrap_repo"
+sys.path.append(PROJECT_ROOT_DIRECRTORY)
+
 from programs.FastTree import fasttree_pipeline
 from programs.raxml import raxml_bootstrap_pipeline
 from programs.IQTREE import iqtree_pipeline
