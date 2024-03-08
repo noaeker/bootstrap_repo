@@ -52,6 +52,7 @@ if not LOCAL_RUN:
     PROJECT_ROOT_DIRECRTORY = "/groups/pupko/noaeker/bootstrap_repo"
     BOOSTER_EXE = "/groups/pupko/noaeker/programs/other_programs/booster_linux64"
     BOOTSTRAP_EDIT_CODE = "/groups/pupko/noaeker/bootstrap_repo/simulation_edit/bootstrap_edit.py"
+    REAL_DATA_ANALYSIS_CODE = "/groups/pupko/noaeker/bootstrap_repo/real_data_evaluation/single_job.py"
     MAD_COMMAND_PREFIX = "/groups/pupko/noaeker/programs/other_programs/mad"
 
 elif LOCAL_RUN:
@@ -65,4 +66,5 @@ elif LOCAL_RUN:
     PROJECT_ROOT_DIRECRTORY = "/Users/noa/Workspace/bootstrap_repo"
     BOOSTER_EXE = "/Users/noa/Programs/booster_macos64"
     BOOTSTRAP_EDIT_CODE = "/Users/noa/Workspace/bootstrap_repo/simulation_edit/bootstrap_edit.py"
+    REAL_DATA_ANALYSIS_CODE = "/Users/noa/Workspace/bootstrap_repo/real_data_evaluation/single_job.py"
     MAD_COMMAND_PREFIX = "/Users/noa/Programs/mad.osx"

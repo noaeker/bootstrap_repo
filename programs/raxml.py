@@ -219,10 +219,14 @@ def extract_bootstrap_running_time(raxml_log_path):
         end_time = re.search(end_pattern, data).group(1)
     except Exception as E:
         end_pattern_1000 = r'\[(\d{2,}:\d{2,}:\d{2,})\] Bootstrap tree #1000'
-        end_time = re.search(end_pattern_1000, data).group(1)
-    start_time_hours, start_time_min, start_time_sec = [int(t) for t in start_time.split(':')]
-    end_time_hours,end_time_min, end_time_sec = [int(t) for t in end_time.split(':')]
-    total_seconds = (end_time_sec-start_time_sec)+(end_time_min-start_time_min)*60+(end_time_hours-start_time_hours)*3600
+        end_time_match = re.search(end_pattern_1000, data)
+        end_time = -1 if end_time_match is None else end_time_match.group(1)
+    try:
+        start_time_hours, start_time_min, start_time_sec = [int(t) for t in start_time.split(':')]
+        end_time_hours,end_time_min, end_time_sec = [int(t) for t in end_time.split(':')]
+        total_seconds = (end_time_sec-start_time_sec)+(end_time_min-start_time_min)*60+(end_time_hours-start_time_hours)*3600
+    except:
+        total_seconds = -1
     return total_seconds
 
 

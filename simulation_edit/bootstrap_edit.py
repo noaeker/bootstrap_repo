@@ -34,6 +34,27 @@ def get_bootstrap_and_all_mles_path(program, bootstrap_tree_details):
     return extra_support_values, all_mles_path
 
 
+def get_splits_df(msa_path,model, true_tree_path, bootstrap_tree_details, program, working_dir):
+    if model is None:
+        model = bootstrap_tree_details["tree_search_model"]
+    mle_tree_path = bootstrap_tree_details[get_program_default_ML_tree(program)]
+    if program == 'raxml':
+        all_bootstrap_trees_path = os.path.join(
+            os.path.dirname(os.path.dirname(mle_tree_path)),'all_tree_searches', 'boot.raxml.bootstraps')
+        tbe_out_path = os.path.join(os.path.dirname(mle_tree_path), 'boot.raxml.tbe')
+        bootstrap_tree_details["tbe_bootstrap"] = tbe_out_path
+        get_booster_tree(mle_tree_path, all_bootstrap_trees_path, out_path=tbe_out_path, tbe=True)
+
+    program_bootstrap_support_paths, all_mle_path = get_bootstrap_and_all_mles_path(program, bootstrap_tree_details)
+    tree_obj_with_features, all_msa_splits_df = extract_all_features_per_mle(working_dir, msa_path, model,
+                                                                             mle_tree_path,
+                                                                             extra_bootstrap_support_paths=program_bootstrap_support_paths,
+                                                                             all_mles_tree_path=all_mle_path,
+                                                                             true_tree_path=true_tree_path)
+    all_msa_splits_df["program"] = program
+    all_msa_splits_df = all_msa_splits_df.assign(**bootstrap_tree_details)
+    return all_msa_splits_df
+
 
 def main():
     parser = job_parser()
@@ -55,21 +76,7 @@ def main():
                 create_dir_if_not_exists(working_dir)
                 logging.info(f"MSA {j} out of {len(tree_data['msa_path'].unique())}")
                 bootstrap_tree_details = tree_program_data.loc[tree_program_data.msa_path == msa_path].head(1).squeeze()
-
-                mle_tree_path =  bootstrap_tree_details[get_program_default_ML_tree(program)]
-                if program=='raxml':
-                    all_bootstrap_trees_path = os.path.join( os.path.dirname(mle_tree_path).replace('results_folder','all_tree_searches'), 'boot.raxml.bootstraps')
-                    tbe_out_path = os.path.join( os.path.dirname(mle_tree_path), 'boot.raxml.tbe')
-                    bootstrap_tree_details["tbe_bootstrap"] = tbe_out_path
-                    get_booster_tree(mle_tree_path, all_bootstrap_trees_path, out_path =tbe_out_path, tbe = True)
-
-
-                model = bootstrap_tree_details["tree_search_model"]
-                program_bootstrap_support_paths, all_mle_path = get_bootstrap_and_all_mles_path(program, bootstrap_tree_details)
-                tree_obj_with_features, all_msa_splits_df = extract_all_features_per_mle(working_dir, msa_path, model, mle_tree_path, extra_bootstrap_support_paths =program_bootstrap_support_paths , all_mles_tree_path =all_mle_path, true_tree_path = true_tree_path)
-                all_msa_splits_df["program"] = program
-                all_msa_splits_df = all_msa_splits_df.assign(**bootstrap_tree_details)
-
+                all_msa_splits_df = get_splits_df(msa_path, None, true_tree_path, bootstrap_tree_details, program, working_dir)
                 all_splits = pd.concat([all_splits, all_msa_splits_df])
                 all_splits.to_csv(args.job_final_output_path, sep='\t')
         raxml_data = all_splits.loc[all_splits.program=='raxml']
