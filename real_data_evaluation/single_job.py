@@ -51,7 +51,7 @@ def convert_nexus_to_fasta(nexus_path, out_file):
 #msa_path,model, true_tree_path, bootstrap_tree_details, program, working_dir
 
 
-def run_programs(msa_path,tree_searches_folder, results_folder,msa_type, model, n_cpus, models_dict):
+def run_programs(msa_path,tree_searches_folder, results_folder,msa_type, model, n_cpus):
     tmp_files_folder = os.path.join(tree_searches_folder, 'tmp')
     create_dir_if_not_exists(tmp_files_folder)
     logging.info("Running IQTREE")
