@@ -50,7 +50,7 @@ def main():
     raw_results_folder = generate_results_folder(args.name)
     log_file_path = os.path.join(raw_results_folder, 'log_file.log')
     logging.basicConfig(filename=log_file_path, level=logging.INFO)
-    MSAs_stats_path = "./summary.csv"
+    MSAs_stats_path = SUMMARY_FILE_PATH
     MSAs_stats = pd.read_csv(MSAs_stats_path)
     relevant_MSAs = MSAs_stats.loc[(MSAs_stats["dataset.alignment.ntax"]<=1000)&(MSAs_stats["dataset.alignment.nchar"]<10000)&(MSAs_stats["dataset.alignment.datatype"]=='nucleotide')]
     relevant_studies = relevant_MSAs["name"]

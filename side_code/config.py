@@ -54,6 +54,7 @@ if not LOCAL_RUN:
     BOOTSTRAP_EDIT_CODE = "/groups/pupko/noaeker/bootstrap_repo/simulation_edit/bootstrap_edit.py"
     REAL_DATA_ANALYSIS_CODE = "/groups/pupko/noaeker/bootstrap_repo/real_data_evaluation/single_job.py"
     MAD_COMMAND_PREFIX = "/groups/pupko/noaeker/programs/other_programs/mad"
+    SUMMARY_FILE_PATH = '/groups/pupko/noaeker/bootstrap_repo/real_data_evaluation/summary.csv'
 
 elif LOCAL_RUN:
     IQTREE_EXE = "/Users/noa/Programs/iqtree-2.1.3-MacOSX/bin/iqtree2"
@@ -68,3 +69,4 @@ elif LOCAL_RUN:
     BOOTSTRAP_EDIT_CODE = "/Users/noa/Workspace/bootstrap_repo/simulation_edit/bootstrap_edit.py"
     REAL_DATA_ANALYSIS_CODE = "/Users/noa/Workspace/bootstrap_repo/real_data_evaluation/single_job.py"
     MAD_COMMAND_PREFIX = "/Users/noa/Programs/mad.osx"
+    SUMMARY_FILE_PATH = '/Users/noa/Workspace/bootstrap_repo/real_data_evaluation/summary.csv'
