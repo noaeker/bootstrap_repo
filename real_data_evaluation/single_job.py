@@ -1,4 +1,5 @@
 import sys
+import re
 if sys.platform == "linux" or sys.platform == "linux2":
     PROJECT_ROOT_DIRECRTORY = "/groups/pupko/noaeker/bootstrap_repo"
 else:
@@ -17,36 +18,63 @@ import logging
 import shutil
 import pickle
 
+
+COUNT = 0
+
+
+def next_count():
+    global COUNT
+    COUNT += 1
+    return COUNT
+
+
 def convert_nexus_to_fasta(nexus_path, out_file):
     with open(nexus_path) as N:
         text = N.read()
-        try:
-            matrix_location = text.index('matrix')
-        except:
-            matrix_location = text.index('Matrix')
-        end_location = text.index(';\nend;')
-        text = text[matrix_location+6:end_location]
-        lines = text.split('\n\t')
-
-        sequences_dict = {}
-        for seq in lines:
-            if len(seq)>50:
-                try:
-                    seq_name_and_value = seq.split('\t')
-                    sequences_dict[seq_name_and_value[0]] = seq_name_and_value[1]
-
-                except:
-                    seq_name_and_value = seq.split(' ')
-                    sequences_dict[seq_name_and_value[0]] = seq_name_and_value[1]
+        regex_pattern = r'[\t\n\s][ATGC\-\?]+[\t\n\s]'
+        matches = re.findall(regex_pattern, text)
+        stripped_matches = {}
+        for match in matches:
+            stripped_matches[next_count()] = match.strip()
+        print(stripped_matches)
 
         with open(out_file,'w') as Out:
-            for seq in sequences_dict:
-                if len(sequences_dict[seq].replace('-', '').replace(' ','').replace('\n','').replace('?','').replace('\t','')) > 0:
+            for seq in stripped_matches:
+                if len(stripped_matches[seq].replace('-', '').replace(' ','').replace('\n','').replace('?','').replace('\t','')) > 0:
                     Out.write(">")
-                    Out.write(seq+"\n")
-                    seq = sequences_dict[seq]
+                    Out.write(str(seq)+"\n")
+                    seq = stripped_matches[seq]
                     Out.write(seq)
                     Out.write('\n')
+
+        return
+        # try:
+        #     matrix_location = text.index('matrix')
+        # except:
+        #     matrix_location = text.index('Matrix')
+        # end_location = text.index(';\nend;')
+        # text = text[matrix_location+6:end_location]
+        # lines = text.split('\n\t')
+        #
+        # sequences_dict = {}
+        # for seq in lines:
+        #     if len(seq)>50:
+        #         try:
+        #             seq_name_and_value = seq.split('\t')
+        #             sequences_dict[seq_name_and_value[0]] = seq_name_and_value[1]
+        #
+        #         except:
+        #             seq_name_and_value = seq.split(' ')
+        #             sequences_dict[seq_name_and_value[0]] = seq_name_and_value[1]
+        #
+        # with open(out_file,'w') as Out:
+        #     for seq in sequences_dict:
+        #         if len(sequences_dict[seq].replace('-', '').replace(' ','').replace('\n','').replace('?','').replace('\t','')) > 0:
+        #             Out.write(">")
+        #             Out.write(seq+"\n")
+        #             seq = sequences_dict[seq]
+        #             Out.write(seq)
+        #             Out.write('\n')
 
 
 

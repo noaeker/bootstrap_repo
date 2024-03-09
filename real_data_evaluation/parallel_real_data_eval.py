@@ -56,7 +56,7 @@ def main():
     relevant_studies = relevant_MSAs["name"]
     logging.info(f"Relevant studies = {relevant_studies}")
     if LOCAL_RUN:
-        relevant_studies = ['Unmack_2013']
+        relevant_studies = ['Worobey_2014a']
 
     distribute_MSAS_over_jobs(relevant_studies, raw_results_folder,args)
 
