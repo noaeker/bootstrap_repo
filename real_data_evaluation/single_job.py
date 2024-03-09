@@ -70,9 +70,9 @@ def main():
         valid_records = []
         for record in records:
             len_seq = len(str(record.seq).replace('-','').replace('?',''))
-            if len(len_seq)>0:
+            if (len_seq)>0:
                 valid_records.append(record)
-        count = SeqIO.write(records, msa_path_fasta, "fasta")
+        count = SeqIO.write(valid_records, msa_path_fasta, "fasta")
         print("Converted %i records" % count)
         #convert_nexus_to_fasta(msa_path_nexus, msa_path_fasta)
     job_working_dir = args.job_folder
