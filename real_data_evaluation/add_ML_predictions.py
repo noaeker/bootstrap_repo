@@ -1,10 +1,3 @@
-import sys
-if sys.platform == "linux" or sys.platform == "linux2":
-    PROJECT_ROOT_DIRECRTORY = "/groups/pupko/noaeker/bootstrap_repo"
-else:
-    PROJECT_ROOT_DIRECRTORY = "/Users/noa/Workspace/bootstrap_repo"
-sys.path.append(PROJECT_ROOT_DIRECRTORY)
-
 import argparse
 import pickle
 import pandas as pd
