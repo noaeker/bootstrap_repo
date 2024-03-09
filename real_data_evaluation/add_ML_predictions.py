@@ -28,7 +28,7 @@ def main():
     csv_paths= [f"{args.raw_results_folder}/job_{i}/{args.name}.csv" for i in range(args.n_jobs)]
     existing_csv_path = [path for path in csv_paths if os.path.exists(path)]
     out_csv_path = os.path.join(args.raw_results_folder,f'{args.name}.csv')
-    combined_df = unify_csvs(existing_csv_path, out_csv_path)
+    combined_df = unify_csvs(existing_csv_path)
     nni_model = pickle.load(open(args.nni_model_path, 'rb'))
     feature_names_nni = nni_model['best_model'].feature_name_
     combined_df['predicted_bootstrap_score_nni'] = nni_model['best_model'].predict_proba(combined_df[feature_names_nni])[:, 1]
