@@ -68,9 +68,11 @@ def main():
 
         records = SeqIO.parse(msa_path_nexus, "nexus")
         valid_records = []
-        for record in records:
+        for i,record in enumerate(records):
             len_seq = len(str(record.seq).replace('-','').replace('?',''))
             if (len_seq)>0:
+                record.name=f'taxa_{i}'
+                record.id=f'taxa_{i}'
                 valid_records.append(record)
         count = SeqIO.write(valid_records, msa_path_fasta, "fasta")
         print("Converted %i records" % count)
