@@ -14,6 +14,7 @@ from real_data_evaluation.real_data_evaluation_parsers import job_parser
 import os
 import tarfile
 import logging
+import shutil
 import pickle
 
 def convert_nexus_to_fasta(nexus_path, out_file):
@@ -86,11 +87,12 @@ def main():
     log_file_path = os.path.join(args.job_folder, 'log_file.log')
     logging.basicConfig(filename=log_file_path, level=logging.INFO)
     study_folder = os.path.join(args.real_alignments_folder,args.job_study_name)
-    if not os.path.exists(study_folder):
-        tar_path = study_folder+'.tar.gz'
-        logging.info(f"Extracting {tar_path} to {study_folder}")
-        file = tarfile.open(tar_path)
-        file.extractall(args.real_alignments_folder)
+    if os.path.exists(study_folder):
+        shutil.rmtree(study_folder)
+    tar_path = study_folder+'.tar.gz'
+    logging.info(f"Extracting {tar_path} to {study_folder}")
+    file = tarfile.open(tar_path)
+    file.extractall(args.real_alignments_folder)
     msa_path_nexus = os.path.join(study_folder ,'alignment.nex')
     msa_path_fasta = os.path.join(study_folder ,'alignment.fasta')
     if not os.path.exists(msa_path_fasta):
