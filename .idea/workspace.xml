@@ -5,7 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c7df0e90-f129-4c06-bac2-5459d2cc3269" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/real_data_evaluation/parallel_real_data_eval.py" beforeDir="false" afterPath="$PROJECT_DIR$/real_data_evaluation/parallel_real_data_eval.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/real_data_evaluation/single_job.py" beforeDir="false" afterPath="$PROJECT_DIR$/real_data_evaluation/single_job.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -49,8 +48,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/real_data_evaluation/single_job.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="183">
-              <caret line="71" lean-forward="true" selection-start-line="71" selection-end-line="71" />
+            <state relative-caret-position="191">
+              <caret line="71" column="29" selection-start-line="71" selection-start-column="22" selection-end-line="71" selection-end-column="75" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -456,8 +455,8 @@
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49550563" weight="0.2769231" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.67159975" visible="true" weight="0.33426574" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.47145876" weight="0.25034964" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.67159975" weight="0.33426574" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" sideWeight="0.47145876" visible="true" weight="0.25034964" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -627,6 +626,11 @@
           <line>42</line>
           <option name="timeStamp" value="310" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/real_data_evaluation/single_job.py</url>
+          <line>71</line>
+          <option name="timeStamp" value="321" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
@@ -686,6 +690,21 @@
     </expressions>
     <expressions id="evaluateExpression">
       <expression>
+        <expression-string>len(record.seq._data.replace('-','').replace('?',''))</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>len(record.seq.data_.replace('-','').replace('?',''))</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>record.seq</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
         <expression-string>stripped_matches[0].find(' ')</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
@@ -712,21 +731,6 @@
       </expression>
       <expression>
         <expression-string>len(stripped_matches[1])</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>len(stripped_matches[0])</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>stripped_matches</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>len(line)</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
@@ -1070,8 +1074,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/real_data_evaluation/single_job.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="183">
-          <caret line="71" lean-forward="true" selection-start-line="71" selection-end-line="71" />
+        <state relative-caret-position="191">
+          <caret line="71" column="29" selection-start-line="71" selection-start-column="22" selection-end-line="71" selection-end-column="75" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>
