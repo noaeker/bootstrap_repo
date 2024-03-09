@@ -69,7 +69,7 @@ def main():
         records = SeqIO.parse(msa_path_nexus, "nexus")
         valid_records = []
         for record in records:
-            len_seq = len(record.seq.data_.replace('-','').replace('?',''))
+            len_seq = len(str(record.seq).replace('-','').replace('?',''))
             if len(len_seq)>0:
                 valid_records.append(record)
         count = SeqIO.write(records, msa_path_fasta, "fasta")
