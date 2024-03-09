@@ -29,7 +29,7 @@ def distribute_MSAS_over_jobs(study_names, all_jobs_results_folder,args):
         logging.info(f"Job {job_ind} runs on study {study} study")
         time.sleep(10)
         curr_job_folder = os.path.join(all_jobs_results_folder, "job_" + str(job_ind))
-        create_or_clean_dir(curr_job_folder)
+        create_dir_if_not_exists(curr_job_folder)
         run_command = f' python {REAL_DATA_ANALYSIS_CODE} --job_ind {job_ind} --job_folder {curr_job_folder} --job_study_name {study} {generate_argument_str(args)}'
         job_name = args.jobs_prefix + str(job_ind)
         if not LOCAL_RUN:
