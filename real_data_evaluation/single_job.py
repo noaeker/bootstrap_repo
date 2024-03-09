@@ -31,15 +31,16 @@ def convert_nexus_to_fasta(nexus_path, out_file):
         for seq in lines:
             if len(seq)>50:
                 try:
-                    seq_name_and_value = seq.split(' ')
-                    sequences_dict[seq_name_and_value[0]] = seq_name_and_value[1]
-                except:
                     seq_name_and_value = seq.split('\t')
+                    sequences_dict[seq_name_and_value[0]] = seq_name_and_value[1]
+
+                except:
+                    seq_name_and_value = seq.split(' ')
                     sequences_dict[seq_name_and_value[0]] = seq_name_and_value[1]
 
         with open(out_file,'w') as Out:
             for seq in sequences_dict:
-                if len(sequences_dict[seq].replace('-', '').replace(' ','').replace('\n','').replace('\t','')) > 0:
+                if len(sequences_dict[seq].replace('-', '').replace(' ','').replace('\n','').replace('?','').replace('\t','')) > 0:
                     Out.write(">")
                     Out.write(seq+"\n")
                     seq = sequences_dict[seq]
@@ -56,9 +57,9 @@ def run_programs(msa_path,tree_searches_folder, results_folder,msa_type, model, 
     create_dir_if_not_exists(tmp_files_folder)
     logging.info("Running IQTREE")
     boot_tree_iqtree_details = iqtree_pipeline(tree_searches_folder, results_folder, msa_path, model=model, nb=1000,
-                                       prefix="iqtree_boot")
+                                       prefix="iqtree_boot", n_cpus = n_cpus)
     iqtree_features_df = get_splits_df(msa_path= msa_path,true_tree_path= None, model=model,
-                                                           bootstrap_tree_details=boot_tree_iqtree_details, program='iqtree', working_dir = tmp_files_folder
+                                                           bootstrap_tree_details=boot_tree_iqtree_details, program='iqtree', working_dir = tmp_files_folder,
                                                            )
 
     logging.info("Running Fasttree")

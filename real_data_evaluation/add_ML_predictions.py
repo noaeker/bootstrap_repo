@@ -9,6 +9,7 @@ def unify_csvs(csvs_path_list):
     for csv_path in csvs_path_list:
         try:
             tmp_df = pd.read_csv(csv_path)
+            tmp_df['csv_path'] = csv_path
             print("size = "+ str(len(tmp_df.index)))
             tmp_dataframes.append(tmp_df)
         except:

@@ -36,11 +36,11 @@ def extract_param_from_IQTREE_log(iqtree_log_path, param_name, raise_error=True)
 
 
 
-def iqtree_bootstrap_search(curr_run_directory, msa_path, model,nb, prefix):
+def iqtree_bootstrap_search(curr_run_directory, msa_path, model,nb, prefix, n_cpus = 1):
 
     search_prefix = os.path.join(curr_run_directory, prefix)
     st = time.time()
-    search_command = f"{IQTREE_EXE} -s {msa_path}  -m {model} -seed {SEED} -pre {search_prefix} -alrt 0 -abayes -bb {nb} -redo "
+    search_command = f"{IQTREE_EXE} -s {msa_path} -nt {n_cpus}  -m {model} -seed {SEED} -pre {search_prefix} -alrt 0 -abayes -bb {nb} -redo "
     best_tree_topology_path = search_prefix + ".treefile"
     execute_command_and_write_to_log(search_command, print_to_log=True)
     end = time.time()
@@ -70,8 +70,8 @@ def diffrentiate_bootstrap_trees(t):
     return {'final_tree_aLRT':res[0],'final_tree_aBayes': res[1], 'final_tree_ultrafast': res[2]}
 
 
-def iqtree_pipeline(curr_run_directory,results_folder, msa_path, model,nb,  prefix):
-    ML_tree, full_running_time = iqtree_bootstrap_search(curr_run_directory, msa_path, model,nb,  prefix)
+def iqtree_pipeline(curr_run_directory,results_folder, msa_path, model,nb,  prefix, n_cpus):
+    ML_tree, full_running_time = iqtree_bootstrap_search(curr_run_directory, msa_path, model,nb,n_cpus, prefix)
     standard_running_time = iqtree_standard_search_running_time(curr_run_directory, msa_path, model,prefix = prefix+"_standard")
     bootstrap_running_time = full_running_time-standard_running_time
     different_tree_topologies =  diffrentiate_bootstrap_trees(ML_tree)
