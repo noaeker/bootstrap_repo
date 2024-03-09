@@ -36,7 +36,7 @@ def extract_param_from_IQTREE_log(iqtree_log_path, param_name, raise_error=True)
 
 
 
-def iqtree_bootstrap_search(curr_run_directory, msa_path, model,nb, prefix, n_cpus = 1):
+def iqtree_bootstrap_search(curr_run_directory, msa_path, model,nb, n_cpus, prefix):
 
     search_prefix = os.path.join(curr_run_directory, prefix)
     st = time.time()
@@ -70,7 +70,7 @@ def diffrentiate_bootstrap_trees(t):
     return {'final_tree_aLRT':res[0],'final_tree_aBayes': res[1], 'final_tree_ultrafast': res[2]}
 
 
-def iqtree_pipeline(curr_run_directory,results_folder, msa_path, model,nb,  prefix, n_cpus):
+def iqtree_pipeline(curr_run_directory,results_folder, msa_path, model,nb,  prefix, n_cpus = 1):
     ML_tree, full_running_time = iqtree_bootstrap_search(curr_run_directory, msa_path, model,nb,n_cpus, prefix)
     standard_running_time = iqtree_standard_search_running_time(curr_run_directory, msa_path, model,prefix = prefix+"_standard")
     bootstrap_running_time = full_running_time-standard_running_time
