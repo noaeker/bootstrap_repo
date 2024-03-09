@@ -37,4 +37,5 @@ def main():
     combined_df['predicted_bootstrap_score_no_nni'] = nni_model['best_model'].predict_proba(combined_df[feature_names_no_nni])[:, 1]
     combined_df.to_csv(out_csv_path)
 
-
+if __name__ == "__main__":
+    main()
