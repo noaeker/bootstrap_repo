@@ -19,67 +19,6 @@ import shutil
 import pickle
 
 
-COUNT = 0
-
-
-def next_count():
-    global COUNT
-    COUNT += 1
-    return COUNT
-
-
-def convert_nexus_to_fasta(nexus_path, out_file):
-    with open(nexus_path) as N:
-        text = N.read()
-        regex_pattern = r'[\t\n\s][ATGC\-\?]+[\t\n\s]'
-        matches = re.findall(regex_pattern, text)
-        stripped_matches = {}
-        for match in matches:
-            stripped_matches[next_count()] = match.strip()
-        print(stripped_matches)
-
-        with open(out_file,'w') as Out:
-            for seq in stripped_matches:
-                if len(stripped_matches[seq].replace('-', '').replace(' ','').replace('\n','').replace('?','').replace('\t','')) > 0:
-                    Out.write(">")
-                    Out.write(str(seq)+"\n")
-                    seq = stripped_matches[seq]
-                    Out.write(seq)
-                    Out.write('\n')
-
-        return
-        # try:
-        #     matrix_location = text.index('matrix')
-        # except:
-        #     matrix_location = text.index('Matrix')
-        # end_location = text.index(';\nend;')
-        # text = text[matrix_location+6:end_location]
-        # lines = text.split('\n\t')
-        #
-        # sequences_dict = {}
-        # for seq in lines:
-        #     if len(seq)>50:
-        #         try:
-        #             seq_name_and_value = seq.split('\t')
-        #             sequences_dict[seq_name_and_value[0]] = seq_name_and_value[1]
-        #
-        #         except:
-        #             seq_name_and_value = seq.split(' ')
-        #             sequences_dict[seq_name_and_value[0]] = seq_name_and_value[1]
-        #
-        # with open(out_file,'w') as Out:
-        #     for seq in sequences_dict:
-        #         if len(sequences_dict[seq].replace('-', '').replace(' ','').replace('\n','').replace('?','').replace('\t','')) > 0:
-        #             Out.write(">")
-        #             Out.write(seq+"\n")
-        #             seq = sequences_dict[seq]
-        #             Out.write(seq)
-        #             Out.write('\n')
-
-
-
-#msa_path,model, true_tree_path, bootstrap_tree_details, program, working_dir
-
 
 def run_programs(msa_path,tree_searches_folder, results_folder,msa_type, model, n_cpus):
     tmp_files_folder = os.path.join(tree_searches_folder, 'tmp')
@@ -125,7 +64,13 @@ def main():
     msa_path_fasta = os.path.join(study_folder ,'alignment.fasta')
     if not os.path.exists(msa_path_fasta):
         logging.info(f"Converting Nexus to Fasta")
-        convert_nexus_to_fasta(msa_path_nexus, msa_path_fasta)
+        from Bio import SeqIO
+
+        records = SeqIO.parse(msa_path_nexus, "nexus")
+        count = SeqIO.write(records, msa_path_fasta, "fasta")
+        print("Converted %i records" % count)
+
+        #convert_nexus_to_fasta(msa_path_nexus, msa_path_fasta)
     job_working_dir = args.job_folder
     tree_searches_folder = os.path.join(job_working_dir, 'all_tree_searches')
     create_dir_if_not_exists(tree_searches_folder)
