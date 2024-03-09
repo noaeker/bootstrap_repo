@@ -31,10 +31,10 @@ def main():
     combined_df = unify_csvs(existing_csv_path)
     nni_model = pickle.load(open(args.nni_model_path, 'rb'))
     feature_names_nni = nni_model['best_model'].feature_name_
-    combined_df['predicted_bootstrap_score_nni'] = nni_model['best_model'].predict_proba(combined_df[feature_names_nni])[:, 1]
+    combined_df['predicted_bootstrap_score_nni'] = nni_model['calibrated_model'].predict_proba(combined_df[feature_names_nni])[:, 1]
     no_nni_model = pickle.load(open(args.no_nni_model_path, 'rb'))
     feature_names_no_nni = no_nni_model['best_model'].feature_name_
-    combined_df['predicted_bootstrap_score_no_nni'] = no_nni_model['best_model'].predict_proba(combined_df[feature_names_no_nni])[:, 1]
+    combined_df['predicted_bootstrap_score_no_nni'] = no_nni_model['calibrated_model'].predict_proba(combined_df[feature_names_no_nni])[:, 1]
     combined_df.to_csv(out_csv_path)
 
 if __name__ == "__main__":
