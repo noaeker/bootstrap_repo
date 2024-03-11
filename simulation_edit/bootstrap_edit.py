@@ -53,7 +53,7 @@ def get_splits_df(msa_path,model, true_tree_path, bootstrap_tree_details, progra
                                                                              true_tree_path=true_tree_path, n_cpus = n_cpus)
     all_msa_splits_df["program"] = program
     all_msa_splits_df = all_msa_splits_df.assign(**bootstrap_tree_details)
-    return all_msa_splits_df
+    return all_msa_splits_df,tree_obj_with_features
 
 
 def main():
@@ -76,7 +76,7 @@ def main():
                 create_dir_if_not_exists(working_dir)
                 logging.info(f"MSA {j} out of {len(tree_data['msa_path'].unique())}")
                 bootstrap_tree_details = tree_program_data.loc[tree_program_data.msa_path == msa_path].head(1).squeeze()
-                all_msa_splits_df = get_splits_df(msa_path, None, true_tree_path, bootstrap_tree_details, program, working_dir)
+                all_msa_splits_df,tree_obj_with_features = get_splits_df(msa_path, None, true_tree_path, bootstrap_tree_details, program, working_dir)
                 all_splits = pd.concat([all_splits, all_msa_splits_df])
                 all_splits.to_csv(args.job_final_output_path, sep='\t')
         raxml_data = all_splits.loc[all_splits.program=='raxml']
