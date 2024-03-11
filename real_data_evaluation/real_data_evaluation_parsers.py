@@ -9,6 +9,9 @@ def main_parser():
     parser.add_argument('--n_cpus', default = 2)
     parser.add_argument('--jobs_prefix', type=str, default = 'test_boot_edit')
     parser.add_argument('--queue', type = str, default = 'power-pupko')
+    parser.add_argument('--specific_study', type= str, default= 'Dorothee')
+    parser.add_argument('--change_names',action='store_true', default=False)
+    parser.add_argument('--model',  type = str, default = 'WAG+G')
     return parser
 
 

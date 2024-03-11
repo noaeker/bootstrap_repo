@@ -25,7 +25,7 @@ from scipy.stats import skew
 
 
 
-def get_mle_tree_features(working_dir, msa_path, model, mle_tree_path, garbage_dir, raxml_path, mad_path):
+def get_mle_tree_features(working_dir, msa_path, model, mle_tree_path, garbage_dir, raxml_path, mad_path, n_cpus):
     mle_tree_obj = Tree(mle_tree_path, format=1)
     branch_lengths = get_branch_lengths(mle_tree_obj)
     curr_pruned_tree_path, curr_pruned_msa_path = get_pruned_tree_and_msa(working_dir, msa_path, mle_tree_obj)
@@ -33,7 +33,7 @@ def get_mle_tree_features(working_dir, msa_path, model, mle_tree_path, garbage_d
                                                       tree_file=curr_pruned_tree_path,
                                                       curr_run_directory=garbage_dir,
                                                       model=model,
-                                                      opt_model_and_brlen=True, n_cpus=1, n_workers='auto',
+                                                      opt_model_and_brlen=True, n_cpus=n_cpus, n_workers='auto',
                                                       return_opt_tree=False,
                                                       program_path = raxml_path
                                                       )
@@ -62,7 +62,7 @@ def get_pruned_tree_and_msa(curr_run_dir, msa_path, mle_tree_ete):
     return pruned_tree_path, pruned_msa_path
 
 
-def get_nni_statistics(working_dir, orig_tree_ll, nni_neighbors, msa_path, model, garbage_dir, program_path = None):
+def get_nni_statistics(working_dir, orig_tree_ll, nni_neighbors, msa_path, model, garbage_dir, n_cpus = 1, program_path = None):
     all_neig_ll = []
     neighbors_tmp_path = os.path.join(garbage_dir,'tmp_neigh.tree')
     for neighbor in nni_neighbors:
@@ -74,7 +74,7 @@ def get_nni_statistics(working_dir, orig_tree_ll, nni_neighbors, msa_path, model
                                                                          ll_on_data_prefix="nni_neighbors",
                                                                          tree_file=curr_pruned_tree_path,
                                                                          curr_run_directory=garbage_dir, model=model,
-                                                                         opt_model_and_brlen=True, n_cpus=1,
+                                                                         opt_model_and_brlen=True, n_cpus=n_cpus,
                                                                          n_workers='auto', return_opt_tree=True, program_path= program_path
                                                                          )
 
@@ -132,14 +132,14 @@ def get_partition_statistics(node, mle_tree_obj, extra_support_features_dict, fb
         stats[f"{bootstrap_support}"] = ((bootstrap_support_trees_dict[bootstrap_support])& node.name).support
     return stats
 
-def extract_all_features_per_mle(working_dir, msa_path, model, mle_tree_path, extra_bootstrap_support_paths, all_mles_tree_path = None, true_tree_path = None, booster_program_path = None, raxml_program_path = None, mad_program_path = None):
+def extract_all_features_per_mle(working_dir, msa_path, model, mle_tree_path, extra_bootstrap_support_paths, all_mles_tree_path = None, true_tree_path = None, booster_program_path = None, raxml_program_path = None, mad_program_path = None,n_cpus  = 1):
     mle_tree_obj = Tree(mle_tree_path, format=0)
     add_internal_names(mle_tree_obj)
     mle_with_internal_path = os.path.join(working_dir, "mle_with_internal.nw")
     mle_tree_obj.write(outfile=mle_with_internal_path, format=1)
     garbage_dir = os.path.join(working_dir, 'tmp')
     create_dir_if_not_exists(garbage_dir)
-    mle_tree_feautres,mle_tree_features_time = get_mle_tree_features(working_dir, msa_path, model, mle_with_internal_path, garbage_dir, mad_path= mad_program_path, raxml_path= raxml_program_path)
+    mle_tree_feautres,mle_tree_features_time = get_mle_tree_features(working_dir, msa_path, model, mle_with_internal_path, garbage_dir, mad_path= mad_program_path, raxml_path= raxml_program_path, n_cpus = n_cpus)
     st_extra_features = time.time()
     msa_features = get_msa_stats(msa_path,model)
     parsimony_trees_path = generate_n_tree_topologies(n = 100, msa_path = msa_path,
@@ -173,7 +173,7 @@ def extract_all_features_per_mle(working_dir, msa_path, model, mle_tree_path, ex
             st_nni = time.time()
             nni_neighobrs = get_nni_neighbors(mle_with_internal_path,node.name )
             NNI_stats = get_nni_statistics(working_dir, mle_tree_feautres["orig_tree_ll"], nni_neighobrs , msa_path,
-                                           model, garbage_dir, program_path = raxml_program_path)
+                                           model, garbage_dir, program_path = raxml_program_path, n_cpus = n_cpus)
             end_nni = time.time()
             per_node_nni_time+=end_nni-st_nni
             partition_statistics = get_partition_statistics(node, mle_tree_obj, extra_support_features_dict,fbp_true_support_tree,bootstrap_support_trees_dict)

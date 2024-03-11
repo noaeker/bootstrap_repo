@@ -6,7 +6,7 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.linear_model import LogisticRegression
 import pickle
 from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
-from sklearn.metrics import matthews_corrcoef, log_loss, brier_score_loss, roc_auc_score, average_precision_score
+from sklearn.metrics import matthews_corrcoef, log_loss, brier_score_loss, roc_auc_score, average_precision_score, f1_score
 import numpy as np
 import os
 from sklearn.metrics import balanced_accuracy_score
@@ -139,17 +139,19 @@ def calibration_plot(model, test_data, y_test):
 
 def enrich_with_single_feature_metrics(var_impt, train_X, y_train, test_X, y_test):
         curr_mcc_scores = []
+        curr_f1_scores = []
         curr_auc_scores = []
         for feature in var_impt.index:
             lg = lightgbm.LGBMClassifier(importance_type='gain').fit(train_X[[feature]], y_train)
             pred_prob= lg.predict_proba(test_X[[feature]])[:, 1]
             pred = lg.predict_proba(test_X[[feature]])[:, 1] >= 0.5
             curr_mcc_scores.append(matthews_corrcoef(y_test, pred))
-            auc = roc_auc_score(y_test,pred_prob)
-            curr_auc_scores.append(auc)
+            curr_f1_scores.append(f1_score(y_test,pred))
+            curr_auc_scores.append(roc_auc_score(y_test,pred_prob))
 
         var_impt[f"mcc"] = curr_mcc_scores
         var_impt[f"auc"] = curr_auc_scores
+        var_impt[f"f1_score"] = curr_f1_scores
 
 
 def expected_calibration_error(samples, true_labels, M=30):

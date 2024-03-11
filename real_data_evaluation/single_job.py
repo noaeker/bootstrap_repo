@@ -15,6 +15,7 @@ from real_data_evaluation.real_data_evaluation_parsers import job_parser
 import os
 import tarfile
 import logging
+from Bio import SeqIO
 import shutil
 import pickle
 
@@ -23,30 +24,30 @@ import pickle
 def run_programs(msa_path,tree_searches_folder, results_folder,msa_type, model, n_cpus):
     tmp_files_folder = os.path.join(tree_searches_folder, 'tmp')
     create_dir_if_not_exists(tmp_files_folder)
-    logging.info("Running IQTREE")
-    boot_tree_iqtree_details = iqtree_pipeline(tree_searches_folder, results_folder, msa_path, model=model, nb=1000,
-                                       prefix="iqtree_boot", n_cpus = n_cpus)
-    iqtree_features_df = get_splits_df(msa_path= msa_path,true_tree_path= None, model=model,
-                                                           bootstrap_tree_details=boot_tree_iqtree_details, program='iqtree', working_dir = tmp_files_folder,
-                                                           )
-
-    logging.info("Running Fasttree")
-    boot_tree_fasttree_details = fasttree_pipeline(tree_searches_folder, results_folder, msa_path, msa_type=msa_type,
-                                           nb=0, model = model)
-    fasttree_features_df = get_splits_df(msa_path=msa_path, true_tree_path=None, model=model,
-                                       bootstrap_tree_details=boot_tree_fasttree_details, program='fasttree',
-                                       working_dir=tmp_files_folder
-                                       )
+    # logging.info("Running IQTREE")
+    # boot_tree_iqtree_details = iqtree_pipeline(tree_searches_folder, results_folder, msa_path, model=model, nb=1000,
+    #                                    prefix="iqtree_boot", n_cpus = n_cpus)
+    # iqtree_features_df = get_splits_df(msa_path= msa_path,true_tree_path= None, model=model,
+    #                                                        bootstrap_tree_details=boot_tree_iqtree_details, program='iqtree', working_dir = tmp_files_folder,n_cpus = n_cpus
+    #                                                        )
+    #
+    # logging.info("Running Fasttree")
+    # boot_tree_fasttree_details = fasttree_pipeline(tree_searches_folder, results_folder, msa_path, msa_type=msa_type,
+    #                                        nb=0, model = model)
+    # fasttree_features_df = get_splits_df(msa_path=msa_path, true_tree_path=None, model=model,
+    #                                    bootstrap_tree_details=boot_tree_fasttree_details, program='fasttree',
+    #                                    working_dir=tmp_files_folder,n_cpus = n_cpus
+    #                                    )
 
     logging.info("Running RAxML")
     boot_tree_raxml_details =  raxml_bootstrap_pipeline(tree_searches_folder ,results_folder , msa_path, prefix ="boot", model = model,  n_cpus=n_cpus,
                                                 n_workers='auto')
     raxml_features_df = get_splits_df(msa_path=msa_path, true_tree_path=None, model=model,
                                          bootstrap_tree_details=boot_tree_raxml_details, program='raxml',
-                                         working_dir=tmp_files_folder
+                                         working_dir=tmp_files_folder, n_cpus = n_cpus
                                          )
 
-    return  iqtree_features_df, fasttree_features_df,raxml_features_df
+    return  raxml_features_df
 
 def main():
     parser = job_parser()
@@ -54,25 +55,26 @@ def main():
     log_file_path = os.path.join(args.job_folder, 'log_file.log')
     logging.basicConfig(filename=log_file_path, level=logging.INFO)
     study_folder = os.path.join(args.real_alignments_folder,args.job_study_name)
-    if os.path.exists(study_folder):
-        shutil.rmtree(study_folder)
-    tar_path = study_folder+'.tar.gz'
-    logging.info(f"Extracting {tar_path} to {study_folder}")
-    file = tarfile.open(tar_path)
-    file.extractall(args.real_alignments_folder)
+    if not os.path.exists(study_folder):
+        tar_path = study_folder+'.tar.gz'
+        logging.info(f"Extracting {tar_path} to {study_folder}")
+        file = tarfile.open(tar_path)
+        file.extractall(args.real_alignments_folder)
     msa_path_nexus = os.path.join(study_folder ,'alignment.nex')
     msa_path_fasta = os.path.join(study_folder ,'alignment.fasta')
     if not os.path.exists(msa_path_fasta):
         logging.info(f"Converting Nexus to Fasta")
-        from Bio import SeqIO
-
         records = SeqIO.parse(msa_path_nexus, "nexus")
         valid_records = []
         for i,record in enumerate(records):
             len_seq = len(str(record.seq).replace('-','').replace('?',''))
             if (len_seq)>0:
-                record.name=f'taxa_{i}'
-                record.id=f'taxa_{i}'
+                if args.change_names:
+                    record.name=f'taxa_{i}'
+                    record.id=f'taxa_{i}'
+                else:
+                    record.name = record.name.replace('@','_')
+                    record.id = record.id.replace('@', '_')
                 valid_records.append(record)
         count = SeqIO.write(valid_records, msa_path_fasta, "fasta")
         print("Converted %i records" % count)
@@ -82,10 +84,10 @@ def main():
     create_dir_if_not_exists(tree_searches_folder)
     results_folder = os.path.join(job_working_dir, 'results')
     create_dir_if_not_exists(results_folder)
-    iqtree_features_df, fasttree_features_df, raxml_features_df = run_programs(msa_path_fasta, tree_searches_folder, results_folder, 'DNA', 'GTR+G', n_cpus= args.n_cpus)
+    raxml_features_df = run_programs(msa_path_fasta, tree_searches_folder, results_folder, 'Protein', args.model, n_cpus= args.n_cpus)
     logging.info("Writing files to CSV")
-    iqtree_features_df.to_csv(os.path.join(job_working_dir,"iqtree_real_data.csv"))
-    fasttree_features_df.to_csv(os.path.join(job_working_dir, "fasttree_real_data.csv"))
+    #iqtree_features_df.to_csv(os.path.join(job_working_dir,"iqtree_real_data.csv"))
+    #fasttree_features_df.to_csv(os.path.join(job_working_dir, "fasttree_real_data.csv"))
     raxml_features_df.to_csv(os.path.join(job_working_dir, "raxml_real_data.csv"))
     logging.info("Done")
 

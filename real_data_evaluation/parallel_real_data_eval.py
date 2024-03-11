@@ -55,8 +55,8 @@ def main():
     relevant_MSAs = MSAs_stats.loc[(MSAs_stats["dataset.alignment.ntax"]<=1000)&(MSAs_stats["dataset.alignment.nchar"]<10000)&(MSAs_stats["dataset.alignment.datatype"]=='nucleotide')]
     relevant_studies = relevant_MSAs["name"]
     logging.info(f"Relevant studies = {relevant_studies}")
-    if LOCAL_RUN:
-        relevant_studies = ['Dornburg_2012']
+    if args.specific_study is not None:
+        relevant_studies = [args.specific_study]
 
     distribute_MSAS_over_jobs(relevant_studies, raw_results_folder,args)
 

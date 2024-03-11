@@ -34,7 +34,7 @@ def get_bootstrap_and_all_mles_path(program, bootstrap_tree_details):
     return extra_support_values, all_mles_path
 
 
-def get_splits_df(msa_path,model, true_tree_path, bootstrap_tree_details, program, working_dir):
+def get_splits_df(msa_path,model, true_tree_path, bootstrap_tree_details, program, working_dir, n_cpus = 1):
     if model is None:
         model = bootstrap_tree_details["tree_search_model"]
     mle_tree_path = bootstrap_tree_details[get_program_default_ML_tree(program)]
@@ -50,7 +50,7 @@ def get_splits_df(msa_path,model, true_tree_path, bootstrap_tree_details, progra
                                                                              mle_tree_path,
                                                                              extra_bootstrap_support_paths=program_bootstrap_support_paths,
                                                                              all_mles_tree_path=all_mle_path,
-                                                                             true_tree_path=true_tree_path)
+                                                                             true_tree_path=true_tree_path, n_cpus = n_cpus)
     all_msa_splits_df["program"] = program
     all_msa_splits_df = all_msa_splits_df.assign(**bootstrap_tree_details)
     return all_msa_splits_df
