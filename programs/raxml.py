@@ -254,13 +254,15 @@ def remove_redundant_sequences(curr_run_directory, prefix,msa_path, model, out_m
         if prefix in file:
             os.remove(os.path.join(curr_run_directory,file))
 
-def raxml_bootstrap_pipeline(curr_run_directory, results_folder, msa_path, prefix, model, n_cpus = 1, n_workers ='auto'):
+def raxml_bootstrap_pipeline(curr_run_directory, results_folder, msa_path, prefix, model, n_cpus = 1, n_workers ='auto', redo = True):
 
     search_prefix = os.path.join(curr_run_directory, prefix)
     search_command = (
-        "{raxml_exe} --blopt nr_safe --all --bs-trees autoMRE --threads {n_cpus} --workers {n_workers}  --force msa --force perf_threads --msa {msa_path} --model {model}  --seed {seed} --prefix {prefix} --redo").format(raxml_exe=RAXML_NG_EXE,
+        "{raxml_exe} --blopt nr_safe --force perf_threads --all --bs-trees autoMRE --threads {n_cpus} --workers {n_workers}  --force msa --force perf_threads --msa {msa_path} --model {model}  --seed {seed} --prefix {prefix}").format(raxml_exe=RAXML_NG_EXE,
         msa_path=msa_path,  seed=SEED,
         prefix=search_prefix, model=model, n_cpus = n_cpus, n_workers = n_workers)
+    if redo:
+        search_command+=' --redo'
     raxml_log_file = search_prefix + ".raxml.log"
     model_file = search_prefix+".raxml.bestModel"
     execute_command_and_write_to_log(search_command, print_to_log=True)
@@ -334,7 +336,7 @@ def raxml_optimize_trees_for_given_msa(full_data_path, ll_on_data_prefix, tree_f
     if program_path is None:
         program_path = RAXML_NG_EXE
     compute_ll_run_command = (
-        "{raxml_exe_path} --force msa --threads {n_cpus} --workers {n_workers} --workers auto --evaluate --msa {msa_path} --model {model} {brlen_command} --tree {tree_file} --seed {seed} --prefix {prefix} --redo").format(
+        "{raxml_exe_path} --force msa --force perf_threads --threads {n_cpus} --workers {n_workers} --workers auto --evaluate --msa {msa_path} --model {model} {brlen_command} --tree {tree_file} --seed {seed} --prefix {prefix} --redo").format(
         raxml_exe_path= program_path, msa_path=full_data_path, tree_file=tree_file, seed=SEED,
         prefix=prefix, brlen_command=brlen_command, model=model, n_cpus = n_cpus, n_workers = n_workers)
     #optimized_trees_path = prefix + ".raxml.mlTrees"

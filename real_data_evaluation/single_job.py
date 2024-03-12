@@ -41,7 +41,7 @@ def run_programs(msa_path,tree_searches_folder, results_folder,msa_type, model, 
 
     logging.info("Running RAxML")
     boot_tree_raxml_details =  raxml_bootstrap_pipeline(tree_searches_folder ,results_folder , msa_path, prefix ="boot", model = model,  n_cpus=n_cpus,
-                                                n_workers='auto')
+                                                n_workers='auto', redo = False)
     raxml_features_df,raxml_obj_with_features = get_splits_df(msa_path=msa_path, true_tree_path=None, model=model,
                                          bootstrap_tree_details=boot_tree_raxml_details, program='raxml',
                                          working_dir=tmp_files_folder, n_cpus = n_cpus
