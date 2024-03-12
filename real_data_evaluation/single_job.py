@@ -44,7 +44,7 @@ def run_programs(msa_path,tree_searches_folder, results_folder,msa_type, model, 
                                                 n_workers='auto', redo = False)
     raxml_features_df,raxml_obj_with_features = get_splits_df(msa_path=msa_path, true_tree_path=None, model=model,
                                          bootstrap_tree_details=boot_tree_raxml_details, program='raxml',
-                                         working_dir=tmp_files_folder, n_cpus = n_cpus
+                                         working_dir=tmp_files_folder, n_cpus = int(n_cpus/9)
                                          )
 
     return  raxml_features_df,raxml_obj_with_features
