@@ -6,12 +6,13 @@ def main_parser():
                         default="/Users/noa/Workspace/bootstrap_results/msa_example")
     parser.add_argument('--name', type=str,
                         default="real_data_eval")
-    parser.add_argument('--n_cpus', default = 2)
+    parser.add_argument('--n_cpus', type = int, default = 2)
     parser.add_argument('--jobs_prefix', type=str, default = 'test_boot_edit')
     parser.add_argument('--queue', type = str, default = 'power-pupko')
     parser.add_argument('--specific_study', type= str, default= 'Bergsten_2013')
     parser.add_argument('--change_names',action='store_true', default=False)
     parser.add_argument('--model',  type = str, default = 'WAG+G')
+    parser.add_argument('--use_existing_trees', action='store_true', default=True)
     return parser
 
 

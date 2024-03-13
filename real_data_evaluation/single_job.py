@@ -13,6 +13,7 @@ from side_code.file_handling import create_dir_if_not_exists
 from simulation_edit.bootstrap_edit import get_bootstrap_and_all_mles_path,get_splits_df
 from real_data_evaluation.real_data_evaluation_parsers import job_parser
 import os
+import numpy as np
 import tarfile
 import logging
 from Bio import SeqIO
@@ -21,7 +22,7 @@ import pickle
 
 
 
-def run_programs(msa_path,tree_searches_folder, results_folder,msa_type, model, n_cpus):
+def run_programs(msa_path,tree_searches_folder, results_folder,msa_type, model, n_cpus,use_existing_trees):
     tmp_files_folder = os.path.join(tree_searches_folder, 'tmp')
     create_dir_if_not_exists(tmp_files_folder)
     # logging.info("Running IQTREE")
@@ -41,11 +42,11 @@ def run_programs(msa_path,tree_searches_folder, results_folder,msa_type, model, 
 
     logging.info("Running RAxML")
     boot_tree_raxml_details =  raxml_bootstrap_pipeline(tree_searches_folder ,results_folder , msa_path, prefix ="boot", model = model,  n_cpus=n_cpus,
-                                                n_workers='auto', redo = False)
+                                                n_workers='auto', use_existing_trees = use_existing_trees)
     raxml_features_df,raxml_obj_with_features = get_splits_df(msa_path=msa_path, true_tree_path=None, model=model,
                                          bootstrap_tree_details=boot_tree_raxml_details, program='raxml',
-                                         working_dir=tmp_files_folder, n_cpus = int(n_cpus/9)
-                                         )
+                                         working_dir=tmp_files_folder, n_cpus = np.min(n_cpus, 20))
+                                         
 
     return  raxml_features_df,raxml_obj_with_features
 
@@ -84,7 +85,7 @@ def main():
     create_dir_if_not_exists(tree_searches_folder)
     results_folder = os.path.join(job_working_dir, 'results')
     create_dir_if_not_exists(results_folder)
-    raxml_features_df,raxml_obj_with_features = run_programs(msa_path_fasta, tree_searches_folder, results_folder, 'Protein', args.model, n_cpus= args.n_cpus)
+    raxml_features_df,raxml_obj_with_features = run_programs(msa_path_fasta, tree_searches_folder, results_folder, 'Protein', args.model, n_cpus= args.n_cpus,use_existing_trees = args.use_existing_trees)
     logging.info("Writing files to CSV")
     #iqtree_features_df.to_csv(os.path.join(job_working_dir,"iqtree_real_data.csv"))
     #fasttree_features_df.to_csv(os.path.join(job_working_dir, "fasttree_real_data.csv"))
