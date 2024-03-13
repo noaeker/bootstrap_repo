@@ -5,13 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c7df0e90-f129-4c06-bac2-5459d2cc3269" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/protein_evaluation/protein_evaluation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/programs/raxml.py" beforeDir="false" afterPath="$PROJECT_DIR$/programs/raxml.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/python notebooks/main paper analysis.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/python notebooks/main paper analysis.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/python notebooks/real_data_analysis.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/python notebooks/real_data_analysis.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/simulation_edit/trees_features_extraction_helper.py" beforeDir="false" afterPath="$PROJECT_DIR$/simulation_edit/trees_features_extraction_helper.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/simulations_generation/simulations.py" beforeDir="false" afterPath="$PROJECT_DIR$/simulations_generation/simulations.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/protein_evaluation/protein_evaluation.py" beforeDir="false" afterPath="$PROJECT_DIR$/protein_evaluation/protein_evaluation.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -84,8 +78,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/protein_evaluation/protein_evaluation.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="162">
-              <caret line="79" column="310" selection-start-line="79" selection-start-column="310" selection-end-line="79" selection-end-column="310" />
+            <state relative-caret-position="118">
+              <caret line="79" column="422" selection-start-line="79" selection-start-column="422" selection-end-line="79" selection-end-column="422" />
             </state>
           </provider>
         </entry>
@@ -134,7 +128,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>3</find>
       <find>raxml_bootstrap_pipeline</find>
       <find>predict</find>
       <find>GTR</find>
@@ -164,6 +157,7 @@
       <find>add</find>
       <find>raxml</find>
       <find>update</find>
+      <find>n_cpus</find>
     </findStrings>
     <replaceStrings>
       <replace>job_data_path</replace>
@@ -443,8 +437,8 @@
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49550563" weight="0.2769231" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.67159975" weight="0.44195804" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" sideWeight="0.47145876" visible="true" weight="0.39300698" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.67159975" visible="true" weight="0.4013986" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.47145876" weight="0.39300698" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -1049,8 +1043,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/protein_evaluation/protein_evaluation.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="79" column="310" selection-start-line="79" selection-start-column="310" selection-end-line="79" selection-end-column="310" />
+        <state relative-caret-position="118">
+          <caret line="79" column="422" selection-start-line="79" selection-start-column="422" selection-end-line="79" selection-end-column="422" />
         </state>
       </provider>
     </entry>
