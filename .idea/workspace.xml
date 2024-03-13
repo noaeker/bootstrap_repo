@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/simulations_generation/simulations.py" description="boot_tree_fasttree = fasttree_pipeline(tree_search..." line="53" />
+    <bookmark url="file://$PROJECT_DIR$/simulations_generation/simulations.py" description="boot_tree_fasttree = fasttree_pipeline(tree_search..." line="52" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c7df0e90-f129-4c06-bac2-5459d2cc3269" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/real_data_evaluation/single_job.py" beforeDir="false" afterPath="$PROJECT_DIR$/real_data_evaluation/single_job.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/protein_evaluation/protein_evaluation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/programs/raxml.py" beforeDir="false" afterPath="$PROJECT_DIR$/programs/raxml.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python notebooks/main paper analysis.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/python notebooks/main paper analysis.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python notebooks/real_data_analysis.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/python notebooks/real_data_analysis.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/simulation_edit/trees_features_extraction_helper.py" beforeDir="false" afterPath="$PROJECT_DIR$/simulation_edit/trees_features_extraction_helper.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/simulations_generation/simulations.py" beforeDir="false" afterPath="$PROJECT_DIR$/simulations_generation/simulations.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -16,19 +22,10 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/simulation_edit/bootstrap_edit.py">
+        <entry file="file://$PROJECT_DIR$/simulations_generation/run_parallel_simulations.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="230">
-              <caret line="45" selection-start-line="45" selection-end-line="45" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/real_data_evaluation/single_job.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="47" column="84" lean-forward="true" selection-start-line="47" selection-start-column="84" selection-end-line="47" selection-end-column="84" />
+            <state relative-caret-position="106">
+              <caret line="13" column="19" selection-start-line="13" selection-start-column="14" selection-end-line="13" selection-end-column="19" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -39,8 +36,29 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/real_data_evaluation/parallel_real_data_eval.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-362">
-              <caret line="25" lean-forward="true" selection-start-line="8" selection-start-column="72" selection-end-line="8" selection-end-column="77" />
+            <state relative-caret-position="182">
+              <caret line="52" column="4" selection-start-line="50" selection-start-column="4" selection-end-line="52" selection-end-column="4" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/simulations_generation/simulations_argparser.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="271">
+              <caret line="15" column="4" lean-forward="true" selection-start-line="15" selection-start-column="4" selection-end-line="15" selection-end-column="67" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/simulation_edit/trees_features_extraction_helper.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="90">
+              <caret line="46" column="47" lean-forward="true" selection-start-line="46" selection-start-column="47" selection-end-line="46" selection-end-column="47" />
+              <folding>
+                <element signature="e#1#49#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -48,26 +66,35 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/simulation_edit/feature_extraction.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="31" selection-start-line="31" selection-end-line="31" />
+            <state relative-caret-position="89">
+              <caret line="158" selection-start-line="158" selection-end-line="158" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/real_data_evaluation/new_tree.nw">
+        <entry file="file://$PROJECT_DIR$/simulations_generation/simulations.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="1413" selection-start-column="1413" selection-end-column="1413" />
+            <state relative-caret-position="-2914">
+              <caret line="16" column="56" selection-start-line="17" selection-start-column="43" selection-end-line="17" selection-end-column="65" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/real_data_evaluation/real_data_evaluation_parsers.py">
+        <entry file="file://$PROJECT_DIR$/protein_evaluation/protein_evaluation.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="291">
-              <caret line="14" column="81" selection-start-line="14" selection-start-column="81" selection-end-line="14" selection-end-column="81" />
+            <state relative-caret-position="162">
+              <caret line="79" column="310" selection-start-line="79" selection-start-column="310" selection-end-line="79" selection-end-column="310" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/side_code/MSA_manipulation.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="117">
+              <caret line="182" selection-start-line="182" selection-end-line="182" />
             </state>
           </provider>
         </entry>
@@ -75,10 +102,22 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/programs/raxml.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="205">
-              <caret line="333" column="22" selection-start-line="333" selection-start-column="22" selection-end-line="333" selection-end-column="22" />
+            <state relative-caret-position="223">
+              <caret line="362" selection-start-line="362" selection-end-line="362" />
               <folding>
                 <element signature="e#1#31#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/side_code/config.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="123">
+              <caret line="64" column="77" selection-start-line="64" selection-start-column="25" selection-end-line="64" selection-end-column="77" />
+              <folding>
+                <element signature="e#0#24#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -95,17 +134,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>A</find>
-      <find>-</find>
-      <find>;</find>
-      <find>fasta</find>
-      <find>fasttree</find>
-      <find>re</find>
-      <find>get_bootstrap_and_all_mles_path</find>
-      <find>here</find>
-      <find>extrac</find>
-      <find>msa_spl</find>
-      <find>summary</find>
       <find>3</find>
       <find>raxml_bootstrap_pipeline</find>
       <find>predict</find>
@@ -113,7 +141,6 @@
       <find>iqtree_pipeline</find>
       <find>iqtree_bootstrap_search</find>
       <find>pruned_tree.prune(get_MSA_seq_names(pruned_msa_path))</find>
-      <find>obtain_all_results_per_MSA</find>
       <find>prune</find>
       <find>auc</find>
       <find>partitio</find>
@@ -122,9 +149,21 @@
       <find>auto</find>
       <find>crea</find>
       <find>extract_all_features_per_mle</find>
-      <find>get_splits_df</find>
       <find>boot</find>
+      <find>get_splits_df</find>
       <find>clean</find>
+      <find>msa_path_edit_analysis</find>
+      <find>add_features_to_data</find>
+      <find>execute_command_and_write_to_log</find>
+      <find>local_true_tree_path</find>
+      <find>si</find>
+      <find>simulate_msa</find>
+      <find>obtain_tree_search_bootstrap_results</find>
+      <find>obtain_all_results_per_MSA</find>
+      <find>no_b</find>
+      <find>add</find>
+      <find>raxml</find>
+      <find>update</find>
     </findStrings>
     <replaceStrings>
       <replace>job_data_path</replace>
@@ -136,9 +175,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/simulation_edit/ML_boot_edit.py" />
-        <option value="$PROJECT_DIR$/dd.json" />
-        <option value="$PROJECT_DIR$/simulation_edit/simulations_argparser.py" />
         <option value="$PROJECT_DIR$/ML/ML_boot_edit.py" />
         <option value="$PROJECT_DIR$/side_code/combine_current_results.py" />
         <option value="$PROJECT_DIR$/side_code/IQTREE.py" />
@@ -156,8 +192,6 @@
         <option value="$PROJECT_DIR$/programs/reconstruct_species_phylogeny_NOA.py" />
         <option value="$PROJECT_DIR$/simulation_edit/simulations_edit_argparser.py" />
         <option value="$PROJECT_DIR$/programs/FastTree.py" />
-        <option value="$PROJECT_DIR$/programs/raxml_grove.py" />
-        <option value="$PROJECT_DIR$/simulations_generation/simulations_argparser.py" />
         <option value="$PROJECT_DIR$/ML_pipeline/ML_boot_edit" />
         <option value="$PROJECT_DIR$/ML_pipeline/generate_extra_plots.py" />
         <option value="$PROJECT_DIR$/simulations_generation/run_parallel_simulations.py" />
@@ -169,8 +203,6 @@
         <option value="$PROJECT_DIR$/ML_pipeline/ML_boot_edit.py" />
         <option value="$PROJECT_DIR$/user_code/Extract_features.py" />
         <option value="$PROJECT_DIR$/side_code/basic_trees_manipulation.py" />
-        <option value="$PROJECT_DIR$/simulation_edit/trees_features_extraction_helper.py" />
-        <option value="$PROJECT_DIR$/simulations_generation/simulations.py" />
         <option value="$PROJECT_DIR$/evaluation_on_real_data.py" />
         <option value="$PROJECT_DIR$/real_data_evaluation/evaluation_on_real_data.py" />
         <option value="$PROJECT_DIR$/evaluation_argparser/evaluation_on_real_data.py" />
@@ -185,8 +217,15 @@
         <option value="$PROJECT_DIR$/real_data_evaluation/add_ML_predictions.py" />
         <option value="$PROJECT_DIR$/real_data_evaluation/parallel_real_data_eval.py" />
         <option value="$PROJECT_DIR$/real_data_evaluation/real_data_evaluation_parsers.py" />
-        <option value="$PROJECT_DIR$/programs/raxml.py" />
         <option value="$PROJECT_DIR$/real_data_evaluation/single_job.py" />
+        <option value="$PROJECT_DIR$/simulations_generation/simulations.py" />
+        <option value="$PROJECT_DIR$/test_on_protein.py" />
+        <option value="$PROJECT_DIR$/programs/raxml_grove.py" />
+        <option value="$PROJECT_DIR$/simulations_generation/simulations_argparser.py" />
+        <option value="$PROJECT_DIR$/protein_evaluation.py" />
+        <option value="$PROJECT_DIR$/programs/raxml.py" />
+        <option value="$PROJECT_DIR$/simulation_edit/trees_features_extraction_helper.py" />
+        <option value="$PROJECT_DIR$/protein_evaluation/protein_evaluation.py" />
       </list>
     </option>
   </component>
@@ -210,27 +249,12 @@
             <path>
               <item name="bootstrap_repo" type="b2602c69:ProjectViewProjectNode" />
               <item name="bootstrap_repo" type="462c0819:PsiDirectoryNode" />
-              <item name="ML_pipeline" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="bootstrap_repo" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bootstrap_repo" type="462c0819:PsiDirectoryNode" />
-              <item name="ML_utils" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="bootstrap_repo" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bootstrap_repo" type="462c0819:PsiDirectoryNode" />
-              <item name="programs" type="462c0819:PsiDirectoryNode" />
+              <item name="protein_evaluation" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="bootstrap_repo" type="b2602c69:ProjectViewProjectNode" />
               <item name="bootstrap_repo" type="462c0819:PsiDirectoryNode" />
               <item name="real_data_evaluation" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="bootstrap_repo" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bootstrap_repo" type="462c0819:PsiDirectoryNode" />
-              <item name="side_code" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="bootstrap_repo" type="b2602c69:ProjectViewProjectNode" />
@@ -241,11 +265,6 @@
               <item name="bootstrap_repo" type="b2602c69:ProjectViewProjectNode" />
               <item name="bootstrap_repo" type="462c0819:PsiDirectoryNode" />
               <item name="simulations_generation" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="bootstrap_repo" type="b2602c69:ProjectViewProjectNode" />
-              <item name="bootstrap_repo" type="462c0819:PsiDirectoryNode" />
-              <item name="user_code" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -268,11 +287,11 @@
       <recent name="$PROJECT_DIR$/simulation_edit" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/protein_evaluation" />
       <recent name="$PROJECT_DIR$/real_data_evaluation" />
       <recent name="$PROJECT_DIR$/simulation_edit" />
       <recent name="$PROJECT_DIR$/programs" />
       <recent name="$PROJECT_DIR$/side_code" />
-      <recent name="$PROJECT_DIR$/ML" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -287,7 +306,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.parallel_real_data_eval">
+  <component name="RunManager" selected="Python.protein_evaluation">
     <configuration name="add_ML_predictions" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="bootstrap_repo" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -301,27 +320,6 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/real_data_evaluation/add_ML_predictions.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="evaluation_on_real_data" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="bootstrap_repo" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/real_data_evaluation/evaluation_on_real_data.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -351,7 +349,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="predict_branch_supports" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="protein_evaluation" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="bootstrap_repo" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -359,11 +357,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/user_code" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/user_code/predict_branch_supports.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/protein_evaluation/protein_evaluation.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -372,7 +370,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="single_job" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="run_parallel_simulations" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="bootstrap_repo" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -380,26 +378,41 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/real_data_evaluation" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/simulations_generation" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/real_data_evaluation/single_job.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/simulations_generation/run_parallel_simulations.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
       <option name="REDIRECT_INPUT" value="false" />
       <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="pytest in protein_evaluation.py" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
+      <module name="bootstrap_repo" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/protein_evaluation/protein_evaluation.py&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.protein_evaluation" />
+        <item itemvalue="Python.run_parallel_simulations" />
+        <item itemvalue="Python tests.pytest in protein_evaluation.py" />
         <item itemvalue="Python.parallel_real_data_eval" />
         <item itemvalue="Python.add_ML_predictions" />
-        <item itemvalue="Python.single_job" />
-        <item itemvalue="Python.evaluation_on_real_data" />
-        <item itemvalue="Python.predict_branch_supports" />
       </list>
     </recent_temporary>
   </component>
@@ -416,16 +429,22 @@
     </task>
     <servers />
   </component>
+  <component name="TestHistory">
+    <history-entry file="pytest_in_test_on_protein_py - 2024.03.13 at 17h 44m 44s.xml">
+      <configuration name="pytest in test_on_protein.py" configurationId="tests" />
+    </history-entry>
+  </component>
   <component name="ToolWindowManager">
     <frame x="0" y="25" width="1440" height="813" extended-state="0" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.12896407" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.20366456" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49550563" weight="0.2769231" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.67159975" visible="true" weight="0.33846155" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.47145876" weight="0.44615385" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.67159975" weight="0.44195804" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" sideWeight="0.47145876" visible="true" weight="0.39300698" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -472,22 +491,17 @@
         </line-breakpoint>
         <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/simulations_generation/simulations.py</url>
-          <line>134</line>
-          <option name="timeStamp" value="89" />
-        </line-breakpoint>
-        <line-breakpoint suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/simulations_generation/simulations.py</url>
-          <line>195</line>
+          <line>167</line>
           <option name="timeStamp" value="95" />
         </line-breakpoint>
         <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/simulations_generation/simulations.py</url>
-          <line>161</line>
+          <line>133</line>
           <option name="timeStamp" value="96" />
         </line-breakpoint>
         <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/simulations_generation/simulations.py</url>
-          <line>157</line>
+          <line>129</line>
           <option name="timeStamp" value="107" />
         </line-breakpoint>
         <line-breakpoint suspend="THREAD" type="python-line">
@@ -497,7 +511,7 @@
         </line-breakpoint>
         <line-breakpoint suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/simulations_generation/simulations.py</url>
-          <line>176</line>
+          <line>148</line>
           <option name="timeStamp" value="191" />
         </line-breakpoint>
         <line-breakpoint suspend="THREAD" type="python-line">
@@ -596,19 +610,9 @@
           <option name="timeStamp" value="326" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/simulation_edit/feature_extraction.py</url>
-          <line>31</line>
-          <option name="timeStamp" value="327" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/programs/raxml.py</url>
-          <line>324</line>
-          <option name="timeStamp" value="328" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/programs/raxml.py</url>
-          <line>338</line>
-          <option name="timeStamp" value="329" />
+          <url>file://$PROJECT_DIR$/simulation_edit/trees_features_extraction_helper.py</url>
+          <line>53</line>
+          <option name="timeStamp" value="335" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -669,102 +673,53 @@
     </expressions>
     <expressions id="evaluateExpression">
       <expression>
+        <expression-string>mle_tree_path</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>cmd</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>bootster_tree</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>features</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>features.columns</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>all_final_trees_path_orig</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>open(msa_path)</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>SeqIO.parse(file, 'fasta')</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
         <expression-string>compute_ll_run_command</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>n_cpus</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>combined_df</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>t</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>record</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>len(record.seq._data.replace('-','').replace('?',''))</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>len(record.seq.data_.replace('-','').replace('?',''))</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>record.seq</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>stripped_matches[0].find(' ')</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$USER_HOME$/opt/anaconda3/lib/python3.8/site-packages/torch/_tensor.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="16258">
-          <caret line="756" selection-start-line="756" selection-end-line="756" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/opt/anaconda3/lib/python3.8/site-packages/sklearn/utils/validation.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15972">
-          <caret line="745" selection-start-line="745" selection-end-line="745" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/opt/anaconda3/lib/python3.8/site-packages/sklearn/metrics/_ranking.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="11506">
-          <caret line="545" selection-start-line="545" selection-end-line="545" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/opt/anaconda3/lib/python3.8/genericpath.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="20" selection-start-line="20" selection-end-line="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/opt/anaconda3/lib/python3.8/site-packages/torch/nn/modules/container.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="172">
-          <caret line="138" selection-start-line="138" selection-end-line="138" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/opt/anaconda3/lib/python3.8/site-packages/torch/nn/modules/linear.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="113" selection-start-line="113" selection-end-line="113" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/opt/anaconda3/lib/python3.8/site-packages/torch/nn/modules/loss.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="134">
-          <caret line="1163" selection-start-line="1163" selection-end-line="1163" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/opt/anaconda3/lib/python3.8/site-packages/torch/utils/data/dataloader.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="133">
@@ -837,13 +792,6 @@
     <entry file="file://$PROJECT_DIR$/convert_nexus_to_fasta.R">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/simulations_generation/simulations_argparser.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="242">
-          <caret line="11" column="37" selection-start-line="11" selection-start-column="37" selection-end-line="11" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test.fasta">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="345">
@@ -869,16 +817,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="152">
           <caret line="490" selection-start-line="490" selection-end-line="490" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/simulation_edit/trees_features_extraction_helper.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="146">
-          <caret line="50" selection-start-line="50" selection-end-line="50" />
-          <folding>
-            <element signature="e#1#49#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -912,16 +850,6 @@
     <entry file="file://$PROJECT_DIR$/programs/output_tree.tree">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/side_code/config.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="192">
-          <caret line="53" column="27" selection-start-line="53" selection-start-column="27" selection-end-line="53" selection-end-column="97" />
-          <folding>
-            <element signature="e#0#24#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/opt/anaconda3/lib/python3.8/gzip.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="162">
@@ -936,13 +864,6 @@
           <folding>
             <element signature="e#0#30#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/simulations_generation/simulations.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="63">
-          <caret line="112" column="65" selection-start-line="112" selection-start-column="60" selection-end-line="112" selection-end-column="65" />
         </state>
       </provider>
     </entry>
@@ -963,15 +884,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/simulations_generation/run_parallel_simulations.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ML_pipeline/ML_argparser.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="462">
@@ -989,16 +901,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/real_data_evaluation/add_ML_predictions.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="110">
-          <caret line="28" column="30" lean-forward="true" selection-start-line="28" selection-start-column="30" selection-end-line="28" selection-end-column="30" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ML_pipeline/ML_boot_edit.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1819">
@@ -1013,13 +915,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/real_data_evaluation/parallel_real_data_eval.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-362">
-          <caret line="25" lean-forward="true" selection-start-line="8" selection-start-column="72" selection-end-line="8" selection-end-column="77" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/simulation_edit/bootstrap_edit.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="230">
@@ -1027,37 +922,135 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/simulation_edit/feature_extraction.py">
+    <entry file="file://$PROJECT_DIR$/real_data_evaluation/real_data_evaluation_parsers.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="31" selection-start-line="31" selection-end-line="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/programs/raxml.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="205">
-          <caret line="333" column="22" selection-start-line="333" selection-start-column="22" selection-end-line="333" selection-end-column="22" />
-          <folding>
-            <element signature="e#1#31#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="308">
+          <caret line="14" column="81" selection-start-line="14" selection-start-column="81" selection-end-line="14" selection-end-column="81" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/real_data_evaluation/single_job.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
-          <caret line="47" column="84" lean-forward="true" selection-start-line="47" selection-start-column="84" selection-end-line="47" selection-end-column="84" />
+          <caret line="47" column="84" selection-start-line="47" selection-start-column="84" selection-end-line="47" selection-end-column="84" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/real_data_evaluation/real_data_evaluation_parsers.py">
+    <entry file="file://$PROJECT_DIR$/simulation_edit/msa_features.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="291">
-          <caret line="14" column="81" selection-start-line="14" selection-start-column="81" selection-end-line="14" selection-end-column="81" />
+        <state relative-caret-position="-829" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/side_code/config.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="123">
+          <caret line="64" column="77" selection-start-line="64" selection-start-column="25" selection-end-line="64" selection-end-column="77" />
+          <folding>
+            <element signature="e#0#24#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/programs/raxml_grove.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="22">
+          <caret line="1" selection-start-line="1" selection-end-line="1" selection-end-column="70" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/protein_example.treefile">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/protein_example.phy">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1116" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/protein_example.treefile.log">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/simulations_generation/simulations.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2914">
+          <caret line="16" column="56" selection-start-line="17" selection-start-column="43" selection-end-line="17" selection-end-column="65" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/side_code/MSA_manipulation.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="117">
+          <caret line="182" selection-start-line="182" selection-end-line="182" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/programs/raxml.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="223">
+          <caret line="362" selection-start-line="362" selection-end-line="362" />
+          <folding>
+            <element signature="e#1#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/real_data_evaluation/add_ML_predictions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="544">
+          <caret line="42" lean-forward="true" selection-start-line="34" selection-start-column="4" selection-end-line="42" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/simulations_generation/run_parallel_simulations.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="106">
+          <caret line="13" column="19" selection-start-line="13" selection-start-column="14" selection-end-line="13" selection-end-column="19" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/real_data_evaluation/parallel_real_data_eval.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="182">
+          <caret line="52" column="4" selection-start-line="50" selection-start-column="4" selection-end-line="52" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/simulation_edit/feature_extraction.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="89">
+          <caret line="158" selection-start-line="158" selection-end-line="158" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/simulations_generation/simulations_argparser.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="271">
+          <caret line="15" column="4" lean-forward="true" selection-start-line="15" selection-start-column="4" selection-end-line="15" selection-end-column="67" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/simulation_edit/trees_features_extraction_helper.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="46" column="47" lean-forward="true" selection-start-line="46" selection-start-column="47" selection-end-line="46" selection-end-column="47" />
+          <folding>
+            <element signature="e#1#49#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/protein_evaluation/protein_evaluation.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="79" column="310" selection-start-line="79" selection-start-column="310" selection-end-line="79" selection-end-column="310" />
         </state>
       </provider>
     </entry>

@@ -279,6 +279,30 @@ def raxml_bootstrap_pipeline(curr_run_directory, results_folder, msa_path, prefi
     return res
 
 
+
+def raxml_no_bootstrap_pipeline(curr_run_directory, results_folder, msa_path, prefix, model, n_cpus = 1, n_workers ='auto', use_existing_trees = False):
+
+    search_prefix = os.path.join(curr_run_directory, prefix)
+    search_command = (
+        "{raxml_exe} --search --blopt nr_safe --force perf_threads --threads {n_cpus} --workers {n_workers}  --force msa --force perf_threads --msa {msa_path} --model {model}  --seed {seed} --prefix {prefix} --redo").format(raxml_exe=RAXML_NG_EXE,
+        msa_path=msa_path,  seed=SEED,
+        prefix=search_prefix, model=model, n_cpus = n_cpus, n_workers = n_workers)
+    raxml_log_file = search_prefix + ".raxml.log"
+    final_tree_topology_path = os.path.join(results_folder,'raxml_final_tree_topology.tree')
+    all_final_tree_topologies_path = os.path.join(results_folder, 'raxml_all_final_tree_topologies.tree')
+    best_tree_topology_path_orig = search_prefix + ".raxml.bestTree"
+    all_final_trees_path_orig = search_prefix + ".raxml.mlTrees"
+    if not use_existing_trees:
+        logging.info("Re-estimating final trees")
+        execute_command_and_write_to_log(search_command, print_to_log=True)
+        shutil.move(best_tree_topology_path_orig, final_tree_topology_path)
+
+        shutil.move(all_final_trees_path_orig, all_final_tree_topologies_path)
+    res = {
+           'final_tree_topology_path': final_tree_topology_path, 'all_final_tree_topologies_path':all_final_tree_topologies_path}
+    return res
+
+
 def standard_raxml_search(curr_run_directory, msa_path, prefix,model,n_pars, n_rand, n_cpus = 1, n_workers = 'auto'):
 
     search_prefix = os.path.join(curr_run_directory, prefix)

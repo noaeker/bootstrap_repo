@@ -1,0 +1,37 @@
+IQ-TREE multicore version 2.2.0-beta COVID-edition for Mac OS X 64-bit built Dec 16 2021 built Dec 16 2021
+Developed by Bui Quang Minh, James Barbetti, Nguyen Lam Tung,
+Olga Chernomor, Heiko Schmidt, Dominik Schrempf, Michael Woodhams, Ly Trong Nhan.
+
+Host:    shakeds-mbp-2.lan (AVX2, FMA3, 16 GB RAM)
+Command: /Users/noa/Programs/iqtree-2.2.0-beta-MacOSX/bin/iqtree2 --alisim /Users/noa/Workspace/bootstrap_repo/protein_example --out-format fasta -t RANDOM{yh/5} --length 60 -m WAG+G
+Seed:    662272 (Using SPRNG - Scalable Parallel Random Number Generator)
+Time:    Wed Mar 13 22:37:43 2024
+Kernel:  AVX+FMA - 1 threads (4 CPU cores detected)
+
+Generating random Yule-Harding tree...
+1 tree(s) printed to /Users/noa/Workspace/bootstrap_repo/protein_example.treefile
+[Alignment Simulator] Executing
+ - Tree filepath: /Users/noa/Workspace/bootstrap_repo/protein_example.treefile
+ - Length of output sequences: 60
+ - Model: WAG+G
+ - Number of output datasets: 1
+An alignment has just been exported to /Users/noa/Workspace/bootstrap_repo/protein_example.fa
+SUBSTITUTION PROCESS
+--------------------
+
+Model of substitution: WAG+G4
+
+State frequencies: (model)
+
+Model of rate heterogeneity: Gamma with 4 categories
+Gamma shape alpha: 1.000
+
+ Category  Relative_rate  Proportion
+  1         0.137          0.250
+  2         0.477          0.250
+  3         1.000          0.250
+  4         2.386          0.250
+Relative rates are computed as MEAN of the portion of the Gamma distribution falling in the category.
+
+[Alignment Simulator] Done
+Date and Time: Wed Mar 13 22:37:43 2024

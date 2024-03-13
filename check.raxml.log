@@ -1,0 +1,25 @@
+
+RAxML-NG v. 1.0.1 released on 19.09.2020 by The Exelixis Lab.
+Developed by: Alexey M. Kozlov and Alexandros Stamatakis.
+Contributors: Diego Darriba, Tomas Flouri, Benoit Morel, Sarah Lutteropp, Ben Bettisworth.
+Latest version: https://github.com/amkozlov/raxml-ng
+Questions/problems/suggestions? Please visit: https://groups.google.com/forum/#!forum/raxml
+
+System: Intel(R) Core(TM) i7-7660U CPU @ 2.50GHz, 2 cores, 16 GB RAM
+
+RAxML-NG was called at 13-Mar-2024 22:37:43 as follows:
+
+/Users/noa/Programs/Raxml/raxml-ng --check --msa /Users/noa/Workspace/bootstrap_repo/protein_example.phy --model WAG+G --seed 5 --prefix /Users/noa/Workspace/bootstrap_repo/check --redo
+
+Analysis options:
+  run mode: Alignment validation
+  start tree(s): 
+  random seed: 5
+  SIMD kernels: AVX2
+  parallelization: coarse-grained (auto), PTHREADS (auto)
+
+WARNING: Running in REDO mode: existing checkpoints are ignored, and all result files will be overwritten!
+
+
+ERROR: Alignment file not found: /Users/noa/Workspace/bootstrap_repo/protein_example.phy
+

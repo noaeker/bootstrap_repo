@@ -48,7 +48,10 @@ def get_booster_tree(mle_tree_path, comparison_tree, out_path ="booster.nw", tbe
     execute_command_and_write_to_log(cmd)
     with open(out_path) as B:
         bootster_tree = B.read()
-    booster_tree_ete = Tree(newick=bootster_tree, format=0)
+    try:
+        booster_tree_ete = Tree(newick=bootster_tree, format=0)
+    except:
+        pass
     add_internal_names(booster_tree_ete)
     return booster_tree_ete
 

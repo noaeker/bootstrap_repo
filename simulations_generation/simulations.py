@@ -15,7 +15,6 @@ from programs.IQTREE import iqtree_pipeline
 from simulations_generation.simulations_argparser import  job_parser
 from simulation_edit.msa_features import get_msa_stats
 from side_code.MSA_manipulation import get_MSA_seq_names
-from simulation_edit.bootstrap_edit import msa_path_edit_analysis
 from side_code.file_handling import create_dir_if_not_exists, create_or_clean_dir
 from programs.raxml_grove import RAxML_grove_tree_simulation
 import pandas as pd
@@ -65,25 +64,6 @@ def obtain_tree_search_bootstrap_results(msa_path, tree_sim_dict, curr_run_dir, 
     return boot_tree_raxml, boot_tree_iqtree,boot_tree_fasttree
 
 
-def add_features_to_data(msa_path,msa_dir,boot_tree_raxml_metrics,boot_tree_iqtree_metrics,boot_tree_fasttree_metrics,tree_sim_dict):
-        curr_boot_tree_raxml_df = msa_path_edit_analysis(msa_path, msa_dir, mle_path=
-        boot_tree_raxml_metrics['final_tree_topology_path'], true_tree_path=tree_sim_dict['true_tree_path'],
-                                                                                                                 program='raxml',
-                                                                                                                 bootstrap_tree_details_dict=boot_tree_raxml_metrics,
-                                                                                                                 n_pars=100)
-
-        curr_boot_tree_iqtree_df = msa_path_edit_analysis(msa_path, msa_dir, mle_path=
-        boot_tree_iqtree_metrics['final_tree_ultrafast'], true_tree_path=tree_sim_dict['true_tree_path'],
-                                                                                                                   program='iqtree',
-                                                                                                                   bootstrap_tree_details_dict=boot_tree_iqtree_metrics,
-                                                                                                                   n_pars=100)
-        curr_boot_tree_fasttree_df = msa_path_edit_analysis(msa_path, msa_dir, mle_path=
-        boot_tree_fasttree_metrics['sh_bootstrap'], true_tree_path=tree_sim_dict['true_tree_path'],
-                                                                                                                         program='fasttree',
-                                                                                                                         bootstrap_tree_details_dict=boot_tree_fasttree_metrics,
-                                                                                                                         n_pars=100)
-        return curr_boot_tree_raxml_df, curr_boot_tree_iqtree_df, curr_boot_tree_fasttree_df
-
 
 def obtain_tree_sim_dict(i, args,curr_job_folder, tree_id):
     print(f"i={i}")
@@ -129,17 +109,9 @@ def obtain_all_results_per_MSA(tree_sim_dict, j, args):
 
     all_features_folder = os.path.join(msa_dir, "features_pipeline")
     create_dir_if_not_exists(all_features_folder)
-    if args.calc_features:
-        curr_boot_tree_raxml_df, curr_boot_tree_iqtree_df, curr_boot_tree_fasttree_df = add_features_to_data(msa_path,
-                                                                                                             all_features_folder,
-                                                                                                             boot_tree_raxml_metrics,
-                                                                                                             boot_tree_iqtree_metrics,
-                                                                                                             boot_tree_fasttree_metrics,
-                                                                                                             tree_sim_dict)
-    else:
-        curr_boot_tree_raxml_df = pd.DataFrame([boot_tree_raxml_metrics])
-        curr_boot_tree_iqtree_df = pd.DataFrame([boot_tree_iqtree_metrics])
-        curr_boot_tree_fasttree_df = pd.DataFrame([boot_tree_fasttree_metrics])
+    curr_boot_tree_raxml_df = pd.DataFrame([boot_tree_raxml_metrics])
+    curr_boot_tree_iqtree_df = pd.DataFrame([boot_tree_iqtree_metrics])
+    curr_boot_tree_fasttree_df = pd.DataFrame([boot_tree_fasttree_metrics])
     return curr_boot_tree_raxml_df,curr_boot_tree_iqtree_df,curr_boot_tree_fasttree_df
 
 
