@@ -64,14 +64,18 @@ def main():
     args = parser.parse_args()
     log_file_path = os.path.join(args.job_folder, 'log_file.log')
     logging.basicConfig(filename=log_file_path, level=logging.INFO)
-    study_folder = os.path.join(args.real_alignments_folder,args.job_study_name)
-    if not os.path.exists(study_folder):
-        tar_path = study_folder+'.tar.gz'
-        logging.info(f"Extracting {tar_path} to {study_folder}")
-        file = tarfile.open(tar_path)
-        file.extractall(args.real_alignments_folder)
-    msa_path_nexus = os.path.join(study_folder ,'alignment.nex')
-    msa_path_fasta = os.path.join(study_folder ,'alignment.fasta')
+    if args.Rob_datasets:
+        study_folder = os.path.join(args.real_alignments_folder,args.job_study_name)
+        if not os.path.exists(study_folder):
+            tar_path = study_folder+'.tar.gz'
+            logging.info(f"Extracting {tar_path} to {study_folder}")
+            file = tarfile.open(tar_path)
+            file.extractall(args.real_alignments_folder)
+        msa_path_nexus = os.path.join(study_folder ,'alignment.nex')
+        msa_path_fasta = os.path.join(study_folder ,'alignment.fasta')
+    else:
+        msa_path_nexus =  os.path.join(args.real_alignments_folder,f'{args.job_study_name}.ali')
+        msa_path_fasta = os.path.join(args.real_alignments_folder, f'{args.job_study_name}.fasta')
     if not os.path.exists(msa_path_fasta):
         logging.info(f"Converting Nexus to Fasta")
         records = SeqIO.parse(msa_path_nexus, "nexus")
@@ -98,6 +102,7 @@ def main():
     logging.info("Writing files to CSV")
     #iqtree_features_df.to_csv(os.path.join(job_working_dir,"iqtree_real_data.csv"))
     #fasttree_features_df.to_csv(os.path.join(job_working_dir, "fasttree_real_data.csv"))
+    features_df["study_name"] = args.job_study_name
     features_df.to_csv(os.path.join(job_working_dir, f"{args.program}_real_data.csv"))
     obj_with_features.write(format=1, outfile=os.path.join(job_working_dir,"new_tree.nw"))
     logging.info("Done")

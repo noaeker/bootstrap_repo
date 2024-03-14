@@ -50,13 +50,16 @@ def main():
     raw_results_folder = generate_results_folder(args.name)
     log_file_path = os.path.join(raw_results_folder, 'log_file.log')
     logging.basicConfig(filename=log_file_path, level=logging.INFO)
-    MSAs_stats_path = SUMMARY_FILE_PATH
-    MSAs_stats = pd.read_csv(MSAs_stats_path)
-    relevant_MSAs = MSAs_stats.loc[(MSAs_stats["dataset.alignment.ntax"]<=1000)&(MSAs_stats["dataset.alignment.nchar"]<10000)&(MSAs_stats["dataset.alignment.datatype"]=='nucleotide')]
-    relevant_studies = relevant_MSAs["name"]
-    logging.info(f"Relevant studies = {relevant_studies}")
-    if args.specific_study is not None:
-        relevant_studies = [args.specific_study]
+    if args.Rob_datasets:
+        MSAs_stats_path = SUMMARY_FILE_PATH
+        MSAs_stats = pd.read_csv(MSAs_stats_path)
+        relevant_MSAs = MSAs_stats.loc[(MSAs_stats["dataset.alignment.ntax"]<=1000)&(MSAs_stats["dataset.alignment.nchar"]<10000)&(MSAs_stats["dataset.alignment.datatype"]=='nucleotide')]
+        relevant_studies = relevant_MSAs["name"]
+        logging.info(f"Relevant studies = {relevant_studies}")
+        if args.specific_study is not None:
+            relevant_studies = [args.specific_study]
+    else:
+        relevant_studies = [os.path.splitext(file)[0] for file in os.listdir(args.real_alignments_folder)][:args.n_MSAs]
 
     distribute_MSAS_over_jobs(relevant_studies, raw_results_folder,args)
 

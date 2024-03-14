@@ -41,6 +41,7 @@ def iqtree_bootstrap_search(curr_run_directory, msa_path, model,nb, n_cpus, pref
     search_prefix = os.path.join(curr_run_directory, prefix)
     st = time.time()
     search_command = f"{IQTREE_EXE} -s {msa_path} -nt {n_cpus}  -m {model} -seed {SEED} -pre {search_prefix} -alrt 0 -abayes -bb {nb} -redo "
+    logging.info(f"search command = {search_command}")
     best_tree_topology_path = search_prefix + ".treefile"
     execute_command_and_write_to_log(search_command, print_to_log=True)
     end = time.time()
