@@ -6,11 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="c7df0e90-f129-4c06-bac2-5459d2cc3269" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/protein_evaluation/protein_evaluation.py" beforeDir="false" afterPath="$PROJECT_DIR$/protein_evaluation/protein_evaluation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/python notebooks/.ipynb_checkpoints/main paper analysis-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/python notebooks/.ipynb_checkpoints/main paper analysis-checkpoint.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/python notebooks/main paper analysis.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/python notebooks/main paper analysis.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/python notebooks/real_data_analysis.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/python notebooks/real_data_analysis.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/real_data_evaluation/real_data_evaluation_parsers.py" beforeDir="false" afterPath="$PROJECT_DIR$/real_data_evaluation/real_data_evaluation_parsers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/real_data_evaluation/single_job.py" beforeDir="false" afterPath="$PROJECT_DIR$/real_data_evaluation/single_job.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -74,8 +69,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/protein_evaluation/protein_evaluation.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="176">
-              <caret line="79" column="432" selection-start-line="79" selection-start-column="432" selection-end-line="79" selection-end-column="432" />
+            <state relative-caret-position="204">
+              <caret line="24" column="13" lean-forward="true" selection-start-line="24" selection-start-column="13" selection-end-line="24" selection-end-column="13" />
             </state>
           </provider>
         </entry>
@@ -1054,8 +1049,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/protein_evaluation/protein_evaluation.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="79" column="432" selection-start-line="79" selection-start-column="432" selection-end-line="79" selection-end-column="432" />
+        <state relative-caret-position="204">
+          <caret line="24" column="13" lean-forward="true" selection-start-line="24" selection-start-column="13" selection-end-line="24" selection-end-column="13" />
         </state>
       </provider>
     </entry>

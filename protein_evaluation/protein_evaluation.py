@@ -23,6 +23,7 @@ import os
 from ete3 import Tree
 import pickle
 import random
+import math
 
 
 
@@ -77,7 +78,7 @@ def main():
             raxml_boot['tree_search_model'] = 'WAG+G'
             feature_extraction_dir = os.path.join(wd,'feautres_calc')
             create_or_clean_dir(feature_extraction_dir)
-            final_tree,features = extract_all_features_per_mle(feature_extraction_dir, msa_path, model = 'WAG+G', mle_tree_path = raxml_boot['final_tree_topology_path'], extra_bootstrap_support_paths = {}, all_mles_tree_path = raxml_boot['all_final_tree_topologies_path'], true_tree_path = local_true_tree_path, booster_program_path = None, raxml_program_path = None, mad_program_path = None,n_cpus  = min(args.n_cpus,int(n_loci/800)))
+            final_tree,features = extract_all_features_per_mle(feature_extraction_dir, msa_path, model = 'WAG+G', mle_tree_path = raxml_boot['final_tree_topology_path'], extra_bootstrap_support_paths = {}, all_mles_tree_path = raxml_boot['all_final_tree_topologies_path'], true_tree_path = local_true_tree_path, booster_program_path = None, raxml_program_path = None, mad_program_path = None,n_cpus  = min(args.n_cpus,math.ceil(n_loci/800)))
             #features = features.apply(lambda row: row.map(raxml_boot), axis=1)
             nni_model = pickle.load(open(args.nni_model_path, 'rb'))
             feature_names_nni = nni_model['best_model'].feature_name_
