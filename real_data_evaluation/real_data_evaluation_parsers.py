@@ -12,7 +12,7 @@ def main_parser():
     parser.add_argument('--specific_study', type= str, default= 'Bergsten_2013')
     parser.add_argument('--change_names',action='store_true', default=False)
     parser.add_argument('--model',  type = str, default = 'WAG+G')
-    parser.add_argument('--use_existing_trees', action='store_true', default=True)
+    parser.add_argument('--use_existing_trees', action='store_true', default=False)
     parser.add_argument('--program',type=str, default = 'iqtree')
     return parser
 
