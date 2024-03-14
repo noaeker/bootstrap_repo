@@ -6,6 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="c7df0e90-f129-4c06-bac2-5459d2cc3269" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/protein_evaluation/protein_evaluation.py" beforeDir="false" afterPath="$PROJECT_DIR$/protein_evaluation/protein_evaluation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python notebooks/.ipynb_checkpoints/main paper analysis-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/python notebooks/.ipynb_checkpoints/main paper analysis-checkpoint.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python notebooks/main paper analysis.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/python notebooks/main paper analysis.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/python notebooks/real_data_analysis.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/python notebooks/real_data_analysis.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/real_data_evaluation/real_data_evaluation_parsers.py" beforeDir="false" afterPath="$PROJECT_DIR$/real_data_evaluation/real_data_evaluation_parsers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/real_data_evaluation/single_job.py" beforeDir="false" afterPath="$PROJECT_DIR$/real_data_evaluation/single_job.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -30,8 +35,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/real_data_evaluation/parallel_real_data_eval.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="182">
-              <caret line="52" column="4" selection-start-line="50" selection-start-column="4" selection-end-line="52" selection-end-column="4" />
+            <state relative-caret-position="319">
+              <caret line="58" column="29" selection-start-line="50" selection-start-column="4" selection-end-line="52" selection-end-column="4" />
             </state>
           </provider>
         </entry>
@@ -40,7 +45,7 @@
         <entry file="file://$PROJECT_DIR$/simulations_generation/simulations_argparser.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="271">
-              <caret line="15" column="4" lean-forward="true" selection-start-line="15" selection-start-column="4" selection-end-line="15" selection-end-column="67" />
+              <caret line="15" column="4" selection-start-line="15" selection-start-column="4" selection-end-line="15" selection-end-column="67" />
             </state>
           </provider>
         </entry>
@@ -49,7 +54,7 @@
         <entry file="file://$PROJECT_DIR$/simulation_edit/trees_features_extraction_helper.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="90">
-              <caret line="46" column="47" lean-forward="true" selection-start-line="46" selection-start-column="47" selection-end-line="46" selection-end-column="47" />
+              <caret line="46" column="47" selection-start-line="46" selection-start-column="47" selection-end-line="46" selection-end-column="47" />
               <folding>
                 <element signature="e#1#49#0" expanded="true" />
               </folding>
@@ -66,29 +71,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/simulations_generation/simulations.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2914">
-              <caret line="16" column="56" selection-start-line="17" selection-start-column="43" selection-end-line="17" selection-end-column="65" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/protein_evaluation/protein_evaluation.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="118">
-              <caret line="79" column="422" selection-start-line="79" selection-start-column="422" selection-end-line="79" selection-end-column="422" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/side_code/MSA_manipulation.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="117">
-              <caret line="182" selection-start-line="182" selection-end-line="182" />
+            <state relative-caret-position="176">
+              <caret line="79" column="432" selection-start-line="79" selection-start-column="432" selection-end-line="79" selection-end-column="432" />
             </state>
           </provider>
         </entry>
@@ -106,13 +93,31 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/side_code/config.py">
+        <entry file="file://$PROJECT_DIR$/real_data_evaluation/single_job.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="123">
-              <caret line="64" column="77" selection-start-line="64" selection-start-column="25" selection-end-line="64" selection-end-column="77" />
+            <state relative-caret-position="120">
+              <caret line="43" column="22" selection-start-line="43" selection-start-column="22" selection-end-line="43" selection-end-column="22" />
               <folding>
-                <element signature="e#0#24#0" expanded="true" />
+                <element signature="e#0#10#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/side_code/code_submission.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-639">
+              <caret line="26" selection-start-line="26" selection-end-line="26" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/real_data_evaluation/real_data_evaluation_parsers.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="283">
+              <caret line="19" column="4" selection-start-line="19" selection-start-column="4" selection-end-line="19" selection-end-column="4" />
             </state>
           </provider>
         </entry>
@@ -210,8 +215,6 @@
         <option value="$PROJECT_DIR$/simulation_edit/bootstrap_edit.py" />
         <option value="$PROJECT_DIR$/real_data_evaluation/add_ML_predictions.py" />
         <option value="$PROJECT_DIR$/real_data_evaluation/parallel_real_data_eval.py" />
-        <option value="$PROJECT_DIR$/real_data_evaluation/real_data_evaluation_parsers.py" />
-        <option value="$PROJECT_DIR$/real_data_evaluation/single_job.py" />
         <option value="$PROJECT_DIR$/simulations_generation/simulations.py" />
         <option value="$PROJECT_DIR$/test_on_protein.py" />
         <option value="$PROJECT_DIR$/programs/raxml_grove.py" />
@@ -219,14 +222,17 @@
         <option value="$PROJECT_DIR$/protein_evaluation.py" />
         <option value="$PROJECT_DIR$/programs/raxml.py" />
         <option value="$PROJECT_DIR$/simulation_edit/trees_features_extraction_helper.py" />
+        <option value="$PROJECT_DIR$/real_data_evaluation/real_data_evaluation_parsers.py" />
+        <option value="$PROJECT_DIR$/real_data_evaluation/single_job.py" />
         <option value="$PROJECT_DIR$/protein_evaluation/protein_evaluation.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="y" value="25" />
-    <option name="width" value="1440" />
-    <option name="height" value="813" />
+    <option name="x" value="95" />
+    <option name="y" value="53" />
+    <option name="width" value="1539" />
+    <option name="height" value="895" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -249,6 +255,11 @@
               <item name="bootstrap_repo" type="b2602c69:ProjectViewProjectNode" />
               <item name="bootstrap_repo" type="462c0819:PsiDirectoryNode" />
               <item name="real_data_evaluation" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="bootstrap_repo" type="b2602c69:ProjectViewProjectNode" />
+              <item name="bootstrap_repo" type="462c0819:PsiDirectoryNode" />
+              <item name="side_code" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="bootstrap_repo" type="b2602c69:ProjectViewProjectNode" />
@@ -300,7 +311,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.protein_evaluation">
+  <component name="RunManager" selected="Python.parallel_real_data_eval">
     <configuration name="add_ML_predictions" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="bootstrap_repo" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -402,10 +413,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.parallel_real_data_eval" />
         <item itemvalue="Python.protein_evaluation" />
         <item itemvalue="Python.run_parallel_simulations" />
         <item itemvalue="Python tests.pytest in protein_evaluation.py" />
-        <item itemvalue="Python.parallel_real_data_eval" />
         <item itemvalue="Python.add_ML_predictions" />
       </list>
     </recent_temporary>
@@ -429,15 +440,15 @@
     </history-entry>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="25" width="1440" height="813" extended-state="0" />
+    <frame x="95" y="53" width="1539" height="895" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.20366456" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.19038208" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49550563" weight="0.2769231" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.67159975" visible="true" weight="0.4013986" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.67159975" visible="true" weight="0.25470513" />
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.47145876" weight="0.39300698" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -590,7 +601,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/real_data_evaluation/single_job.py</url>
-          <line>71</line>
+          <line>79</line>
           <option name="timeStamp" value="322" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -600,7 +611,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/real_data_evaluation/single_job.py</url>
-          <line>45</line>
+          <line>46</line>
           <option name="timeStamp" value="326" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -814,13 +825,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/side_code/code_submission.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="145">
-          <caret line="26" selection-start-line="26" selection-end-line="26" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/real_data_evaluation/summary.csv">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -916,23 +920,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/real_data_evaluation/real_data_evaluation_parsers.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="308">
-          <caret line="14" column="81" selection-start-line="14" selection-start-column="81" selection-end-line="14" selection-end-column="81" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/real_data_evaluation/single_job.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="47" column="84" selection-start-line="47" selection-start-column="84" selection-end-line="47" selection-end-column="84" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/simulation_edit/msa_features.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-829" />
@@ -1010,13 +997,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/real_data_evaluation/parallel_real_data_eval.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="182">
-          <caret line="52" column="4" selection-start-line="50" selection-start-column="4" selection-end-line="52" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/simulation_edit/feature_extraction.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="89">
@@ -1027,24 +1007,55 @@
     <entry file="file://$PROJECT_DIR$/simulations_generation/simulations_argparser.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="271">
-          <caret line="15" column="4" lean-forward="true" selection-start-line="15" selection-start-column="4" selection-end-line="15" selection-end-column="67" />
+          <caret line="15" column="4" selection-start-line="15" selection-start-column="4" selection-end-line="15" selection-end-column="67" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/simulation_edit/trees_features_extraction_helper.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="90">
-          <caret line="46" column="47" lean-forward="true" selection-start-line="46" selection-start-column="47" selection-end-line="46" selection-end-column="47" />
+          <caret line="46" column="47" selection-start-line="46" selection-start-column="47" selection-end-line="46" selection-end-column="47" />
           <folding>
             <element signature="e#1#49#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/real_data_evaluation/parallel_real_data_eval.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="319">
+          <caret line="58" column="29" selection-start-line="50" selection-start-column="4" selection-end-line="52" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/real_data_evaluation/real_data_evaluation_parsers.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="283">
+          <caret line="19" column="4" selection-start-line="19" selection-start-column="4" selection-end-line="19" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/real_data_evaluation/single_job.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="43" column="22" selection-start-line="43" selection-start-column="22" selection-end-line="43" selection-end-column="22" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/side_code/code_submission.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-639">
+          <caret line="26" selection-start-line="26" selection-end-line="26" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/protein_evaluation/protein_evaluation.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="118">
-          <caret line="79" column="422" selection-start-line="79" selection-start-column="422" selection-end-line="79" selection-end-column="422" />
+        <state relative-caret-position="176">
+          <caret line="79" column="432" selection-start-line="79" selection-start-column="432" selection-end-line="79" selection-end-column="432" />
         </state>
       </provider>
     </entry>
