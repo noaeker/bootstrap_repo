@@ -46,14 +46,14 @@ def run_programs(msa_path,tree_searches_folder, results_folder,msa_type, model, 
                                                     n_workers='auto', use_existing_trees = use_existing_trees)
         raxml_features_df,raxml_obj_with_features = get_splits_df(msa_path=msa_path, true_tree_path=None, model=model,
                                              bootstrap_tree_details=boot_tree_raxml_details, program='raxml',
-                                             working_dir=tmp_files_folder, n_cpus = min(n_cpus, 20))
+                                             working_dir=tmp_files_folder, n_cpus = 1)
         return raxml_features_df, raxml_obj_with_features
     elif program=='iqtree':
      logging.info("Running IQTREE")
      boot_tree_iqtree_details = iqtree_pipeline(tree_searches_folder, results_folder, msa_path, model=model, nb=1000,
                                         prefix="iqtree_boot", n_cpus = n_cpus)
      iqtree_features_df,iqtree_obj_with_features = get_splits_df(msa_path= msa_path,true_tree_path= None, model=model,
-                                                            bootstrap_tree_details=boot_tree_iqtree_details, program='iqtree', working_dir = tmp_files_folder,n_cpus =  min(n_cpus, 20)
+                                                            bootstrap_tree_details=boot_tree_iqtree_details, program='iqtree', working_dir = tmp_files_folder,n_cpus = 1
                                                             )
      return iqtree_features_df,iqtree_obj_with_features
 
