@@ -32,7 +32,7 @@ def main():
     existing_csv_path = [path for path in csv_paths if os.path.exists(path)]
     out_csv_path = os.path.join(args.raw_results_folder,f'{args.name}.csv')
     combined_df = unify_csvs(existing_csv_path)
-    ML_tree = Tree(args.ML_tree_path, format = 1)
+    #ML_tree = Tree(args.ML_tree_path, format = 1)
     nni_model = pickle.load(open(args.nni_model_path, 'rb'))
     feature_names_nni = nni_model['best_model'].feature_name_
     combined_df['predicted_bootstrap_score_nni'] = nni_model['calibrated_model'].predict_proba(combined_df[feature_names_nni])[:, 1]
@@ -40,9 +40,9 @@ def main():
     feature_names_no_nni = no_nni_model['best_model'].feature_name_
     combined_df['predicted_bootstrap_score_no_nni'] = no_nni_model['calibrated_model'].predict_proba(combined_df[feature_names_no_nni])[:, 1]
     combined_df.to_csv(out_csv_path)
-    for i, row in combined_df.iterrows():
-        (ML_tree & row["node_name"]).support = row["predicted_bootstrap_score_nni"]
-    ML_tree.write(format=0, outfile=os.path.join(args.raw_results_folder, "ML_tree_with_predictions.nw"))
+    #for i, row in combined_df.iterrows():
+    #    (ML_tree & row["node_name"]).support = row["predicted_bootstrap_score_nni"]
+    #ML_tree.write(format=0, outfile=os.path.join(args.raw_results_folder, "ML_tree_with_predictions.nw"))
 
 
 if __name__ == "__main__":
