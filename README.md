@@ -1,4 +1,4 @@
-**In this work, we propose a machine-learning based approach to eatimate branch support in phylogenies**
+**In this work, we propose a machine-learning based approach to estimate branch support in phylogenies**
 
 1. Our work is based on simulations of many MSAs, and applying tree-searches using several phylogenetic softwares. The simulations generation is implemented in the 'simulations_generation_folder'.
 Simulations are performed based on empirical trees.
